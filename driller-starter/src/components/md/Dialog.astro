@@ -1,0 +1,362 @@
+---
+/**
+ * Material Design 3 — Dialog
+ * Supports: basic dialog, alert dialog
+ *
+ * Usage:
+ *   <Dialog id="my-dialog" headline="Are you sure?">
+ *     <p>This action cannot be undone.</p>
+ *     <div slot="actions">
+ *       <Button variant="text" data-dialog-close>Cancel</Button>
+ *       <Button variant="filled">Confirm</Button>
+ *     </div>
+ *   </Dialog>
+ *
+ *   <!-- Trigger -->
+ *   <button data-dialog-open="my-dialog">Open</button>
+ */
+
+interface Props {
+  /** Native dialog id — required so triggers can reference it */
+  id: string;
+  /** Whether the dialog is open on initial render */
+  open?: boolean;
+  /** `'alert'` sets role="alertdialog" */
+  type?: 'alert';
+  /** Short headline rendered above the body slot (optional if using headline slot) */
+  headline?: string;
+  class?: string;
+  [key: string]: any;
+}
+
+const {
+  id,
+  open = false,
+  type,
+  headline,
+  class: className,
+  ...attrs
+} = Astro.props;
+
+const role = type === 'alert' ? 'alertdialog' : 'dialog';
+---
+
+<dialog
+  id={id}
+  class:list={['md-dialog', className]}
+  role={role}
+  aria-modal="true"
+  aria-labelledby={headline ? `${id}-headline` : undefined}
+  {...open ? { open: true } : {}}
+  {...attrs}
+>
+  {/* Scrim — rendered inside <dialog> so it participates in the stacking context */}
+  <div class="md-dialog__scrim" aria-hidden="true"></div>
+
+  {/* Container */}
+  <div class="md-dialog__container">
+    {/* Elevation surface */}
+    <div class="md-dialog__surface">
+
+      {/* Icon slot (optional) */}
+      <slot name="icon" />
+
+      {/* Headline */}
+      {(headline || Astro.slots.has('headline')) && (
+        <div class="md-dialog__headline" id={`${id}-headline`}>
+          <slot name="headline">{headline}</slot>
+        </div>
+      )}
+
+      {/* Body */}
+      <div class="md-dialog__content">
+        <slot />
+      </div>
+
+      {/* Actions */}
+      <div class="md-dialog__actions">
+        <slot name="actions" />
+      </div>
+
+    </div>
+  </div>
+</dialog>
+
+<script>
+  // ─── Dialog controller ────────────────────────────────────────────────────
+  // Animation duration must match the @keyframes durations below.
+  const OPEN_DURATION  = 300; // ms — dialog-open keyframe
+  const CLOSE_DURATION = 150; // ms — dialog-close keyframe
+
+  function openDialog(dialog: HTMLDialogElement) {
+    dialog.removeAttribute('data-closing');
+    dialog.showModal();
+    dialog.setAttribute('data-open', '');
+  }
+
+  function closeDialog(dialog: HTMLDialogElement) {
+    dialog.removeAttribute('data-open');
+    dialog.setAttribute('data-closing', '');
+    setTimeout(() => {
+      dialog.removeAttribute('data-closing');
+      dialog.close();
+    }, CLOSE_DURATION);
+  }
+
+  // Wire up every md-dialog on the page
+  document.querySelectorAll<HTMLDialogElement>('.md-dialog').forEach((dialog) => {
+    const scrim = dialog.querySelector<HTMLElement>('.md-dialog__scrim');
+
+    // Scrim click → close
+    scrim?.addEventListener('click', () => closeDialog(dialog));
+
+    // Close buttons inside the dialog (data-dialog-close attr)
+    dialog.querySelectorAll<HTMLElement>('[data-dialog-close]').forEach((btn) => {
+      btn.addEventListener('click', () => closeDialog(dialog));
+    });
+
+    // Escape key is handled natively by <dialog>, but we need the exit animation
+    dialog.addEventListener('cancel', (e) => {
+      e.preventDefault(); // stop the native instant-close
+      closeDialog(dialog);
+    });
+
+    // If pre-rendered as open, upgrade to true top-layer modal
+    if (dialog.hasAttribute('open')) {
+      dialog.removeAttribute('open');
+      dialog.showModal();
+      dialog.setAttribute('data-open', '');
+    }
+  });
+
+  // Wire up trigger buttons elsewhere on the page (data-dialog-open="<id>")
+  document.querySelectorAll<HTMLElement>('[data-dialog-open]').forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const id = trigger.getAttribute('data-dialog-open');
+      if (!id) return;
+      const dialog = document.getElementById(id) as HTMLDialogElement | null;
+      if (dialog && typeof dialog.showModal === 'function') {
+        openDialog(dialog);
+      }
+    });
+  });
+</script>
+
+<style>
+  /* ═══════════════════════════════════════════════════════════
+     DIALOG — local token aliases (maps MD tokens → Driller tokens)
+     ═══════════════════════════════════════════════════════════ */
+  .md-dialog {
+    /* Container */
+    --_container-color:        var(--md-dialog-container-color,        var(--surface-raised));
+    --_container-shape:        var(--md-dialog-container-shape,        28px);
+    --_container-min-inline:   var(--md-dialog-container-min-inline-size, 280px);
+    --_container-max-inline:   var(--md-dialog-container-max-inline-size, 560px);
+
+    /* Headline */
+    --_headline-color:         var(--md-dialog-headline-color,         var(--text));
+    --_headline-font:          var(--md-dialog-headline-font,          var(--font-display));
+    --_headline-size:          var(--md-dialog-headline-size,          1.5rem);
+    --_headline-weight:        var(--md-dialog-headline-weight,        400);
+    --_headline-line-height:   var(--md-dialog-headline-line-height,   2rem);
+
+    /* Body / supporting text */
+    --_supporting-color:       var(--md-dialog-supporting-text-color,  var(--text-muted));
+    --_supporting-font:        var(--md-dialog-supporting-text-font,   var(--font-body));
+    --_supporting-size:        var(--md-dialog-supporting-text-size,   0.875rem);
+    --_supporting-line-height: var(--md-dialog-supporting-text-line-height, 1.25rem);
+
+    /* Scrim */
+    --_scrim-color:            var(--md-dialog-scrim-color,            rgba(0, 0, 0, 0.32));
+  }
+
+  /* ─── Reset native <dialog> chrome ─────────────────────────────────────── */
+  .md-dialog {
+    /* Position — covers the viewport */
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    /* Size — let the container div handle actual sizing */
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    /* Remove native dialog chrome */
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: transparent;
+    /* Layout */
+    display: none;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  /* When open, flex-display the dialog wrapper */
+  .md-dialog[open] {
+    display: flex;
+  }
+
+  /* ─── Scrim ───────────────────────────────────────────────────────────── */
+  .md-dialog__scrim {
+    position: fixed;
+    inset: 0;
+    background: var(--_scrim-color);
+    z-index: 0;
+  }
+
+  /* ─── Container (centres the surface) ────────────────────────────────── */
+  .md-dialog__container {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* let scrim clicks fall through to scrim div */
+  }
+
+  /* ─── Surface ─────────────────────────────────────────────────────────── */
+  .md-dialog__surface {
+    background: var(--_container-color);
+    border-radius: var(--_container-shape);
+    box-shadow:
+      0px 3px 5px -1px rgba(0,0,0,0.20),
+      0px 6px 10px  0px rgba(0,0,0,0.14),
+      0px 1px 18px  0px rgba(0,0,0,0.12);
+    display: flex;
+    flex-direction: column;
+    min-inline-size: var(--_container-min-inline);
+    max-inline-size: var(--_container-max-inline);
+    max-block-size: calc(100dvh - 48px);
+    overflow: hidden;
+    pointer-events: auto;
+    /* Entry animation */
+    animation: md-dialog-open var(--md-dialog-animation-duration, 300ms)
+      cubic-bezier(0.05, 0.7, 0.1, 1.0) forwards;
+  }
+
+  /* Exit animation on surface when dialog is closing */
+  .md-dialog[data-closing] .md-dialog__surface {
+    animation: md-dialog-close var(--md-dialog-close-duration, 150ms)
+      cubic-bezier(0.3, 0.0, 0.8, 0.15) forwards;
+  }
+
+  /* Also fade the scrim on open/close */
+  .md-dialog__scrim {
+    animation: md-dialog-scrim-open var(--md-dialog-animation-duration, 300ms)
+      linear forwards;
+  }
+
+  .md-dialog[data-closing] .md-dialog__scrim {
+    animation: md-dialog-scrim-close var(--md-dialog-close-duration, 150ms)
+      linear forwards;
+  }
+
+  /* ─── Headline ────────────────────────────────────────────────────────── */
+  .md-dialog__headline {
+    align-items: center;
+    color: var(--_headline-color);
+    display: flex;
+    flex-direction: column;
+    font-family: var(--_headline-font);
+    font-size: var(--_headline-size);
+    font-weight: var(--_headline-weight);
+    line-height: var(--_headline-line-height);
+    padding: 24px 24px 0;
+    text-align: center;
+  }
+
+  /* Icon slot — when an icon is present, add spacing */
+  .md-dialog__surface :global([slot='icon']) {
+    display: flex;
+    align-self: center;
+    color: var(--text-muted);
+    font-size: 24px;
+    padding-top: 24px;
+  }
+
+  .md-dialog__surface:has(:global([slot='icon'])) .md-dialog__headline {
+    padding-top: 16px;
+    align-items: center;
+  }
+
+  /* ─── Content / body ──────────────────────────────────────────────────── */
+  .md-dialog__content {
+    color: var(--_supporting-color);
+    font-family: var(--_supporting-font);
+    font-size: var(--_supporting-size);
+    line-height: var(--_supporting-line-height);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 16px 24px;
+  }
+
+  /* ─── Actions ─────────────────────────────────────────────────────────── */
+  .md-dialog__actions {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-end;
+    padding: 16px 24px 24px;
+  }
+
+  /* Divider between content and actions when content is scrollable */
+  .md-dialog__content + .md-dialog__actions {
+    border-top: 1px solid var(--line);
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     ANIMATIONS
+     ═══════════════════════════════════════════════════════════ */
+
+  /* Dialog open — slide up + fade in */
+  @keyframes md-dialog-open {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0)    scale(1);
+    }
+  }
+
+  /* Dialog close — slide down + fade out */
+  @keyframes md-dialog-close {
+    from {
+      opacity: 1;
+      transform: translateY(0)    scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(8px)  scale(0.98);
+    }
+  }
+
+  /* Scrim open */
+  @keyframes md-dialog-scrim-open {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* Scrim close */
+  @keyframes md-dialog-scrim-close {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     FORCED COLORS (high-contrast mode)
+     ═══════════════════════════════════════════════════════════ */
+  @media (forced-colors: active) {
+    .md-dialog__surface {
+      outline: 2px solid CanvasText;
+    }
+  }
+</style>
