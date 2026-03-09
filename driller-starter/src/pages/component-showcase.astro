@@ -1,29 +1,31 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
 
-import Icon from '../../components/md/Icon.astro';
-import Divider from '../../components/md/Divider.astro';
-import Button from '../../components/md/Button.astro';
-import IconButton from '../../components/md/IconButton.astro';
-import FAB from '../../components/md/FAB.astro';
-import Checkbox from '../../components/md/Checkbox.astro';
-import Radio from '../../components/md/Radio.astro';
-import Switch from '../../components/md/Switch.astro';
-import Slider from '../../components/md/Slider.astro';
-import TextField from '../../components/md/TextField.astro';
-import Select from '../../components/md/Select.astro';
-import SelectOption from '../../components/md/SelectOption.astro';
-import Chip from '../../components/md/Chip.astro';
-import ChipSet from '../../components/md/ChipSet.astro';
-import List from '../../components/md/List.astro';
-import ListItem from '../../components/md/ListItem.astro';
-import Menu from '../../components/md/Menu.astro';
-import MenuItem from '../../components/md/MenuItem.astro';
-import Tabs from '../../components/md/Tabs.astro';
-import Tab from '../../components/md/Tab.astro';
-import Dialog from '../../components/md/Dialog.astro';
-import CircularProgress from '../../components/md/CircularProgress.astro';
-import LinearProgress from '../../components/md/LinearProgress.astro';
+import Icon from '../components/md/Icon.astro';
+import Divider from '../components/md/Divider.astro';
+import Button from '../components/md/Button.astro';
+import IconButton from '../components/md/IconButton.astro';
+import FAB from '../components/md/FAB.astro';
+import Checkbox from '../components/md/Checkbox.astro';
+import Radio from '../components/md/Radio.astro';
+import Switch from '../components/md/Switch.astro';
+import Slider from '../components/md/Slider.astro';
+import TextField from '../components/md/TextField.astro';
+import Select from '../components/md/Select.astro';
+import SelectOption from '../components/md/SelectOption.astro';
+import Chip from '../components/md/Chip.astro';
+import ChipSet from '../components/md/ChipSet.astro';
+import List from '../components/md/List.astro';
+import ListItem from '../components/md/ListItem.astro';
+import Menu from '../components/md/Menu.astro';
+import MenuItem from '../components/md/MenuItem.astro';
+import Tabs from '../components/md/Tabs.astro';
+import Tab from '../components/md/Tab.astro';
+import Dialog from '../components/md/Dialog.astro';
+import CircularProgress from '../components/md/CircularProgress.astro';
+import LinearProgress from '../components/md/LinearProgress.astro';
+import Badge from '../components/md/Badge.astro';
+import Card from '../components/md/Card.astro';
 ---
 
 <BaseLayout title="Component Showcase">
@@ -671,6 +673,54 @@ import LinearProgress from '../../components/md/LinearProgress.astro';
 
         <p class="showcase-label">Indeterminate four-color</p>
         <LinearProgress indeterminate fourColor />
+      </div>
+    </section>
+
+    <Divider />
+
+    <!-- ══════════════════════════════════════
+         BADGE
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-badge">
+      <h2 class="showcase-section-title">Badge</h2>
+      <div class="showcase-row" style="gap: 2rem; margin-top: 1rem; align-items: flex-end;">
+        <div style="position: relative; width: 48px; height: 48px; background: var(--surface-container-highest, #ececec); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+          <Icon name="mail" />
+          <Badge />
+        </div>
+        <div style="position: relative; width: 48px; height: 48px; background: var(--surface-container-highest, #ececec); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+          <Icon name="notifications" />
+          <Badge value="3" />
+        </div>
+        <div style="position: relative; width: 48px; height: 48px; background: var(--surface-container-highest, #ececec); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+          <Icon name="person" />
+          <Badge value="99+" />
+        </div>
+      </div>
+    </section>
+
+    <Divider />
+
+    <!-- ══════════════════════════════════════
+         CARD
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-card">
+      <h2 class="showcase-section-title">Card</h2>
+      <div class="showcase-grid">
+        <Card variant="elevated" style="padding: 1.5rem;">
+          <h3 style="margin: 0 0 0.5rem;">Elevated Card</h3>
+          <p style="margin: 0; color: var(--text-muted, #444);">This is an elevated card using drop shadow.</p>
+        </Card>
+        
+        <Card variant="filled" style="padding: 1.5rem;">
+          <h3 style="margin: 0 0 0.5rem;">Filled Card</h3>
+          <p style="margin: 0; color: var(--text-muted, #444);">This is a filled card using surface container highest.</p>
+        </Card>
+        
+        <Card variant="outlined" style="padding: 1.5rem;">
+          <h3 style="margin: 0 0 0.5rem;">Outlined Card</h3>
+          <p style="margin: 0; color: var(--text-muted, #444);">This is an outlined card with a 1px border.</p>
+        </Card>
       </div>
     </section>
 
