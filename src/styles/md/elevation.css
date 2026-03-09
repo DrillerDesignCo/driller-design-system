@@ -1,0 +1,113 @@
+/*
+ * Material Design 3 — Elevation (CSS-Only)
+ * Implements MD3 elevation levels 0–5 using dual box-shadows.
+ *
+ * Usage:
+ *   <div class="md-elevation" style="--md-elevation-level: 2"></div>
+ *   — or use utility classes: .md-elevation-0 through .md-elevation-5
+ *
+ * The element should be `position: absolute; inset: 0; pointer-events: none;`
+ * inside a `position: relative` parent and `border-radius: inherit`.
+ */
+
+/* ── Elevation overlay element ── */
+.md-elevation {
+  border-radius: inherit;
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  transition-property: box-shadow, opacity;
+  transition-duration: inherit;
+  transition-timing-function: inherit;
+}
+
+/* Key shadow + Ambient shadow via pseudo-elements */
+.md-elevation::before,
+.md-elevation::after {
+  content: '';
+  border-radius: inherit;
+  inset: 0;
+  position: absolute;
+  transition-property: box-shadow, opacity;
+  transition-duration: inherit;
+  transition-timing-function: inherit;
+}
+
+/* Key shadow */
+.md-elevation::before {
+  opacity: 0.3;
+}
+
+/* Ambient shadow */
+.md-elevation::after {
+  opacity: 0.15;
+}
+
+/* ── Level 0 (default, no shadow) ── */
+.md-elevation-0,
+.md-elevation {
+  --md-elevation-level: 0;
+}
+.md-elevation-0::before, .md-elevation-0::after {
+  box-shadow: 0px 0px 0px 0px var(--md-elevation-shadow-color, rgba(0,0,0,1));
+}
+
+/* ── Level 1 ── */
+.md-elevation-1 { --md-elevation-level: 1; }
+.md-elevation-1::before {
+  box-shadow: 0px 1px 2px 0px var(--md-elevation-shadow-color, rgba(0,0,0,1));
+}
+.md-elevation-1::after {
+  box-shadow: 0px 1px 3px 1px var(--md-elevation-shadow-color, rgba(0,0,0,1));
+}
+
+/* ── Level 2 ── */
+.md-elevation-2 { --md-elevation-level: 2; }
+.md-elevation-2::before {
+  box-shadow: 0px 1px 2px 0px var(--md-elevation-shadow-color, rgba(0,0,0,1));
+}
+.md-elevation-2::after {
+  box-shadow: 0px 2px 6px 2px var(--md-elevation-shadow-color, rgba(0,0,0,1));
+}
+
+/* ── Level 3 ── */
+.md-elevation-3 { --md-elevation-level: 3; }
+.md-elevation-3::before {
+  box-shadow: 0px 1px 3px 0px var(--md-elevation-shadow-color, rgba(0,0,0,1));
+}
+.md-elevation-3::after {
+  box-shadow: 0px 4px 8px 3px var(--md-elevation-shadow-color, rgba(0,0,0,1));
+}
+
+/* ── Level 4 ── */
+.md-elevation-4 { --md-elevation-level: 4; }
+.md-elevation-4::before {
+  box-shadow: 0px 2px 3px 0px var(--md-elevation-shadow-color, rgba(0,0,0,1));
+}
+.md-elevation-4::after {
+  box-shadow: 0px 6px 10px 4px var(--md-elevation-shadow-color, rgba(0,0,0,1));
+}
+
+/* ── Level 5 ── */
+.md-elevation-5 { --md-elevation-level: 5; }
+.md-elevation-5::before {
+  box-shadow: 0px 4px 4px 0px var(--md-elevation-shadow-color, rgba(0,0,0,1));
+}
+.md-elevation-5::after {
+  box-shadow: 0px 8px 12px 6px var(--md-elevation-shadow-color, rgba(0,0,0,1));
+}
+
+/* ── Hover elevation boost ── */
+.md-elevation-hover-1:hover::before {
+  box-shadow: 0px 1px 2px 0px var(--md-elevation-shadow-color, rgba(0,0,0,1));
+}
+.md-elevation-hover-1:hover::after {
+  box-shadow: 0px 1px 3px 1px var(--md-elevation-shadow-color, rgba(0,0,0,1));
+}
+
+.md-elevation-hover-2:hover::before {
+  box-shadow: 0px 1px 2px 0px var(--md-elevation-shadow-color, rgba(0,0,0,1));
+}
+.md-elevation-hover-2:hover::after {
+  box-shadow: 0px 2px 6px 2px var(--md-elevation-shadow-color, rgba(0,0,0,1));
+}

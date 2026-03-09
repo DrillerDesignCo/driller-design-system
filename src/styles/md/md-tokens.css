@@ -1,0 +1,97 @@
+/*
+ * Material Design 3 — Component Tokens
+ * Maps MD sys tokens → Driller design tokens
+ * Consumed by all md/ component styles
+ */
+
+:root {
+  /* ── Ripple ── */
+  --md-ripple-hover-color: var(--color-primary);
+  --md-ripple-hover-opacity: 0.08;
+  --md-ripple-pressed-color: var(--color-primary);
+  --md-ripple-pressed-opacity: 0.12;
+
+  /* ── Elevation ── */
+  --md-elevation-level: 0;
+  --md-elevation-shadow-color: rgba(0, 0, 0, 1);
+
+  /* ── Focus Ring ── */
+  --md-focus-ring-color: var(--focus-ring);
+  --md-focus-ring-width: 3px;
+  --md-focus-ring-active-width: 8px;
+  --md-focus-ring-outward-offset: 2px;
+  --md-focus-ring-inward-offset: 0px;
+  --md-focus-ring-duration: 600ms;
+  --md-focus-ring-shape: inherit;
+
+  /* ── Icon ── */
+  --md-icon-size: 24px;
+  --md-icon-font: 'Material Symbols Outlined';
+
+  /* ── Divider ── */
+  --md-divider-color: var(--line);
+  --md-divider-thickness: 1px;
+
+  /* ── Button — shared ── */
+  --md-button-container-height: 40px;
+  --md-button-container-shape: 9999px;
+  --md-button-label-text-font: var(--font-body);
+  --md-button-label-text-size: 0.875rem;
+  --md-button-label-text-weight: 500;
+  --md-button-label-text-line-height: 1.25rem;
+  --md-button-icon-size: 18px;
+  --md-button-leading-space: 24px;
+  --md-button-trailing-space: 24px;
+  --md-button-with-leading-icon-leading-space: 16px;
+  --md-button-with-leading-icon-trailing-space: 24px;
+  --md-button-with-trailing-icon-leading-space: 24px;
+  --md-button-with-trailing-icon-trailing-space: 16px;
+
+  /* Button — Elevated */
+  --md-elevated-button-container-color: var(--surface-raised);
+  --md-elevated-button-label-text-color: var(--color-primary);
+  --md-elevated-button-elevation: 1;
+
+  /* Button — Filled */
+  --md-filled-button-container-color: var(--color-primary);
+  --md-filled-button-label-text-color: #ffffff;
+
+  /* Button — Filled Tonal */
+  --md-filled-tonal-button-container-color: var(--accent-soft);
+  --md-filled-tonal-button-label-text-color: var(--text);
+
+  /* Button — Outlined */
+  --md-outlined-button-label-text-color: var(--color-primary);
+  --md-outlined-button-outline-color: var(--line-strong);
+  --md-outlined-button-outline-width: 1px;
+
+  /* Button — Text */
+  --md-text-button-label-text-color: var(--color-primary);
+
+  /* ── Sys Motion ── */
+  --md-sys-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --md-sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* ── Sys Shape ── */
+  --md-sys-shape-corner-full: 9999px;
+  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-none: 0px;
+}
+
+/* Dark section overrides */
+.dark-section {
+  --md-ripple-hover-color: var(--color-light);
+  --md-ripple-pressed-color: var(--color-light);
+  --md-elevated-button-container-color: var(--surface);
+  --md-elevated-button-label-text-color: var(--color-light);
+  --md-filled-tonal-button-container-color: rgba(255, 255, 255, 0.12);
+  --md-filled-tonal-button-label-text-color: var(--color-light);
+  --md-outlined-button-label-text-color: var(--color-light);
+  --md-outlined-button-outline-color: var(--line-strong);
+  --md-text-button-label-text-color: var(--color-primary);
+  --md-divider-color: var(--line);
+}

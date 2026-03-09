@@ -1,0 +1,112 @@
+/*
+ * Driller Starter — Three-Layer Token System (Light Mode)
+ * ────────────────────────────────────────────────────────
+ * Layer 1: Primitives  → brand-specific values (swap per client)
+ * Layer 2: Semantic     → purpose-driven aliases (same structure, every site)
+ * Layer 3: Component    → consumed by UI components
+ */
+
+/* ══════════════════════════════════════════════
+   LAYER 1 — PRIMITIVES
+   ══════════════════════════════════════════════ */
+
+:root {
+  --color-primary: #D4764E;
+  --color-dark: #1B3A5C;
+  --color-light: #FAFAF8;
+  --color-accent-text: #A85A35;
+  --color-white: #ffffff;
+
+  --font-display: 'DM Serif Display', serif;
+  --font-body: 'Poppins', sans-serif;
+  --font-serif: 'Source Serif 4', serif;
+}
+
+
+/* ══════════════════════════════════════════════
+   LAYER 2 — SEMANTIC TOKENS (Light Shell)
+   ══════════════════════════════════════════════ */
+
+:root {
+  /* Backgrounds */
+  --bg: var(--color-white);
+  --surface: var(--color-light);
+  --surface-raised: #ffffff;
+
+  /* Text */
+  --text: var(--color-dark);
+  --text-muted: #4A5568;
+  --text-faint: #8A94A6;
+
+  /* Accent */
+  --accent: var(--color-accent-text);
+  --accent-bg: var(--color-primary);
+  --accent-soft: rgba(212, 118, 78, 0.10);
+  --focus-ring: rgba(212, 118, 78, 0.50);
+
+  /* Lines */
+  --line: rgba(27, 58, 92, 0.10);
+  --line-strong: rgba(27, 58, 92, 0.20);
+
+  /* Nav */
+  --nav-bg: var(--color-white);
+  --nav-text: var(--color-dark);
+  --nav-text-muted: #6B6460;
+  --nav-border: var(--line);
+}
+
+
+/* ══════════════════════════════════════════════
+   LAYER 2 — DARK SECTION VARIANT
+   ══════════════════════════════════════════════ */
+
+.dark-section {
+  --bg: var(--color-dark);
+  --surface: #15304E;
+  --text: var(--color-light);
+  --text-muted: rgba(255, 255, 255, 0.75);
+  --text-faint: rgba(255, 255, 255, 0.50);
+  --accent: var(--color-primary);
+  --line: rgba(255, 255, 255, 0.15);
+  --line-strong: rgba(255, 255, 255, 0.30);
+  background: var(--bg);
+  color: var(--text);
+}
+
+
+/* ══════════════════════════════════════════════
+   LAYER 3 — COMPONENT TOKENS
+   ══════════════════════════════════════════════ */
+
+:root {
+  /* Button — Primary (solid gold) */
+  --btn-primary-bg: var(--color-primary);
+  --btn-primary-text: var(--color-dark);
+  --btn-primary-border: var(--color-primary);
+  --btn-primary-hover-bg: #BE6540;
+  --btn-primary-hover-text: #FFFFFF;
+
+  /* Button — Secondary (outlined dark) */
+  --btn-secondary-bg: transparent;
+  --btn-secondary-text: var(--color-dark);
+  --btn-secondary-border: var(--line-strong);
+  --btn-secondary-hover-bg: var(--color-dark);
+  --btn-secondary-hover-text: var(--color-light);
+
+  /* Container */
+  --container-max: 1200px;
+  --container-padding: 1.5rem;
+  --reading-max: 760px;
+}
+
+/* Dark section button overrides */
+.dark-section {
+  --btn-primary-bg: var(--color-primary);
+  --btn-primary-text: var(--color-dark);
+  --btn-primary-border: var(--color-primary);
+  --btn-secondary-bg: transparent;
+  --btn-secondary-text: var(--color-light);
+  --btn-secondary-border: rgba(255, 255, 255, 0.40);
+  --btn-secondary-hover-bg: var(--color-light);
+  --btn-secondary-hover-text: var(--color-dark);
+}

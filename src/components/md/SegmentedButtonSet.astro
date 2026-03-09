@@ -1,0 +1,85 @@
+---
+/**
+ * @license
+ * Copyright 2026 Driller Design Co.
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Part of the Driller Design System
+ * Built on Material Design 3 principles
+ * https://drillerdesign.co
+ */
+
+interface Props {
+  multiselect?: boolean;
+  class?: string;
+}
+
+const {
+  multiselect = false,
+  class: className,
+  ...attrs
+} = Astro.props;
+---
+
+<span
+  class:list={['md-segmented-button-set', className]}
+  role="group"
+  data-multiselect={multiselect || undefined}
+  {...attrs}
+>
+  <slot />
+</span>
+
+<style>
+  .md-segmented-button-set {
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
+    width: 100%;
+    height: 40px;
+  }
+
+  /* Round first and last children */
+  .md-segmented-button-set :global(.md-segmented-button:first-child) {
+    border-start-start-radius: 20px;
+    border-end-start-radius: 20px;
+  }
+
+  .md-segmented-button-set :global(.md-segmented-button:last-child) {
+    border-start-end-radius: 20px;
+    border-end-end-radius: 20px;
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.md-segmented-button-set').forEach((set) => {
+    const isMulti = set.hasAttribute('data-multiselect');
+    const buttons = Array.from(set.querySelectorAll<HTMLButtonElement>('.md-segmented-button'));
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (btn.disabled) return;
+
+        if (isMulti) {
+          const wasSelected = btn.classList.contains('md-segmented-button--selected');
+          btn.classList.toggle('md-segmented-button--selected', !wasSelected);
+          btn.classList.toggle('md-segmented-button--unselected', wasSelected);
+          btn.setAttribute('aria-pressed', !wasSelected ? 'true' : 'false');
+        } else {
+          // Single select — cannot deselect
+          if (btn.classList.contains('md-segmented-button--selected')) return;
+
+          buttons.forEach((b) => {
+            b.classList.remove('md-segmented-button--selected');
+            b.classList.add('md-segmented-button--unselected');
+            b.setAttribute('aria-pressed', 'false');
+          });
+
+          btn.classList.add('md-segmented-button--selected');
+          btn.classList.remove('md-segmented-button--unselected');
+          btn.setAttribute('aria-pressed', 'true');
+        }
+      });
+    });
+  });
+</script>

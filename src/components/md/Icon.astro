@@ -1,0 +1,78 @@
+---
+/**
+ * @license
+ * Copyright 2026 Driller Design Co.
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Part of the Driller Design System
+ * Built on Material Design 3 principles
+ * https://drillerdesign.co
+ */
+
+interface Props {
+  /** Material Symbols icon name, e.g. "search", "home", "arrow_forward" */
+  name: string;
+  /** Render the filled variant of the icon */
+  filled?: boolean;
+  /** Icon size in px (overrides the default 24px) */
+  size?: number;
+  /** Additional CSS classes */
+  class?: string;
+}
+
+const {
+  name,
+  filled = false,
+  size,
+  class: className,
+  ...attrs
+} = Astro.props;
+
+const sizeStyle = size ? `font-size:${size}px;width:${size}px;height:${size}px;` : undefined;
+const fillStyle = filled ? `font-variation-settings:'FILL' 1;` : undefined;
+const inlineStyle = [sizeStyle, fillStyle].filter(Boolean).join('') || undefined;
+---
+
+<span
+  class:list={['md-icon', 'material-symbols-outlined', className]}
+  aria-hidden="true"
+  style={inlineStyle}
+  {...attrs}
+>{name}</span>
+
+<style>
+  /* Converted from icon/internal/_icon.scss */
+  .md-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    color: inherit;
+    font-variation-settings: inherit;
+    font-weight: 400;
+    font-family: 'Material Symbols Outlined';
+    display: inline-flex;
+    font-style: normal;
+    place-items: center;
+    place-content: center;
+    line-height: 1;
+    overflow: hidden;
+    letter-spacing: normal;
+    text-transform: none;
+    user-select: none;
+    white-space: nowrap;
+    word-wrap: normal;
+    flex-shrink: 0;
+
+    /* Font smoothing */
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* SVG icon children */
+  .md-icon :global(svg) {
+    fill: currentColor;
+    height: 100%;
+    width: 100%;
+  }
+</style>

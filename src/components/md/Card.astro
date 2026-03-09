@@ -1,0 +1,157 @@
+---
+/**
+ * @license
+ * Copyright 2026 Driller Design Co.
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Part of the Driller Design System
+ * Built on Material Design 3 principles
+ * https://drillerdesign.co
+ */
+
+/**
+ * Material Design 3 — Card
+ * Supports: elevated | filled | outlined variants
+ *
+ * Usage:
+ *   <Card variant="elevated">
+ *     <p>Card content here</p>
+ *   </Card>
+ *
+ *   <Card variant="outlined">
+ *     <p>Outlined card</p>
+ *   </Card>
+ */
+
+interface Props {
+  variant?: 'elevated' | 'filled' | 'outlined';
+  class?: string;
+  [key: string]: any;
+}
+
+const {
+  variant = 'filled',
+  class: className,
+  ...attrs
+} = Astro.props;
+---
+
+<div
+  class:list={['md-card', `md-card--${variant}`, className]}
+  {...attrs}
+>
+  <div class="md-card__background"></div>
+  <slot />
+  <div class="md-card__outline"></div>
+</div>
+
+<style>
+  /* ═══════════════════════════════════════════════════════════
+     CARD — local token aliases
+     ═══════════════════════════════════════════════════════════ */
+  .md-card {
+    /* Shape */
+    --_shape: var(--md-card-container-shape, 12px);
+
+    /* Elevated */
+    --_elevated-color:  var(--md-elevated-card-container-color,  var(--surface-container-low, var(--surface)));
+    --_elevated-shadow: var(--md-elevated-card-container-shadow-color, rgba(0, 0, 0, 0.08));
+
+    /* Filled */
+    --_filled-color:    var(--md-filled-card-container-color,    var(--surface-container-highest, var(--surface)));
+
+    /* Outlined */
+    --_outlined-color:  var(--md-outlined-card-container-color,  var(--surface));
+    --_outline-color:   var(--md-outlined-card-outline-color,    var(--line, rgba(0, 0, 0, 0.12)));
+    --_outline-width:   var(--md-outlined-card-outline-width,    1px);
+  }
+
+  /* ─── Base ────────────────────────────────────────────────────────────── */
+  .md-card {
+    border-radius: var(--_shape);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    z-index: 0;
+    overflow: hidden;
+    /* Ensure child text colors inherit from token context */
+    color: var(--text, inherit);
+  }
+
+  /* ─── Background layer (z-index: -1, behind slot content) ──────────────── */
+  .md-card__background {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    /* Background is set per variant, below */
+  }
+
+  /* ─── Outline layer (z-index: 1, on top of slot content, non-interactive) */
+  .md-card__outline {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    border-radius: inherit;
+    /* Transparent HCM border */
+    border: 0 solid transparent;
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     ELEVATED variant
+     ═══════════════════════════════════════════════════════════ */
+  .md-card--elevated .md-card__background {
+    background: var(--_elevated-color);
+  }
+
+  .md-card--elevated {
+    box-shadow:
+      0px  1px  2px  0px var(--_elevated-shadow),
+      0px  1px  3px  1px var(--_elevated-shadow);
+  }
+
+  /* Lifted on hover */
+  .md-card--elevated:hover {
+    box-shadow:
+      0px  1px  2px  0px var(--_elevated-shadow),
+      0px  2px  6px  2px var(--_elevated-shadow);
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     FILLED variant
+     ═══════════════════════════════════════════════════════════ */
+  .md-card--filled .md-card__background {
+    background: var(--_filled-color);
+  }
+
+  .md-card--filled {
+    box-shadow: none;
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     OUTLINED variant
+     ═══════════════════════════════════════════════════════════ */
+  .md-card--outlined .md-card__background {
+    background: var(--_outlined-color);
+  }
+
+  .md-card--outlined {
+    box-shadow: none;
+  }
+
+  .md-card--outlined .md-card__outline {
+    border-width: var(--_outline-width);
+    border-color: var(--_outline-color);
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     FORCED COLORS (high-contrast mode)
+     ═══════════════════════════════════════════════════════════ */
+  @media (forced-colors: active) {
+    .md-card__outline {
+      border-width: 1px;
+      border-color: CanvasText;
+    }
+  }
+</style>

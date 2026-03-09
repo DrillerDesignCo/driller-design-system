@@ -1,0 +1,45 @@
+---
+import { brand } from '../config/brand';
+
+interface Props {
+  headline?: string;
+  description?: string;
+  cta?: { label: string; href: string };
+  variant?: 'light' | 'dark';
+}
+
+const {
+  headline = "Ready to Scale?",
+  description = "Bring the business. We'll architect the blueprint.",
+  cta = brand.cta.primary,
+  variant = 'dark',
+} = Astro.props;
+---
+
+<section class={`cta-block section ${variant === 'dark' ? 'dark-section' : ''}`}>
+  <div class="container cta-inner">
+    <span class="micro-label" style="color: var(--accent);">LET'S WORK TOGETHER</span>
+    <h2 class="display-lg cta-headline">{headline}</h2>
+    {description && <p class="body-lg cta-description">{description}</p>}
+    <a href={cta.href} class="btn btn-primary">{cta.label}</a>
+  </div>
+</section>
+
+<style>
+  .cta-block {
+    text-align: center;
+  }
+
+  .cta-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .cta-description {
+    max-width: 500px;
+  }
+</style>

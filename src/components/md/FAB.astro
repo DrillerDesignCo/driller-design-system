@@ -1,0 +1,193 @@
+---
+/**
+ * @license
+ * Copyright 2026 Driller Design Co.
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Part of the Driller Design System
+ * Built on Material Design 3 principles
+ * https://drillerdesign.co
+ */
+
+/**
+ * Material Design Floating Action Button (FAB)
+ * Converted from @material/web fab component to Astro.
+ */
+
+interface Props {
+  /** Color variant. */
+  variant?: 'surface' | 'primary' | 'secondary' | 'tertiary';
+  /** FAB size. */
+  size?: 'small' | 'medium' | 'large';
+  /** Extended FAB label — shows icon + text when set. */
+  label?: string;
+  /** Lowers the elevation. */
+  lowered?: boolean;
+  /** Additional CSS classes. */
+  class?: string;
+}
+
+const {
+  variant = 'primary',
+  size = 'medium',
+  label,
+  lowered = false,
+  class: className,
+  ...attrs
+} = Astro.props;
+
+const isExtended = !!label;
+---
+
+<button
+  class:list={[
+    'md-fab',
+    `md-fab--${variant}`,
+    `md-fab--${size}`,
+    {
+      'md-fab--extended': isExtended,
+      'md-fab--lowered': lowered,
+    },
+    className,
+  ]}
+  {...attrs}
+>
+  <span class="md-fab__elevation"></span>
+  <span class="md-ripple" aria-hidden="true"></span>
+  <span class="md-fab__icon"><slot name="icon"><slot /></slot></span>
+  {label && <span class="md-fab__label">{label}</span>}
+</button>
+
+<style>
+  /* ── Tokens ─────────────────────────────────── */
+  .md-fab {
+    --_shape: var(--md-fab-container-shape, 16px);
+    --_size: 56px;
+    --_icon-size: 24px;
+  }
+
+  /* ── Base ──────────────────────────────────── */
+  .md-fab {
+    align-items: center;
+    border: none;
+    border-radius: var(--_shape);
+    box-sizing: border-box;
+    cursor: pointer;
+    display: inline-flex;
+    font-family: var(--font-body);
+    font-size: var(--md-fab-label-text-size, 0.875rem);
+    font-weight: var(--md-fab-label-text-weight, 500);
+    gap: 12px;
+    height: var(--_size);
+    justify-content: center;
+    min-width: var(--_size);
+    outline: none;
+    overflow: hidden;
+    padding: 0 16px;
+    position: relative;
+    text-decoration: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: box-shadow 0.28s ease, transform 0.1s ease;
+    z-index: 0;
+    box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.3), 0px 4px 8px 3px rgba(0,0,0,0.15);
+  }
+
+  .md-fab--lowered {
+    box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.3), 0px 1px 3px 1px rgba(0,0,0,0.15);
+  }
+
+  .md-fab:focus-visible {
+    outline: var(--md-focus-ring-width, 3px) solid var(--md-focus-ring-color, var(--focus-ring));
+    outline-offset: var(--md-focus-ring-outward-offset, 2px);
+  }
+
+  /* ── Sizes ─────────────────────────────────── */
+  .md-fab--small {
+    --_size: 40px;
+    --_shape: var(--md-fab-small-container-shape, 12px);
+    --_icon-size: 24px;
+  }
+
+  .md-fab--large {
+    --_size: 96px;
+    --_shape: var(--md-fab-large-container-shape, 28px);
+    --_icon-size: 36px;
+  }
+
+  .md-fab--extended {
+    --_shape: 16px;
+    height: 56px;
+    padding: 0 20px;
+  }
+
+  /* ── Variants ──────────────────────────────── */
+  .md-fab--surface {
+    background: var(--md-fab-surface-container-color, var(--surface-raised));
+    color: var(--md-fab-surface-label-text-color, var(--color-primary));
+  }
+
+  .md-fab--primary {
+    background: var(--md-fab-primary-container-color, var(--color-primary));
+    color: var(--md-fab-primary-label-text-color, #ffffff);
+  }
+
+  .md-fab--secondary {
+    background: var(--md-fab-secondary-container-color, var(--accent-soft));
+    color: var(--md-fab-secondary-label-text-color, var(--text));
+  }
+
+  .md-fab--tertiary {
+    background: var(--md-fab-tertiary-container-color, var(--color-dark));
+    color: var(--md-fab-tertiary-label-text-color, var(--color-light));
+  }
+
+  /* ── Hover ─────────────────────────────────── */
+  .md-fab:hover {
+    box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.3), 0px 6px 10px 4px rgba(0,0,0,0.15);
+  }
+
+  .md-fab--lowered:hover {
+    box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.3), 0px 2px 6px 2px rgba(0,0,0,0.15);
+  }
+
+  /* ── Icon / Label ──────────────────────────── */
+  .md-fab__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--_icon-size);
+    width: var(--_icon-size);
+    height: var(--_icon-size);
+    position: relative;
+    z-index: 1;
+  }
+
+  .md-fab__icon :global(svg),
+  .md-fab__icon :global(img) {
+    width: var(--_icon-size);
+    height: var(--_icon-size);
+  }
+
+  .md-fab__label {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .md-fab__elevation {
+    border-radius: inherit;
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+  }
+
+  /* ── High contrast ─────────────────────────── */
+  @media (forced-colors: active) {
+    .md-fab {
+      border: 1px solid CanvasText;
+    }
+  }
+</style>

@@ -1,0 +1,84 @@
+/*
+ * Material Design 3 — Focus Ring (CSS-Only)
+ * Replaces <md-focus-ring> web component with :focus-visible styling.
+ *
+ * Usage — Automatic (recommended):
+ *   Any interactive element with :focus-visible gets a ring automatically.
+ *
+ * Usage — Explicit class:
+ *   Add `.md-focus-ring` to a container to scope focus ring styles.
+ */
+
+/* ── Global focus-visible ring ── */
+:focus-visible {
+  outline: var(--md-focus-ring-width, 3px) solid var(--md-focus-ring-color, var(--focus-ring));
+  outline-offset: var(--md-focus-ring-outward-offset, 2px);
+  border-radius: inherit;
+}
+
+/* Remove default outline on elements that have the ring */
+:focus-visible:not(:focus-visible) {
+  outline: none;
+}
+
+/* ── Animated focus ring (opt-in via class) ── */
+.md-focus-ring {
+  position: relative;
+}
+
+.md-focus-ring :focus-visible,
+.md-focus-ring:focus-visible {
+  outline: none;
+}
+
+.md-focus-ring :focus-visible::before,
+.md-focus-ring:focus-visible::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--md-focus-ring-outward-offset, 2px));
+  border-radius: inherit;
+  outline: var(--md-focus-ring-width, 3px) solid var(--md-focus-ring-color, var(--focus-ring));
+  pointer-events: none;
+  animation:
+    md-focus-ring-grow calc(var(--md-focus-ring-duration, 600ms) * 0.25),
+    md-focus-ring-shrink calc(var(--md-focus-ring-duration, 600ms) * 0.75)
+      calc(var(--md-focus-ring-duration, 600ms) * 0.25);
+  animation-timing-function: var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
+  animation-fill-mode: forwards;
+}
+
+/* Inward variant */
+.md-focus-ring-inward :focus-visible::before,
+.md-focus-ring-inward:focus-visible::before {
+  inset: var(--md-focus-ring-inward-offset, 0px);
+  outline: none;
+  border: var(--md-focus-ring-width, 3px) solid var(--md-focus-ring-color, var(--focus-ring));
+  animation-name: md-focus-ring-inward-grow, md-focus-ring-inward-shrink;
+}
+
+/* ── Keyframes ── */
+@keyframes md-focus-ring-grow {
+  from { outline-width: 0; }
+  to   { outline-width: var(--md-focus-ring-active-width, 8px); }
+}
+
+@keyframes md-focus-ring-shrink {
+  from { outline-width: var(--md-focus-ring-active-width, 8px); }
+}
+
+@keyframes md-focus-ring-inward-grow {
+  from { border-width: 0; }
+  to   { border-width: var(--md-focus-ring-active-width, 8px); }
+}
+
+@keyframes md-focus-ring-inward-shrink {
+  from { border-width: var(--md-focus-ring-active-width, 8px); }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion) {
+  .md-focus-ring :focus-visible::before,
+  .md-focus-ring:focus-visible::before {
+    animation: none;
+  }
+}

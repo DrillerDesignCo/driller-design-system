@@ -1,0 +1,420 @@
+---
+/**
+ * @license
+ * Copyright 2026 Driller Design Co.
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Part of the Driller Design System
+ * Built on Material Design 3 principles
+ * https://drillerdesign.co
+ */
+
+/**
+ * Material Design 3 — Button
+ * Supports: elevated, filled, filled-tonal, outlined, text
+ *
+ * Usage:
+ *   <Button variant="filled">Label</Button>
+ *   <Button variant="outlined" href="/page">Link</Button>
+ *   <Button variant="elevated"><Icon slot="icon" name="add" /> Create</Button>
+ */
+
+interface Props {
+  variant?: 'elevated' | 'filled' | 'filled-tonal' | 'outlined' | 'text';
+  href?: string;
+  disabled?: boolean;
+  softDisabled?: boolean;
+  trailingIcon?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+  target?: string;
+  download?: string;
+  value?: string;
+  name?: string;
+  class?: string;
+  [key: string]: any;
+}
+
+const {
+  variant = 'filled',
+  href,
+  disabled = false,
+  softDisabled = false,
+  trailingIcon = false,
+  type = 'submit',
+  target,
+  download,
+  value,
+  name,
+  class: className,
+  ...attrs
+} = Astro.props;
+
+const isLink = !!href;
+const Tag = isLink ? 'a' : 'button';
+const isDisabledOrSoft = disabled || softDisabled;
+---
+
+<Tag
+  class:list={[
+    'md-button',
+    `md-button--${variant}`,
+    {
+      'md-button--trailing-icon': trailingIcon,
+      'md-button--disabled': disabled,
+      'md-button--soft-disabled': softDisabled,
+    },
+    className,
+  ]}
+  {...isLink ? {
+    href,
+    target,
+    download: download || undefined,
+    'aria-disabled': isDisabledOrSoft || undefined,
+    tabindex: disabled && !softDisabled ? -1 : undefined,
+  } : {
+    type,
+    disabled,
+    'aria-disabled': softDisabled || undefined,
+    name,
+    value,
+  }}
+  {...attrs}
+>
+  {/* Background layer */}
+  <span class="md-button__bg" aria-hidden="true"></span>
+
+  {/* Elevation (elevated & filled & tonal only) */}
+  {(variant === 'elevated' || variant === 'filled' || variant === 'filled-tonal') && (
+    <span class="md-button__elevation md-elevation" aria-hidden="true"></span>
+  )}
+
+  {/* Outline (outlined only) */}
+  {variant === 'outlined' && (
+    <span class="md-button__outline" aria-hidden="true"></span>
+  )}
+
+  {/* Ripple */}
+  <span class="md-ripple" aria-hidden="true"></span>
+
+  {/* Content */}
+  <span class="md-button__touch" aria-hidden="true"></span>
+  {!trailingIcon && <slot name="icon" />}
+  <span class="md-button__label"><slot /></span>
+  {trailingIcon && <slot name="icon" />}
+</Tag>
+
+<style>
+  /* ═══════════════════════════════════════
+     BUTTON — Shared base
+     ═══════════════════════════════════════ */
+  .md-button {
+    --_shape: var(--md-button-container-shape, 9999px);
+    --_height: var(--md-button-container-height, 40px);
+    --_label-font: var(--md-button-label-text-font, var(--font-body));
+    --_label-size: var(--md-button-label-text-size, 0.875rem);
+    --_label-weight: var(--md-button-label-text-weight, 500);
+    --_icon-size: var(--md-button-icon-size, 18px);
+    --_leading-space: var(--md-button-leading-space, 24px);
+    --_trailing-space: var(--md-button-trailing-space, 24px);
+
+    border-radius: var(--_shape);
+    box-sizing: border-box;
+    cursor: pointer;
+    display: inline-flex;
+    gap: 8px;
+    min-height: var(--_height);
+    outline: none;
+    padding-block: calc((var(--_height) - var(--_label-size)) / 2);
+    padding-inline-start: var(--_leading-space);
+    padding-inline-end: var(--_trailing-space);
+    place-content: center;
+    place-items: center;
+    position: relative;
+    font-family: var(--_label-font);
+    font-size: var(--_label-size);
+    font-weight: var(--_label-weight);
+    line-height: 1.25rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    vertical-align: top;
+    text-decoration: none;
+    border: none;
+    transition: box-shadow 280ms var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
+  }
+
+  .md-button:focus-visible {
+    outline: 3px solid var(--md-focus-ring-color, var(--focus-ring));
+    outline-offset: 2px;
+  }
+
+  /* Content wrapper */
+  .md-button__label {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    text-overflow: inherit;
+  }
+
+  /* Touch target */
+  .md-button__touch {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  /* Background */
+  .md-button__bg {
+    background: var(--_container-color);
+    border-radius: inherit;
+    inset: 0;
+    position: absolute;
+  }
+
+  /* Icon slot */
+  .md-button ::slotted([slot='icon']),
+  .md-button :global([slot='icon']) {
+    display: inline-flex;
+    position: relative;
+    z-index: 1;
+    fill: currentColor;
+    flex-shrink: 0;
+    color: var(--_icon-color, currentColor);
+    font-size: var(--_icon-size);
+    width: var(--_icon-size);
+    height: var(--_icon-size);
+  }
+
+  /* Ripple */
+  .md-button > .md-ripple {
+    --md-ripple-hover-color: var(--_hover-state-layer-color, var(--md-ripple-hover-color));
+    --md-ripple-pressed-color: var(--_pressed-state-layer-color, var(--md-ripple-pressed-color));
+  }
+
+  /* Outline */
+  .md-button__outline {
+    inset: 0;
+    border-style: solid;
+    position: absolute;
+    box-sizing: border-box;
+    border-color: var(--_outline-color, var(--line-strong));
+    border-width: var(--_outline-width, 1px);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  /* With leading icon */
+  .md-button:has([slot='icon']):not(.md-button--trailing-icon) {
+    padding-inline-start: var(--md-button-with-leading-icon-leading-space, 16px);
+    padding-inline-end: var(--md-button-with-leading-icon-trailing-space, 24px);
+  }
+
+  /* With trailing icon */
+  .md-button--trailing-icon:has([slot='icon']) {
+    padding-inline-start: var(--md-button-with-trailing-icon-leading-space, 24px);
+    padding-inline-end: var(--md-button-with-trailing-icon-trailing-space, 16px);
+  }
+
+  /* Disabled */
+  .md-button--disabled,
+  .md-button--soft-disabled {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .md-button--disabled .md-button__label,
+  .md-button--soft-disabled .md-button__label {
+    opacity: 0.38;
+  }
+
+  .md-button--disabled .md-button__bg,
+  .md-button--soft-disabled .md-button__bg {
+    opacity: 0.12;
+  }
+
+  /* ═══════════════════════════════════════
+     VARIANT — Elevated
+     ═══════════════════════════════════════ */
+  .md-button--elevated {
+    --_container-color: var(--md-elevated-button-container-color, var(--surface-raised));
+    --_icon-color: var(--md-elevated-button-label-text-color, var(--color-primary));
+    --_hover-state-layer-color: var(--color-primary);
+    --_pressed-state-layer-color: var(--color-primary);
+    color: var(--md-elevated-button-label-text-color, var(--color-primary));
+  }
+
+  .md-button--elevated .md-button__elevation {
+    --md-elevation-level: 1;
+    transition: box-shadow 280ms var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
+  }
+
+  .md-button--elevated:hover .md-button__elevation {
+    --md-elevation-level: 2;
+  }
+
+  .md-button--elevated:active .md-button__elevation {
+    --md-elevation-level: 1;
+  }
+
+  .md-button--elevated.md-button--disabled .md-button__elevation {
+    --md-elevation-level: 0;
+  }
+
+  /* ═══════════════════════════════════════
+     VARIANT — Filled
+     ═══════════════════════════════════════ */
+  .md-button--filled {
+    --_container-color: var(--md-filled-button-container-color, var(--color-primary));
+    --_icon-color: var(--md-filled-button-label-text-color, #ffffff);
+    --_hover-state-layer-color: #ffffff;
+    --_pressed-state-layer-color: #ffffff;
+    color: var(--md-filled-button-label-text-color, #ffffff);
+  }
+
+  .md-button--filled .md-button__elevation {
+    --md-elevation-level: 0;
+  }
+
+  .md-button--filled:hover .md-button__elevation {
+    --md-elevation-level: 1;
+  }
+
+  .md-button--filled:active .md-button__elevation {
+    --md-elevation-level: 0;
+  }
+
+  /* ═══════════════════════════════════════
+     VARIANT — Filled Tonal
+     ═══════════════════════════════════════ */
+  .md-button--filled-tonal {
+    --_container-color: var(--md-filled-tonal-button-container-color, var(--accent-soft));
+    --_icon-color: var(--md-filled-tonal-button-label-text-color, var(--text));
+    --_hover-state-layer-color: var(--text);
+    --_pressed-state-layer-color: var(--text);
+    color: var(--md-filled-tonal-button-label-text-color, var(--text));
+  }
+
+  .md-button--filled-tonal .md-button__elevation {
+    --md-elevation-level: 0;
+  }
+
+  .md-button--filled-tonal:hover .md-button__elevation {
+    --md-elevation-level: 1;
+  }
+
+  /* ═══════════════════════════════════════
+     VARIANT — Outlined
+     ═══════════════════════════════════════ */
+  .md-button--outlined {
+    --_container-color: transparent;
+    --_outline-color: var(--md-outlined-button-outline-color, var(--line-strong));
+    --_outline-width: var(--md-outlined-button-outline-width, 1px);
+    --_icon-color: var(--md-outlined-button-label-text-color, var(--color-primary));
+    --_hover-state-layer-color: var(--color-primary);
+    --_pressed-state-layer-color: var(--color-primary);
+    color: var(--md-outlined-button-label-text-color, var(--color-primary));
+  }
+
+  .md-button--outlined:active .md-button__outline {
+    border-color: var(--text);
+  }
+
+  .md-button--outlined.md-button--disabled .md-button__outline {
+    border-color: var(--line);
+    opacity: 0.12;
+  }
+
+  /* ═══════════════════════════════════════
+     VARIANT — Text
+     ═══════════════════════════════════════ */
+  .md-button--text {
+    --_container-color: transparent;
+    --_icon-color: var(--md-text-button-label-text-color, var(--color-primary));
+    --_hover-state-layer-color: var(--color-primary);
+    --_pressed-state-layer-color: var(--color-primary);
+    color: var(--md-text-button-label-text-color, var(--color-primary));
+  }
+
+  /* ═══════════════════════════════════════
+     Elevation element styling
+     ═══════════════════════════════════════ */
+  .md-button__elevation {
+    border-radius: inherit;
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+  }
+
+  .md-button__elevation::before,
+  .md-button__elevation::after {
+    content: '';
+    border-radius: inherit;
+    inset: 0;
+    position: absolute;
+    transition: box-shadow 280ms var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
+  }
+
+  .md-button__elevation::before {
+    opacity: 0.3;
+  }
+
+  .md-button__elevation::after {
+    opacity: 0.15;
+  }
+
+  /* Elevation shadow values by level */
+  .md-button__elevation {
+    --_el: var(--md-elevation-level, 0);
+  }
+
+  /* Level 0 */
+  .md-button__elevation::before {
+    box-shadow: 0px 0px 0px 0px var(--md-elevation-shadow-color, rgba(0,0,0,1));
+  }
+  .md-button__elevation::after {
+    box-shadow: 0px 0px 0px 0px var(--md-elevation-shadow-color, rgba(0,0,0,1));
+  }
+
+  /* Level 1 */
+  .md-button--elevated .md-button__elevation::before,
+  .md-button--filled:hover .md-button__elevation::before,
+  .md-button--filled-tonal:hover .md-button__elevation::before {
+    box-shadow: 0px 1px 2px 0px var(--md-elevation-shadow-color, rgba(0,0,0,1));
+  }
+  .md-button--elevated .md-button__elevation::after,
+  .md-button--filled:hover .md-button__elevation::after,
+  .md-button--filled-tonal:hover .md-button__elevation::after {
+    box-shadow: 0px 1px 3px 1px var(--md-elevation-shadow-color, rgba(0,0,0,1));
+  }
+
+  /* Level 2 (elevated hover) */
+  .md-button--elevated:hover .md-button__elevation::before {
+    box-shadow: 0px 1px 2px 0px var(--md-elevation-shadow-color, rgba(0,0,0,1));
+  }
+  .md-button--elevated:hover .md-button__elevation::after {
+    box-shadow: 0px 2px 6px 2px var(--md-elevation-shadow-color, rgba(0,0,0,1));
+  }
+
+  /* Forced colors (high contrast mode) */
+  @media (forced-colors: active) {
+    .md-button__bg {
+      border: 1px solid CanvasText;
+    }
+
+    .md-button--disabled {
+      --_icon-color: GrayText;
+      color: GrayText;
+    }
+
+    .md-button--disabled .md-button__label,
+    .md-button--disabled .md-button__bg {
+      opacity: 1;
+    }
+
+    .md-button--outlined.md-button--disabled .md-button__outline {
+      border-color: GrayText;
+      opacity: 1;
+    }
+  }
+</style>

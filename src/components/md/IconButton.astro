@@ -1,0 +1,333 @@
+---
+/**
+ * @license
+ * Copyright 2026 Driller Design Co.
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Part of the Driller Design System
+ * Built on Material Design 3 principles
+ * https://drillerdesign.co
+ */
+
+/**
+ * Material Design 3 — Icon Button
+ * Supports: standard, filled, filled-tonal, outlined
+ * Optional toggle behavior.
+ *
+ * Usage:
+ *   <IconButton><Icon name="favorite" /></IconButton>
+ *   <IconButton variant="filled" toggle selected><Icon name="favorite" /></IconButton>
+ */
+
+interface Props {
+  variant?: 'standard' | 'filled' | 'filled-tonal' | 'outlined';
+  href?: string;
+  disabled?: boolean;
+  softDisabled?: boolean;
+  toggle?: boolean;
+  selected?: boolean;
+  flipIconInRtl?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+  target?: string;
+  download?: string;
+  ariaLabelSelected?: string;
+  class?: string;
+  [key: string]: any;
+}
+
+const {
+  variant = 'standard',
+  href,
+  disabled = false,
+  softDisabled = false,
+  toggle = false,
+  selected = false,
+  flipIconInRtl = false,
+  type = 'button',
+  target,
+  download,
+  ariaLabelSelected,
+  class: className,
+  ...attrs
+} = Astro.props;
+
+const isLink = !!href;
+const isDisabledOrSoft = disabled || softDisabled;
+---
+
+<div
+  class:list={[
+    'md-icon-button',
+    `md-icon-button--${variant}`,
+    {
+      'md-icon-button--selected': toggle && selected,
+      'md-icon-button--disabled': disabled,
+      'md-icon-button--soft-disabled': softDisabled,
+      'md-icon-button--toggle': toggle,
+      'md-icon-button--flip-icon': flipIconInRtl,
+    },
+    className,
+  ]}
+  data-toggle={toggle ? '' : undefined}
+  data-selected={toggle && selected ? '' : undefined}
+>
+  {/* Ripple */}
+  <span class="md-ripple" aria-hidden="true"></span>
+
+  {/* Icon — default state */}
+  <span class="md-icon-button__icon">
+    <slot />
+  </span>
+
+  {/* Icon — selected state (for toggle) */}
+  {toggle && (
+    <span class="md-icon-button__icon md-icon-button__icon--selected">
+      <slot name="selected"><slot /></slot>
+    </span>
+  )}
+
+  {/* Interactive element */}
+  {isLink ? (
+    <a
+      class="md-icon-button__link"
+      href={href}
+      target={target || undefined}
+      download={download || undefined}
+      aria-label={attrs['aria-label'] || undefined}
+    >
+      <span class="md-icon-button__touch"></span>
+    </a>
+  ) : (
+    <button
+      class="md-icon-button__button"
+      type={type}
+      disabled={disabled}
+      aria-disabled={softDisabled || undefined}
+      aria-pressed={toggle ? selected : undefined}
+      aria-label={attrs['aria-label'] || undefined}
+    >
+      <span class="md-icon-button__touch"></span>
+    </button>
+  )}
+</div>
+
+{toggle && (
+<script>
+  document.querySelectorAll('.md-icon-button[data-toggle]').forEach((el) => {
+    const btn = el.querySelector('button');
+    if (!btn) return;
+
+    btn.addEventListener('click', () => {
+      if (btn.disabled) return;
+      const wasSelected = el.hasAttribute('data-selected');
+      if (wasSelected) {
+        el.removeAttribute('data-selected');
+        el.classList.remove('md-icon-button--selected');
+        btn.setAttribute('aria-pressed', 'false');
+      } else {
+        el.setAttribute('data-selected', '');
+        el.classList.add('md-icon-button--selected');
+        btn.setAttribute('aria-pressed', 'true');
+      }
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+  });
+</script>
+)}
+
+<style>
+  /* ═══════════════════════════════════════
+     ICON BUTTON — Shared base
+     ═══════════════════════════════════════ */
+  .md-icon-button {
+    --_size: 40px;
+    --_icon-size: 24px;
+    --_shape: var(--md-sys-shape-corner-full, 9999px);
+    --_container-color: transparent;
+    --_icon-color: var(--text);
+    --_state-layer-color: var(--text);
+
+    position: relative;
+    display: inline-flex;
+    place-content: center;
+    place-items: center;
+    width: var(--_size);
+    height: var(--_size);
+    border-radius: var(--_shape);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    vertical-align: top;
+  }
+
+  .md-icon-button:focus-within {
+    outline: 3px solid var(--md-focus-ring-color, var(--focus-ring));
+    outline-offset: 2px;
+  }
+
+  /* Ripple */
+  .md-icon-button > .md-ripple {
+    --md-ripple-hover-color: var(--_state-layer-color);
+    --md-ripple-pressed-color: var(--_state-layer-color);
+    border-radius: var(--_shape);
+  }
+
+  /* Interactive element — covers the full area */
+  .md-icon-button__button,
+  .md-icon-button__link {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    place-content: center;
+    place-items: center;
+    border-radius: inherit;
+    border: none;
+    outline: none;
+    background: transparent;
+    cursor: inherit;
+    text-decoration: none;
+    color: inherit;
+    appearance: none;
+    padding: 0;
+    z-index: 1;
+  }
+
+  .md-icon-button__touch {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  /* Background layer */
+  .md-icon-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--_container-color);
+  }
+
+  /* Icon wrappers */
+  .md-icon-button__icon {
+    display: inline-flex;
+    place-items: center;
+    place-content: center;
+    color: var(--_icon-color);
+    font-size: var(--_icon-size);
+    width: var(--_icon-size);
+    height: var(--_icon-size);
+    z-index: 1;
+    position: relative;
+  }
+
+  /* Toggle: hide selected icon by default */
+  .md-icon-button__icon--selected {
+    display: none;
+  }
+
+  .md-icon-button--selected .md-icon-button__icon:not(.md-icon-button__icon--selected) {
+    display: none;
+  }
+
+  .md-icon-button--selected .md-icon-button__icon--selected {
+    display: inline-flex;
+  }
+
+  /* Icon color */
+  .md-icon-button :global(.md-icon),
+  .md-icon-button :global([data-icon]) {
+    color: inherit;
+    font-size: inherit;
+  }
+
+  /* Disabled */
+  .md-icon-button--disabled,
+  .md-icon-button--soft-disabled {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .md-icon-button--disabled .md-icon-button__icon {
+    opacity: 0.38;
+  }
+
+  /* ═══════════════════════════════════════
+     VARIANT — Standard
+     ═══════════════════════════════════════ */
+  .md-icon-button--standard {
+    --_icon-color: var(--text);
+    --_state-layer-color: var(--text);
+  }
+
+  .md-icon-button--standard.md-icon-button--selected {
+    --_icon-color: var(--color-primary);
+  }
+
+  /* ═══════════════════════════════════════
+     VARIANT — Filled
+     ═══════════════════════════════════════ */
+  .md-icon-button--filled {
+    --_container-color: var(--color-primary);
+    --_icon-color: #ffffff;
+    --_state-layer-color: #ffffff;
+  }
+
+  .md-icon-button--filled.md-icon-button--toggle:not(.md-icon-button--selected) {
+    --_container-color: var(--surface);
+    --_icon-color: var(--color-primary);
+    --_state-layer-color: var(--color-primary);
+  }
+
+  /* ═══════════════════════════════════════
+     VARIANT — Filled Tonal
+     ═══════════════════════════════════════ */
+  .md-icon-button--filled-tonal {
+    --_container-color: var(--accent-soft);
+    --_icon-color: var(--text);
+    --_state-layer-color: var(--text);
+  }
+
+  .md-icon-button--filled-tonal.md-icon-button--selected {
+    --_container-color: var(--color-primary);
+    --_icon-color: #ffffff;
+  }
+
+  /* ═══════════════════════════════════════
+     VARIANT — Outlined
+     ═══════════════════════════════════════ */
+  .md-icon-button--outlined {
+    --_icon-color: var(--text);
+    --_state-layer-color: var(--text);
+  }
+
+  .md-icon-button--outlined::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 1px solid var(--line-strong);
+    pointer-events: none;
+  }
+
+  .md-icon-button--outlined.md-icon-button--selected {
+    --_container-color: var(--color-primary);
+    --_icon-color: #ffffff;
+  }
+
+  .md-icon-button--outlined.md-icon-button--selected::after {
+    border-color: transparent;
+  }
+
+  .md-icon-button--outlined.md-icon-button--disabled::after {
+    border-color: var(--line);
+    opacity: 0.12;
+  }
+
+  /* ═══════════════════════════════════════
+     Forced colors
+     ═══════════════════════════════════════ */
+  @media (forced-colors: active) {
+    .md-icon-button--disabled {
+      color: GrayText;
+    }
+  }
+</style>

@@ -1,0 +1,207 @@
+---
+/**
+ * @license
+ * Copyright 2026 Driller Design Co.
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Part of the Driller Design System
+ * Built on Material Design 3 principles
+ * https://drillerdesign.co
+ */
+
+/**
+ * Material Design 3 — MenuItem
+ * Used inside Menu.astro as individual selectable items.
+ *
+ * Usage:
+ *   <MenuItem headline="Edit" />
+ *   <MenuItem headline="Share" href="/share" />
+ *   <MenuItem headline="Delete" disabled />
+ *   <MenuItem headline="Cut">
+ *     <Icon slot="start" name="content_cut" />
+ *     <span slot="end">⌘X</span>
+ *   </MenuItem>
+ */
+
+interface Props {
+  headline: string;
+  disabled?: boolean;
+  href?: string;
+  class?: string;
+  [key: string]: any;
+}
+
+const {
+  headline,
+  disabled = false,
+  href,
+  class: className,
+  ...attrs
+} = Astro.props;
+
+const isLink = !!href;
+const Tag = isLink ? 'a' : disabled ? 'span' : 'button';
+---
+
+<li
+  class:list={['md-menu-item', { 'md-menu-item--disabled': disabled }, className]}
+  role="none"
+>
+  <Tag
+    class="md-menu-item__root"
+    role="menuitem"
+    tabindex={disabled ? -1 : 0}
+    aria-disabled={disabled || undefined}
+    {...isLink ? { href } : !disabled ? { type: 'button' } : {}}
+    {...attrs}
+  >
+    <span class="md-menu-item__start">
+      <slot name="start" />
+    </span>
+    <span class="md-menu-item__body">
+      <span class="md-menu-item__headline">{headline}</span>
+    </span>
+    <span class="md-menu-item__end">
+      <slot name="end" />
+    </span>
+    <span class="md-ripple" aria-hidden="true"></span>
+  </Tag>
+</li>
+
+<style>
+  /* ═══════════════════════════════════════
+     MenuItem — Container
+     ═══════════════════════════════════════ */
+  .md-menu-item {
+    display: flex;
+    border-radius: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+
+  /* ═══════════════════════════════════════
+     MenuItem — Root element (button / a / span)
+     ═══════════════════════════════════════ */
+  .md-menu-item__root {
+    /* resets */
+    background: none;
+    border: none;
+    margin: 0;
+    text-align: unset;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 12px;
+    min-height: 48px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-inline-start: 12px;
+    padding-inline-end: 12px;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    border-radius: 0;
+    overflow: hidden;
+
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5rem;
+    background-color: var(--surface);
+  }
+
+  .md-menu-item__root:hover {
+    background-color: color-mix(in srgb, var(--text) 8%, var(--surface));
+  }
+
+  .md-menu-item__root:focus-visible {
+    outline: 3px solid var(--focus-ring, var(--color-primary));
+    outline-offset: -3px;
+    background-color: color-mix(in srgb, var(--text) 12%, var(--surface));
+  }
+
+  .md-menu-item__root:active {
+    background-color: color-mix(in srgb, var(--text) 12%, var(--surface));
+  }
+
+  /* ═══════════════════════════════════════
+     MenuItem — Slots
+     ═══════════════════════════════════════ */
+  .md-menu-item__start,
+  .md-menu-item__end {
+    display: flex;
+    align-items: center;
+    color: var(--text-muted);
+    fill: currentColor;
+    flex-shrink: 0;
+  }
+
+  .md-menu-item__start:empty,
+  .md-menu-item__end:empty {
+    display: none;
+  }
+
+  .md-menu-item__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .md-menu-item__headline {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* ═══════════════════════════════════════
+     MenuItem — Disabled state
+     ═══════════════════════════════════════ */
+  .md-menu-item--disabled .md-menu-item__root {
+    opacity: 0.38;
+    pointer-events: none;
+    cursor: default;
+  }
+
+  /* ═══════════════════════════════════════
+     Ripple
+     ═══════════════════════════════════════ */
+  .md-ripple {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .md-ripple::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, var(--text) 1%, transparent 1%) center / 20000% no-repeat;
+    opacity: 0;
+    transition: background-size 600ms, opacity 600ms;
+  }
+
+  .md-menu-item__root:active .md-ripple::after {
+    background-size: 0%;
+    opacity: 0.12;
+    transition: 0s;
+  }
+
+  /* ═══════════════════════════════════════
+     Forced colors (high contrast)
+     ═══════════════════════════════════════ */
+  @media (forced-colors: active) {
+    .md-menu-item--disabled .md-menu-item__root {
+      color: GrayText;
+      opacity: 1;
+    }
+  }
+</style>

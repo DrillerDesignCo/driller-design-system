@@ -1,0 +1,340 @@
+---
+/**
+ * @license
+ * Copyright 2026 Driller Design Co.
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Part of the Driller Design System
+ * Built on Material Design 3 principles
+ * https://drillerdesign.co
+ */
+
+/**
+ * Material Design 3 — Tab
+ * Individual tab for use inside <Tabs>.
+ *
+ * Usage:
+ *   <Tab label="Home" active />
+ *   <Tab variant="secondary" label="Settings" />
+ *   <Tab label="Photos" inlineIcon>
+ *     <Icon slot="icon" name="photo" />
+ *   </Tab>
+ *
+ * Props:
+ *   variant    – 'primary' | 'secondary'  (default: 'primary')
+ *   active     – whether this tab starts selected
+ *   label      – visible text label (also used for aria-label fallback)
+ *   inlineIcon – primary only: place icon inline instead of stacked above label
+ *   class      – additional classes forwarded to the host element
+ */
+
+interface Props {
+  variant?: 'primary' | 'secondary';
+  active?: boolean;
+  label?: string;
+  inlineIcon?: boolean;
+  class?: string;
+  [key: string]: any;
+}
+
+const {
+  variant = 'primary',
+  active = false,
+  label,
+  inlineIcon = false,
+  class: className,
+  ...attrs
+} = Astro.props;
+
+// Secondary tabs use a full-width indicator (spans the whole tab).
+const isSecondary = variant === 'secondary';
+// Primary tabs stack icon above label unless inlineIcon is requested.
+const isStacked = !isSecondary && !inlineIcon;
+---
+
+<button
+  class:list={[
+    'md-tab',
+    `md-tab--${variant}`,
+    {
+      'md-tab--active': active,
+      'md-tab--stacked': isStacked,
+    },
+    className,
+  ]}
+  role="tab"
+  aria-selected={active ? 'true' : 'false'}
+  tabindex={active ? 0 : -1}
+  type="button"
+  {...attrs}
+>
+  {/* State layers */}
+  <span class="md-tab__bg" aria-hidden="true"></span>
+  <span class="md-ripple" aria-hidden="true"></span>
+
+  {/* Content */}
+  <span
+    class:list={[
+      'md-tab__content',
+      {
+        'md-tab__content--stacked': isStacked,
+        'md-tab__content--inline': !isStacked,
+      },
+    ]}
+    role="presentation"
+  >
+    <slot name="icon" />
+    {label && <span class="md-tab__label">{label}</span>}
+    <slot />
+    {/* Inline indicator for primary tabs */}
+    {!isSecondary && <span class="md-tab__indicator" aria-hidden="true"></span>}
+  </span>
+
+  {/* Full-width indicator for secondary tabs */}
+  {isSecondary && <span class="md-tab__indicator md-tab__indicator--full" aria-hidden="true"></span>}
+</button>
+
+<style>
+  /* ═══════════════════════════════════════
+     TAB — Base
+     ═══════════════════════════════════════ */
+  .md-tab {
+    /* Design tokens (primary defaults) */
+    --_label-font:               var(--font-body);
+    --_label-size:               0.875rem;    /* 14px */
+    --_label-weight:             500;
+    --_label-line-height:        1.25rem;
+    --_container-height:         48px;
+    --_icon-size:                24px;
+
+    /* Colors — inactive */
+    --_label-color:              var(--text-muted);
+    --_icon-color:               var(--text-muted);
+    --_hover-label-color:        var(--text);
+    --_hover-icon-color:         var(--text);
+    --_focus-label-color:        var(--text);
+    --_pressed-label-color:      var(--text);
+
+    /* Colors — active */
+    --_active-label-color:       var(--color-primary);
+    --_active-icon-color:        var(--color-primary);
+    --_active-hover-label-color: var(--color-primary);
+    --_active-hover-icon-color:  var(--color-primary);
+
+    /* Indicator */
+    --_indicator-color:          var(--color-primary);
+    --_indicator-height:         3px;
+    --_indicator-shape:          3px 3px 0 0;
+
+    /* Ripple */
+    --_hover-layer-color:        var(--text-muted);
+    --_pressed-layer-color:      var(--text-muted);
+    --_active-hover-layer-color: var(--color-primary);
+    --_active-pressed-layer-color: var(--color-primary);
+
+    /* Layout */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding-inline: 16px;
+    position: relative;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    vertical-align: middle;
+    white-space: nowrap;
+    z-index: 0;
+
+    /* Typography */
+    font-family: var(--_label-font);
+    font-size: var(--_label-size);
+    font-weight: var(--_label-weight);
+    line-height: var(--_label-line-height);
+    color: var(--_label-color);
+
+    transition: color 100ms linear;
+  }
+
+  /* ─── Focus ─── */
+  .md-tab:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: -3px;
+    border-radius: 4px;
+  }
+
+  /* ─── Hover ─── */
+  .md-tab:hover {
+    color: var(--_hover-label-color);
+  }
+
+  /* ─── Active / selected ─── */
+  .md-tab--active {
+    color: var(--_active-label-color);
+  }
+
+  .md-tab--active:hover {
+    color: var(--_active-hover-label-color);
+  }
+
+  /* ═══════════════════════════════════════
+     Background / State layer
+     ═══════════════════════════════════════ */
+  .md-tab__bg {
+    position: absolute;
+    inset: 0;
+    border-radius: 4px 4px 0 0;
+    background: transparent;
+    pointer-events: none;
+    transition: background 100ms linear;
+  }
+
+  .md-tab:hover .md-tab__bg {
+    background: color-mix(in srgb, var(--_hover-layer-color) 8%, transparent);
+  }
+
+  .md-tab:active .md-tab__bg {
+    background: color-mix(in srgb, var(--_pressed-layer-color) 12%, transparent);
+  }
+
+  .md-tab--active:hover .md-tab__bg {
+    background: color-mix(in srgb, var(--_active-hover-layer-color) 8%, transparent);
+  }
+
+  .md-tab--active:active .md-tab__bg {
+    background: color-mix(in srgb, var(--_active-pressed-layer-color) 12%, transparent);
+  }
+
+  /* ═══════════════════════════════════════
+     Ripple layer
+     ═══════════════════════════════════════ */
+  .md-ripple {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  /* ═══════════════════════════════════════
+     Content area
+     ═══════════════════════════════════════ */
+  .md-tab__content {
+    position: relative;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--_container-height);
+    gap: 8px;
+  }
+
+  /* Primary stacked: icon above label */
+  .md-tab__content--stacked {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  /* ─── Icon slot ─── */
+  .md-tab :global([slot='icon']) {
+    display: inline-flex;
+    position: relative;
+    fill: currentColor;
+    color: var(--_icon-color);
+    font-size: var(--_icon-size);
+    width: var(--_icon-size);
+    height: var(--_icon-size);
+    flex-shrink: 0;
+    writing-mode: horizontal-tb;
+    transition: color 100ms linear;
+  }
+
+  .md-tab:hover :global([slot='icon']) {
+    color: var(--_hover-icon-color);
+  }
+
+  .md-tab--active :global([slot='icon']) {
+    color: var(--_active-icon-color);
+  }
+
+  .md-tab--active:hover :global([slot='icon']) {
+    color: var(--_active-hover-icon-color);
+  }
+
+  /* ─── Label ─── */
+  .md-tab__label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* ═══════════════════════════════════════
+     Active Indicator
+     ═══════════════════════════════════════ */
+  .md-tab__indicator {
+    position: absolute;
+    box-sizing: border-box;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--_indicator-height);
+    background: var(--_indicator-color);
+    border-radius: var(--_indicator-shape);
+    transform-origin: bottom left;
+    opacity: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .md-tab--active .md-tab__indicator {
+    opacity: 1;
+  }
+
+  /* Secondary: full-width indicator sits on the outer button, not inside content */
+  .md-tab__indicator--full {
+    position: absolute;
+    inset: auto 0 0 0;
+    left: 0;
+    right: 0;
+    height: var(--_indicator-height);
+    border-radius: var(--_indicator-shape);
+    transform-origin: bottom left;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* ═══════════════════════════════════════
+     VARIANT — Secondary overrides
+     ═══════════════════════════════════════ */
+  .md-tab--secondary {
+    --_container-height:     48px;
+    --_label-color:          var(--text-muted);
+    --_active-label-color:   var(--color-primary);
+    --_indicator-color:      var(--color-primary);
+    --_indicator-height:     2px;
+  }
+
+  /* Secondary has slightly taller container when it also has an icon+label */
+  .md-tab--secondary.md-tab--stacked {
+    --_container-height:     72px;
+  }
+
+  /* ═══════════════════════════════════════
+     VARIANT — Primary with icon + label stacked
+     ═══════════════════════════════════════ */
+  .md-tab--primary .md-tab__content--stacked.has-icon.has-label {
+    height: 72px;
+  }
+
+  /* ═══════════════════════════════════════
+     Forced-colors (high contrast)
+     ═══════════════════════════════════════ */
+  @media (forced-colors: active) {
+    .md-tab__indicator {
+      background: CanvasText;
+    }
+  }
+</style>

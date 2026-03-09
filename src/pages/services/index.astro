@@ -1,0 +1,135 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import CTABlock from '../../components/CTABlock.astro';
+import { brand } from '../../config/brand';
+
+// Example services — replace with Content Collections for dynamic content
+const services = [
+  {
+    title: "Single-Page Website",
+    description: "High-converting single-page asset for lead capture.",
+    investment: "$1,500",
+    href: "/services/single-page-website/",
+  },
+  {
+    title: "Enterprise Web Architecture",
+    description: "Scalable multi-page infrastructure with payment gateways and product catalogs.",
+    investment: "Starting at $5,000",
+    href: "/services/enterprise-web-architecture/",
+  },
+  {
+    title: "Brand Architecture",
+    description: "Deep brand strategy, complete visual identity system, comprehensive Brand Book.",
+    investment: "Starting at $2,500",
+    href: "/services/brand-architecture/",
+  },
+  {
+    title: "Managed SEO",
+    description: "Local market domination through GBP optimization, citations, and localized content.",
+    investment: "$1,500/mo",
+    href: "/services/managed-seo/",
+  },
+  {
+    title: "Paid Acquisition",
+    description: "Campaign setup and management for Google Ads and paid search channels.",
+    investment: "Starting at $1,500",
+    href: "/services/paid-acquisition/",
+  },
+  {
+    title: "Fractional Creative",
+    description: "On-call design retainer for signage, print campaigns, branded merchandise, and more.",
+    investment: "$2,500/mo",
+    href: "/services/fractional-creative/",
+  },
+];
+---
+
+<BaseLayout title="Services" description="View our services and investment tiers.">
+
+  <Hero
+    headline="Blueprinted Strategy. Tailored Execution."
+    description="We take market reality, architect the blueprint, and execute end-to-end."
+    secondaryCta={undefined}
+  />
+
+  <section class="section">
+    <div class="container">
+      <div class="services-grid">
+        {services.map((service) => (
+          <a href={service.href} class="service-card">
+            <div class="service-card-content">
+              <h3>{service.title}</h3>
+              <p class="body-lg">{service.description}</p>
+            </div>
+            <div class="service-card-footer">
+              <span class="micro-label" style="color: var(--accent);">
+                Investment: {service.investment}
+              </span>
+              <span class="micro-label" style="color: var(--text-muted);">
+                View Details →
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTABlock
+    headline="If It Doesn't Move the Needle, It Doesn't Ship."
+    description="Let's architect a tailored blueprint for your market."
+  />
+
+</BaseLayout>
+
+<style>
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+
+  .service-card {
+    background: var(--bg);
+    padding: 2.5rem;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2rem;
+    transition: background 0.25s ease;
+    min-height: 220px;
+  }
+
+  .service-card:hover {
+    background: rgba(225, 189, 88, 0.05);
+  }
+
+  .service-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .service-card h3 {
+    color: var(--text);
+    font-size: 1.25rem;
+  }
+
+  .service-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .services-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

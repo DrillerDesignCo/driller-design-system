@@ -1,0 +1,193 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FAQAccordion from '../components/FAQAccordion.astro';
+import { brand } from '../config/brand';
+
+const faqItems = [
+  {
+    question: "What makes you different from other marketing agencies?",
+    answer: "We are not a marketing agency. We are an expert consultancy that engineers marketing impact through data-backed blueprints. Every decision is justified by market data — never preference.",
+  },
+  {
+    question: "What is your minimum investment?",
+    answer: "Our managed services start at $1,200/month. We work with service-based businesses that are ready to invest in measurable, long-term growth.",
+  },
+  {
+    question: "How does your process work?",
+    answer: "Discovery → Strategy → Execution → Transition. We listen, diagnose, research the market, architect the blueprint, execute with full transparency, and hand over the keys.",
+  },
+  {
+    question: "Can you guarantee results?",
+    answer: "We won't guarantee rankings — anyone who does is lying. What we guarantee is disciplined execution, transparent reporting, and a data-backed blueprint.",
+  },
+];
+---
+
+<BaseLayout title="Apply" description="Request a consultation with our team.">
+
+  <section class="hero">
+    <div class="container hero-inner">
+      <span class="micro-label" style="color: var(--accent);">{brand.location}</span>
+      <h1 class="display-xl">Request a Consultation</h1>
+      <p class="body-lg" style="max-width: 600px;">
+        Tell us about your business. We'll review your market position and respond within 24 hours.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="apply-grid">
+
+        <!-- Form -->
+        <form class="apply-form" id="apply-form">
+          <div class="form-group">
+            <label for="name" class="micro-label">Full Name</label>
+            <input type="text" id="name" name="name" required placeholder="Your name" />
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="micro-label">Email</label>
+            <input type="email" id="email" name="email" required placeholder="you@company.com" />
+          </div>
+
+          <div class="form-group">
+            <label for="company" class="micro-label">Business Name</label>
+            <input type="text" id="company" name="company" required placeholder="Your company" />
+          </div>
+
+          <div class="form-group">
+            <label for="revenue" class="micro-label">Annual Revenue Band</label>
+            <select id="revenue" name="revenue" required>
+              <option value="" disabled selected>Select a range</option>
+              <option value="under-500k">Under $500K</option>
+              <option value="500k-1m">$500K – $1M</option>
+              <option value="1m-5m">$1M – $5M</option>
+              <option value="5m-plus">$5M+</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="budget" class="micro-label">Monthly Marketing Budget</label>
+            <select id="budget" name="budget" required>
+              <option value="" disabled selected>Select a range</option>
+              <option value="under-1200">Under $1,200</option>
+              <option value="1200-3000">$1,200 – $3,000</option>
+              <option value="3000-5000">$3,000 – $5,000</option>
+              <option value="5000-plus">$5,000+</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="goal" class="micro-label">Primary Goal</label>
+            <select id="goal" name="goal" required>
+              <option value="" disabled selected>Select your goal</option>
+              <option value="leads">More leads / calls</option>
+              <option value="visibility">Increase online visibility</option>
+              <option value="brand">Build / rebuild brand identity</option>
+              <option value="website">New website or redesign</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="message" class="micro-label">Tell us more (optional)</label>
+            <textarea id="message" name="message" rows="4" placeholder="What's the one thing that, if it worked, would change your business this year?"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+            Submit Application
+          </button>
+        </form>
+
+        <!-- FAQ sidebar -->
+        <div class="apply-sidebar">
+          <FAQAccordion items={faqItems} headline="Common Questions" />
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: 8rem 0 4rem;
+  }
+
+  .hero-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .apply-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .apply-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-group label {
+    color: var(--text-muted);
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    padding: 0.875rem 1rem;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    transition: border-color 0.2s ease;
+    min-height: 44px;
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: var(--text-faint);
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .form-group select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23F3F6F6' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+  }
+
+  .form-group select option {
+    background: var(--color-dark);
+    color: var(--text);
+  }
+
+  @media (max-width: 768px) {
+    .apply-grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+  }
+</style>

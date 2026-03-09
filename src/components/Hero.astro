@@ -1,0 +1,86 @@
+---
+import { brand } from '../config/brand';
+
+interface Props {
+  eyebrow?: string;
+  headline: string;
+  description?: string;
+  primaryCta?: { label: string; href: string };
+  secondaryCta?: { label: string; href: string } | undefined;
+}
+
+const {
+  eyebrow = brand.location,
+  headline,
+  description,
+  primaryCta = brand.cta.primary,
+  secondaryCta = brand.cta.secondary,
+} = Astro.props;
+---
+
+<section class="hero">
+  <div class="container hero-inner">
+    {eyebrow && <span class="micro-label hero-eyebrow">{eyebrow}</span>}
+    <h1 class="display-xl hero-headline">{headline}</h1>
+    {description && <p class="body-lg hero-description">{description}</p>}
+    <div class="hero-actions">
+      <a href={primaryCta.href} class="btn btn-primary">{primaryCta.label}</a>
+      {secondaryCta && (
+        <a href={secondaryCta.href} class="btn btn-secondary">
+          {secondaryCta.label}
+        </a>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding: 7rem 0 5rem;
+    display: flex;
+    align-items: center;
+    min-height: 65vh;
+  }
+
+  .hero-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    max-width: 720px;
+  }
+
+  .hero-eyebrow {
+    color: var(--accent);
+  }
+
+  .hero-headline {
+    color: var(--text);
+  }
+
+  .hero-description {
+    max-width: 560px;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 0.75rem;
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      padding: 4rem 0 3rem;
+      min-height: auto;
+    }
+
+    .hero-actions {
+      flex-direction: column;
+    }
+
+    .hero-actions .btn {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>

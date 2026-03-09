@@ -1,86 +1,127 @@
-# Material Web
+# Driller Starter
 
-<img src="./docs/images/material-web.gif"
-  title="Material web components"
-  alt="A collection of Material web components"
-  style="border-radius: 32px">
+An Astro starter template powered by the **Driller Design System** — 31 production-ready Material Design 3 components, zero JavaScript frameworks required.
 
-[![Published on npm](https://img.shields.io/npm/v/%40material%2Fweb)](https://www.npmjs.com/package/@material/web)
-[![Join our Discord](https://img.shields.io/badge/discord-join%20chat-5865F2.svg?logo=discord&logoColor=fff&label=%23material)](https://lit.dev/discord/)
-[![Test status](https://github.com/material-components/material-web/actions/workflows/test.yml/badge.svg)](https://github.com/material-components/material-web/actions/workflows/test.yml)
-[![npm Downloads](https://img.shields.io/npm/dm/%40material%2Fweb?label=npm%20downloads)](https://npm-stat.com/charts.html?package=%40material%2Fweb)
-[![jsDelivr hits (npm)](https://img.shields.io/jsdelivr/npm/hm/%40material%2Fweb)](https://www.jsdelivr.com/package/npm/@material/web?tab=stats)
+## Quick Start
 
-`@material/web` is a library of
-[web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components)<!-- {.external} -->
-that helps build beautiful and accessible web applications. It uses
-[Material 3](https://m3.material.io/)<!-- {.external} -->, the latest version of Google's
-open-source design system.
+### Use this template
 
-**Note:
-[MWC is in maintenance mode pending new maintainers](https://github.com/material-components/material-web/discussions/5642).**
+```bash
+# Clone from GitHub
+git clone https://github.com/DrillerDesignCo/driller-design-system.git my-project
+cd my-project/driller-starter
 
-## Resources
-
--   [Introduction](./docs/intro.md)
--   [Roadmap](./docs/roadmap.md)
--   [Component docs](./docs/components/)
--   [Bundle size](./docs/size.md)
--   [Browser support and FAQ](./docs/support.md)
-
-## Quick start
-
-> Tip: Using Angular? We recommend using
-> [Angular Material](https://material.angular.io/)<!-- {.external} --> components
-> instead.
-
-This code snippet is a buildless example that loads `@material/web` from a CDN.
-Check out the [quick start](./docs/quick-start.md) guide to install and build
-for production.
-
-<!-- LINT.IfChange -->
-
-```html
-<head>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <script type="importmap">
-    {
-      "imports": {
-        "@material/web/": "https://esm.run/@material/web/"
-      }
-    }
-  </script>
-  <script type="module">
-    import '@material/web/all.js';
-    import {styles as typescaleStyles} from '@material/web/typography/md-typescale-styles.js';
-
-    document.adoptedStyleSheets.push(typescaleStyles.styleSheet);
-  </script>
-</head>
-<body>
-  <h1 class="md-typescale-display-medium">Hello Material!</h1>
-  <form>
-    <p class="md-typescale-body-medium">Check out these controls in a form!</p>
-    <md-checkbox></md-checkbox>
-    <div>
-      <md-radio name="group"></md-radio>
-      <md-radio name="group"></md-radio>
-      <md-radio name="group"></md-radio>
-    </div>
-
-    <md-outlined-text-field label="Favorite color" value="Purple"></md-outlined-text-field>
-
-    <md-outlined-button type="reset">Reset</md-outlined-button>
-  </form>
-  <style>
-    form {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 16px;
-    }
-  </style>
-</body>
+# Install & run
+npm install
+npm run dev
 ```
 
-<!-- LINT.ThenChange(./g3doc/docs/quick-start.md) -->
+Open [http://localhost:4321](http://localhost:4321) to see your site. Visit [/component-showcase](http://localhost:4321/component-showcase) to see all 31 components in action.
+
+## What's Included
+
+### 31 Components (`src/components/md/`)
+
+| Category | Components |
+|----------|-----------|
+| **Foundation** | Icon, Divider |
+| **Actions** | Button, IconButton, FAB |
+| **Forms** | Checkbox, Radio, Switch, Slider, TextField, Select, SelectOption |
+| **Collections** | Chip, ChipSet, List, ListItem, Menu, MenuItem, SubMenu |
+| **Navigation** | Tabs, Tab, NavigationBar, NavigationTab, NavigationDrawer |
+| **Selection** | SegmentedButton, SegmentedButtonSet |
+| **Feedback** | Dialog, CircularProgress, LinearProgress |
+| **Display** | Badge, Card |
+
+### Design Tokens (`src/styles/tokens.css`)
+
+All components use CSS custom properties. Customize the entire design system by editing token values:
+
+```css
+:root {
+  --color-primary: #6750a4;
+  --surface: #fffbfe;
+  --text: #1d1b20;
+  /* ... */
+}
+```
+
+### Project Structure
+
+```
+driller-starter/
+├── src/
+│   ├── components/
+│   │   └── md/          ← 31 Driller Design components
+│   ├── layouts/
+│   │   └── BaseLayout.astro
+│   ├── pages/
+│   │   ├── index.astro
+│   │   └── component-showcase.astro
+│   └── styles/
+│       ├── tokens.css   ← Design tokens (colors, typography, spacing)
+│       ├── global.css   ← Global reset & base styles
+│       └── md/          ← Component foundation styles (ripple, elevation, focus-ring)
+├── public/              ← Static assets (images, fonts, favicon)
+├── agents.md            ← Multi-agent workflow assignments
+├── astro.config.mjs
+├── package.json
+└── tsconfig.json
+```
+
+## Usage
+
+### Import a component
+
+```astro
+---
+import Button from '../components/md/Button.astro';
+import Icon from '../components/md/Icon.astro';
+---
+
+<Button variant="filled">
+  <Icon slot="icon" name="add" />
+  Create
+</Button>
+```
+
+### Available component variants
+
+```astro
+<!-- Buttons: elevated, filled, filled-tonal, outlined, text -->
+<Button variant="outlined">Outlined</Button>
+
+<!-- Cards: elevated, filled, outlined -->
+<Card variant="elevated">
+  <h3>Card Title</h3>
+  <p>Card content goes here.</p>
+</Card>
+
+<!-- Text Fields: filled, outlined -->
+<TextField variant="outlined" label="Email" type="email" />
+
+<!-- FABs: surface, primary, secondary, tertiary -->
+<FAB variant="primary" label="Create" icon="add" />
+```
+
+## Commands
+
+| Command | Action |
+|:--------|:-------|
+| `npm install` | Install dependencies |
+| `npm run dev` | Start dev server at `localhost:4321` |
+| `npm run build` | Build production site to `./dist/` |
+| `npm run preview` | Preview production build locally |
+| `npm run check` | Run Astro type checking |
+
+## Starting a New Project
+
+1. Delete `component-showcase.astro` (it's just a demo page)
+2. Edit `src/styles/tokens.css` to match your brand colors
+3. Modify `src/layouts/BaseLayout.astro` with your site's meta/nav/footer
+4. Build your pages in `src/pages/` using the components
+
+## License
+
+Copyright 2026 Driller Design Co.  
+Licensed under the Apache License, Version 2.0.

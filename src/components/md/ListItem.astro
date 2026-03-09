@@ -1,0 +1,284 @@
+---
+/**
+ * @license
+ * Copyright 2026 Driller Design Co.
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Part of the Driller Design System
+ * Built on Material Design 3 principles
+ * https://drillerdesign.co
+ */
+
+/**
+ * Material Design 3 — ListItem
+ * Supports text (li), button (button), and link (a) types.
+ *
+ * Usage:
+ *   <ListItem headline="Label" />
+ *   <ListItem headline="Label" supportingText="Details" type="button" />
+ *   <ListItem headline="Link" href="/page" />
+ *   <ListItem headline="With Icon">
+ *     <Icon slot="start" name="star" />
+ *     <span slot="end">99+</span>
+ *   </ListItem>
+ */
+
+interface Props {
+  headline: string;
+  supportingText?: string;
+  trailingSupportingText?: string;
+  disabled?: boolean;
+  href?: string;
+  type?: 'text' | 'link' | 'button';
+  target?: '_blank' | '_parent' | '_self' | '_top' | '';
+  class?: string;
+  [key: string]: any;
+}
+
+const {
+  headline,
+  supportingText,
+  trailingSupportingText,
+  disabled = false,
+  href,
+  type: typeProp = 'text',
+  target,
+  class: className,
+  ...attrs
+} = Astro.props;
+
+// If href is given, always render as a link
+const resolvedType = href ? 'link' : typeProp;
+const Tag = resolvedType === 'link' ? 'a' : resolvedType === 'button' ? 'button' : 'li';
+const isInteractive = resolvedType !== 'text';
+// Links can't be truly disabled in HTML; we use aria-disabled
+const isDisabled = disabled && resolvedType !== 'link';
+---
+
+<Tag
+  class:list={[
+    'md-list-item',
+    {
+      'md-list-item--interactive': isInteractive,
+      'md-list-item--disabled': isDisabled || (disabled && resolvedType === 'link'),
+    },
+    className,
+  ]}
+  md-list-item
+  role="listitem"
+  tabindex={isDisabled || !isInteractive ? -1 : 0}
+  {...resolvedType === 'link' ? {
+    href,
+    target: target || undefined,
+    'aria-disabled': disabled || undefined,
+  } : resolvedType === 'button' ? {
+    type: 'button',
+    disabled: isDisabled || undefined,
+  } : {}}
+  {...attrs}
+>
+  {/* Ripple for interactive items */}
+  {isInteractive && <span class="md-list-item__ripple" aria-hidden="true"></span>}
+
+  {/* Leading slot */}
+  <span class="md-list-item__start">
+    <slot name="start" />
+  </span>
+
+  {/* Body */}
+  <span class="md-list-item__body">
+    <span class="md-list-item__headline">{headline}</span>
+    {supportingText && (
+      <span class="md-list-item__supporting-text">{supportingText}</span>
+    )}
+  </span>
+
+  {/* Trailing supporting text + trailing slot */}
+  <span class="md-list-item__end">
+    {trailingSupportingText && (
+      <span class="md-list-item__trailing-supporting-text">{trailingSupportingText}</span>
+    )}
+    <slot name="end" />
+  </span>
+</Tag>
+
+<style>
+  /* ═══════════════════════════════════════
+     LIST ITEM — Base
+     ═══════════════════════════════════════ */
+  .md-list-item {
+    /* Token locals */
+    --_label-font: var(--md-list-item-label-text-font, var(--font-body));
+    --_label-size: var(--md-list-item-label-text-size, 1rem);
+    --_label-weight: var(--md-list-item-label-text-weight, 400);
+    --_label-line-height: var(--md-list-item-label-text-line-height, 1.5rem);
+    --_label-color: var(--md-list-item-label-text-color, var(--text));
+
+    --_supporting-text-font: var(--md-list-item-supporting-text-font, var(--font-body));
+    --_supporting-text-size: var(--md-list-item-supporting-text-size, 0.875rem);
+    --_supporting-text-weight: var(--md-list-item-supporting-text-weight, 400);
+    --_supporting-text-line-height: var(--md-list-item-supporting-text-line-height, 1.25rem);
+    --_supporting-text-color: var(--md-list-item-supporting-text-color, var(--text-muted));
+
+    --_trailing-text-font: var(--md-list-item-trailing-supporting-text-font, var(--font-body));
+    --_trailing-text-size: var(--md-list-item-trailing-supporting-text-size, 0.75rem);
+    --_trailing-text-weight: var(--md-list-item-trailing-supporting-text-weight, 400);
+    --_trailing-text-line-height: var(--md-list-item-trailing-supporting-text-line-height, 1rem);
+    --_trailing-text-color: var(--md-list-item-trailing-supporting-text-color, var(--text-muted));
+
+    --_leading-icon-color: var(--md-list-item-leading-icon-color, var(--text-muted));
+    --_trailing-icon-color: var(--md-list-item-trailing-icon-color, var(--text-muted));
+
+    --_container-shape: var(--md-list-item-container-shape, 0px);
+    --_one-line-height: var(--md-list-item-one-line-container-height, 56px);
+    --_two-line-height: var(--md-list-item-two-line-container-height, 72px);
+    --_top-space: var(--md-list-item-top-space, 12px);
+    --_bottom-space: var(--md-list-item-bottom-space, 12px);
+    --_leading-space: var(--md-list-item-leading-space, 16px);
+    --_trailing-space: var(--md-list-item-trailing-space, 16px);
+    --_disabled-opacity: var(--md-list-item-disabled-opacity, 0.3);
+
+    /* Reset tag styles */
+    background: none;
+    border: none;
+    margin: 0;
+    text-align: unset;
+    text-decoration: none;
+    cursor: inherit;
+
+    /* Layout */
+    border-radius: var(--_container-shape);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-height: var(--_one-line-height);
+    padding-top: var(--_top-space);
+    padding-bottom: var(--_bottom-space);
+    padding-inline-start: var(--_leading-space);
+    padding-inline-end: var(--_trailing-space);
+    position: relative;
+    width: 100%;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+
+    /* Typography */
+    color: var(--_label-color);
+    font-family: var(--_label-font);
+    font-size: var(--_label-size);
+    font-weight: var(--_label-weight);
+    line-height: var(--_label-line-height);
+  }
+
+  /* Interactive states */
+  .md-list-item--interactive {
+    cursor: pointer;
+  }
+
+  .md-list-item--interactive:hover {
+    background: color-mix(in srgb, var(--text) 8%, transparent);
+  }
+
+  .md-list-item--interactive:active {
+    background: color-mix(in srgb, var(--text) 12%, transparent);
+  }
+
+  .md-list-item--interactive:focus-visible {
+    outline: 3px solid var(--focus-ring, var(--color-primary));
+    outline-offset: 2px;
+  }
+
+  /* Disabled */
+  .md-list-item--disabled {
+    opacity: var(--_disabled-opacity);
+    pointer-events: none;
+    cursor: default;
+  }
+
+  /* Ripple layer */
+  .md-list-item__ripple {
+    border-radius: inherit;
+    inset: 0;
+    position: absolute;
+    pointer-events: none;
+  }
+
+  /* Body — headline + supporting text */
+  .md-list-item__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    gap: 2px;
+  }
+
+  /* Two-line min height when supporting text is present */
+  .md-list-item:has(.md-list-item__supporting-text) {
+    min-height: var(--_two-line-height);
+  }
+
+  .md-list-item__headline {
+    color: var(--_label-color);
+    font-family: var(--_label-font);
+    font-size: var(--_label-size);
+    font-weight: var(--_label-weight);
+    line-height: var(--_label-line-height);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .md-list-item__supporting-text {
+    color: var(--_supporting-text-color);
+    font-family: var(--_supporting-text-font);
+    font-size: var(--_supporting-text-size);
+    font-weight: var(--_supporting-text-weight);
+    line-height: var(--_supporting-text-line-height);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Start slot (leading icon/avatar) */
+  .md-list-item__start {
+    color: var(--_leading-icon-color);
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    fill: currentColor;
+  }
+
+  .md-list-item__start:empty {
+    display: none;
+  }
+
+  /* End slot (trailing icon / supporting text) */
+  .md-list-item__end {
+    color: var(--_trailing-icon-color);
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 4px;
+    fill: currentColor;
+  }
+
+  .md-list-item__end:empty {
+    display: none;
+  }
+
+  .md-list-item__trailing-supporting-text {
+    color: var(--_trailing-text-color);
+    font-family: var(--_trailing-text-font);
+    font-size: var(--_trailing-text-size);
+    font-weight: var(--_trailing-text-weight);
+    line-height: var(--_trailing-text-line-height);
+  }
+
+  /* Forced colors (high contrast) */
+  @media (forced-colors: active) {
+    .md-list-item--disabled {
+      color: GrayText;
+      opacity: 1;
+    }
+  }
+</style>

@@ -1,0 +1,122 @@
+---
+/**
+ * @license
+ * Copyright 2026 Driller Design Co.
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Part of the Driller Design System
+ * Built on Material Design 3 principles
+ * https://drillerdesign.co
+ */
+
+/**
+ * Material Design Divider
+ * Converted from @material/web divider component to Astro.
+ *
+ * A thin line that groups content in lists and containers.
+ */
+
+interface Props {
+  /** Indents the divider with equal padding on both sides. */
+  inset?: boolean;
+  /** Indents the divider with padding on the leading side. */
+  insetStart?: boolean;
+  /** Indents the divider with padding on the trailing side. */
+  insetEnd?: boolean;
+  /** Renders a vertical divider instead of horizontal. */
+  vertical?: boolean;
+  /** Additional CSS classes. */
+  class?: string;
+}
+
+const {
+  inset = false,
+  insetStart = false,
+  insetEnd = false,
+  vertical = false,
+  class: className,
+  ...attrs
+} = Astro.props;
+---
+
+<hr
+  class:list={[
+    'md-divider',
+    {
+      'md-divider--inset': inset,
+      'md-divider--inset-start': insetStart,
+      'md-divider--inset-end': insetEnd,
+      'md-divider--vertical': vertical,
+    },
+    className,
+  ]}
+  role={vertical ? 'separator' : undefined}
+  aria-orientation={vertical ? 'vertical' : undefined}
+  {...attrs}
+/>
+
+<style>
+  /* ── Divider tokens ───────────────────────────── */
+  .md-divider {
+    --_color: var(--md-divider-color, var(--line));
+    --_thickness: var(--md-divider-thickness, 1px);
+  }
+
+  /* ── Base ──────────────────────────────────────── */
+  .md-divider {
+    border: 0;
+    box-sizing: border-box;
+    color: var(--_color);
+    display: flex;
+    height: var(--_thickness);
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .md-divider::before {
+    background: currentColor;
+    content: '';
+    height: 100%;
+    width: 100%;
+  }
+
+  /* ── Inset variants ───────────────────────────── */
+  .md-divider--inset,
+  .md-divider--inset-start {
+    padding-inline-start: 16px;
+  }
+
+  .md-divider--inset,
+  .md-divider--inset-end {
+    padding-inline-end: 16px;
+  }
+
+  /* ── Vertical ─────────────────────────────────── */
+  .md-divider--vertical {
+    align-self: stretch;
+    display: inline-flex;
+    flex-direction: column;
+    height: auto;
+    width: var(--_thickness);
+  }
+
+  .md-divider--vertical.md-divider--inset,
+  .md-divider--vertical.md-divider--inset-start {
+    padding-inline-start: 0;
+    padding-block-start: 16px;
+  }
+
+  .md-divider--vertical.md-divider--inset,
+  .md-divider--vertical.md-divider--inset-end {
+    padding-inline-end: 0;
+    padding-block-end: 16px;
+  }
+
+  /* ── High-contrast mode ───────────────────────── */
+  @media (forced-colors: active) {
+    .md-divider::before {
+      background: CanvasText;
+    }
+  }
+</style>
