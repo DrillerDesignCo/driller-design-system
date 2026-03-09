@@ -31,6 +31,7 @@ import NavigationTab from '../components/md/NavigationTab.astro';
 import NavigationDrawer from '../components/md/NavigationDrawer.astro';
 import SegmentedButton from '../components/md/SegmentedButton.astro';
 import SegmentedButtonSet from '../components/md/SegmentedButtonSet.astro';
+import SubMenu from '../components/md/SubMenu.astro';
 ---
 
 <BaseLayout title="Component Showcase">
@@ -877,6 +878,38 @@ import SegmentedButtonSet from '../components/md/SegmentedButtonSet.astro';
           <SegmentedButton label="Selected Disabled" selected disabled />
           <SegmentedButton label="Disabled" disabled />
         </SegmentedButtonSet>
+      </div>
+    </section>
+
+    <Divider />
+
+    <!-- ══════════════════════════════════════
+         SUBMENU
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-submenu">
+      <h2 class="showcase-section-title">SubMenu</h2>
+      <p class="showcase-sublabel">Hover or click "More options" to open the nested menu. Use arrow keys to navigate.</p>
+      
+      <div class="showcase-menu-anchor" style="margin-top: 1rem;">
+        <Button variant="filled" id="showcase-submenu-btn">File Edit</Button>
+        <Menu anchor="showcase-submenu-btn">
+          <MenuItem headline="New File">
+            <Icon slot="start" name="note_add" />
+          </MenuItem>
+          <MenuItem headline="Open...">
+            <Icon slot="start" name="folder_open" />
+          </MenuItem>
+          <SubMenu hoverOpenDelay={200} hoverCloseDelay={300}>
+            <MenuItem slot="item" headline="More options">
+              <Icon slot="end" name="chevron_right" />
+            </MenuItem>
+            <Menu slot="menu">
+              <MenuItem headline="Save As..." />
+              <MenuItem headline="Export" />
+              <MenuItem headline="Print" disabled />
+            </Menu>
+          </SubMenu>
+        </Menu>
       </div>
     </section>
 
