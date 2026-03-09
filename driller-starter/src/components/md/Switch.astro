@@ -1,0 +1,551 @@
+---
+/**
+ * Material Design 3 — Switch
+ * A toggle switch that supports selected/deselected states with optional icons.
+ *
+ * Usage:
+ *   <Switch />
+ *   <Switch selected />
+ *   <Switch icons />
+ *   <Switch selected disabled />
+ *   <Switch showOnlySelectedIcon selected />
+ */
+
+interface Props {
+  selected?: boolean;
+  disabled?: boolean;
+  icons?: boolean;
+  showOnlySelectedIcon?: boolean;
+  required?: boolean;
+  name?: string;
+  value?: string;
+  class?: string;
+  [key: string]: any;
+}
+
+const {
+  selected = false,
+  disabled = false,
+  icons = false,
+  showOnlySelectedIcon = false,
+  required = false,
+  name,
+  value = 'on',
+  class: className,
+  ...attrs
+} = Astro.props;
+
+const shouldShowIcons = icons || showOnlySelectedIcon;
+const showWithIcon = showOnlySelectedIcon ? selected : icons;
+---
+
+<div
+  class:list={[
+    'md-switch',
+    {
+      'selected': selected,
+      'unselected': !selected,
+      'disabled': disabled,
+    },
+    className,
+  ]}
+  {...attrs}
+>
+  <input
+    class="md-switch__input"
+    type="checkbox"
+    role="switch"
+    checked={selected}
+    disabled={disabled}
+    required={required}
+    name={name}
+    value={value}
+  />
+
+  <span class="md-switch__track">
+    <span class="md-switch__handle-container">
+      <span class:list={['md-switch__handle', { 'with-icon': showWithIcon }]}>
+        {shouldShowIcons && (
+          <div class="md-switch__icons">
+            <svg class="md-switch__icon md-switch__icon--on" viewBox="0 0 24 24">
+              <path d="M9.55 18.2 3.65 12.3 5.275 10.675 9.55 14.95 18.725 5.775 20.35 7.4Z" />
+            </svg>
+            {!showOnlySelectedIcon && (
+              <svg class="md-switch__icon md-switch__icon--off" viewBox="0 0 24 24">
+                <path d="M6.4 19.2 4.8 17.6 10.4 12 4.8 6.4 6.4 4.8 12 10.4 17.6 4.8 19.2 6.4 13.6 12 19.2 17.6 17.6 19.2 12 13.6Z" />
+              </svg>
+            )}
+          </div>
+        )}
+      </span>
+    </span>
+  </span>
+</div>
+
+<script>
+  document.querySelectorAll('.md-switch').forEach((el) => {
+    const input = el.querySelector('input');
+    if (!input) return;
+
+    input.addEventListener('change', () => {
+      el.classList.toggle('selected', input.checked);
+      el.classList.toggle('unselected', !input.checked);
+
+      // Update icon visibility for showOnlySelectedIcon
+      const handle = el.querySelector('.md-switch__handle');
+      if (handle && el.hasAttribute('data-show-only-selected-icon')) {
+        handle.classList.toggle('with-icon', input.checked);
+      }
+    });
+  });
+</script>
+
+<style>
+  /* ═══════════════════════════════════════
+     SWITCH — Root / Container
+     ═══════════════════════════════════════ */
+  .md-switch {
+    --_track-width: 52px;
+    --_track-height: 32px;
+    --_track-shape: 9999px;
+    --_handle-width: 16px;
+    --_handle-height: 16px;
+    --_selected-handle-width: 24px;
+    --_selected-handle-height: 24px;
+    --_with-icon-handle-width: 24px;
+    --_with-icon-handle-height: 24px;
+    --_pressed-handle-width: 28px;
+    --_pressed-handle-height: 28px;
+    --_state-layer-size: 40px;
+    --_touch-target-size: 48px;
+    --_icon-size: 16px;
+    --_selected-icon-size: 16px;
+
+    /* Track colors */
+    --_track-color: var(--surface-dim, var(--surface));
+    --_track-outline-color: var(--line-strong);
+    --_track-outline-width: 2px;
+    --_selected-track-color: var(--color-primary);
+    --_disabled-track-color: var(--surface-dim, var(--surface));
+    --_disabled-track-opacity: 0.12;
+    --_disabled-selected-track-color: var(--text);
+
+    /* Handle colors */
+    --_handle-color: var(--line-strong);
+    --_selected-handle-color: var(--color-dark);
+    --_disabled-handle-color: var(--text);
+    --_disabled-handle-opacity: 0.38;
+    --_disabled-selected-handle-color: var(--surface);
+    --_disabled-selected-handle-opacity: 1;
+
+    /* Hover handle colors */
+    --_hover-handle-color: var(--text);
+    --_selected-hover-handle-color: var(--color-dark);
+
+    /* Focus handle colors */
+    --_focus-handle-color: var(--text);
+    --_selected-focus-handle-color: var(--color-dark);
+
+    /* Pressed handle colors */
+    --_pressed-handle-color: var(--text);
+    --_selected-pressed-handle-color: var(--color-dark);
+
+    /* Icon colors */
+    --_icon-color: var(--text-muted);
+    --_selected-icon-color: var(--color-primary);
+    --_disabled-icon-color: var(--text-muted);
+    --_disabled-icon-opacity: 0.38;
+    --_disabled-selected-icon-color: var(--text);
+    --_disabled-selected-icon-opacity: 0.38;
+
+    /* Hover track colors */
+    --_hover-track-color: var(--surface-dim, var(--surface));
+    --_hover-track-outline-color: var(--text);
+    --_selected-hover-track-color: var(--color-primary);
+
+    /* State layer */
+    --_hover-state-layer-color: var(--text);
+    --_hover-state-layer-opacity: 0.08;
+    --_pressed-state-layer-color: var(--text);
+    --_pressed-state-layer-opacity: 0.12;
+    --_selected-hover-state-layer-color: var(--color-primary);
+    --_selected-hover-state-layer-opacity: 0.08;
+    --_selected-pressed-state-layer-color: var(--color-primary);
+    --_selected-pressed-state-layer-opacity: 0.12;
+
+    display: inline-flex;
+    outline: none;
+    vertical-align: top;
+    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
+    align-items: center;
+    position: relative;
+    width: var(--_track-width);
+    height: var(--_track-height);
+    border-radius: var(--_track-shape);
+    flex-shrink: 0;
+  }
+
+  .md-switch.disabled {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .md-switch:focus-within {
+    outline: 3px solid var(--md-focus-ring-color, var(--focus-ring));
+    outline-offset: 2px;
+  }
+
+  /* ═══════════════════════════════════════
+     INPUT — Touch target
+     ═══════════════════════════════════════ */
+  .md-switch__input {
+    appearance: none;
+    height: max(100%, var(--_touch-target-size));
+    outline: none;
+    margin: 0;
+    position: absolute;
+    width: max(100%, var(--_touch-target-size));
+    z-index: 1;
+    cursor: inherit;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* ═══════════════════════════════════════
+     TRACK
+     ═══════════════════════════════════════ */
+  .md-switch__track {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border-radius: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .md-switch__track::before {
+    content: '';
+    display: flex;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    border-radius: inherit;
+    box-sizing: border-box;
+    transition-property: opacity, background-color;
+    transition-timing-function: linear;
+    transition-duration: 67ms;
+  }
+
+  /* Track — unselected */
+  .unselected .md-switch__track::before {
+    background-color: var(--_track-color);
+    border-color: var(--_track-outline-color);
+    border-style: solid;
+    border-width: var(--_track-outline-width);
+  }
+
+  .unselected:hover .md-switch__track::before {
+    background-color: var(--_hover-track-color);
+    border-color: var(--_hover-track-outline-color);
+  }
+
+  .unselected:active .md-switch__track::before {
+    background-color: var(--_hover-track-color);
+    border-color: var(--_hover-track-outline-color);
+  }
+
+  /* Track — selected */
+  .selected .md-switch__track::before {
+    background-color: var(--_selected-track-color);
+  }
+
+  .selected:hover .md-switch__track::before {
+    background-color: var(--_selected-hover-track-color);
+  }
+
+  .selected:active .md-switch__track::before {
+    background-color: var(--_selected-track-color);
+  }
+
+  /* Track — disabled */
+  .disabled .md-switch__track {
+    background-color: transparent;
+    border-color: transparent;
+  }
+
+  .disabled .md-switch__track::before {
+    transition: none;
+    opacity: var(--_disabled-track-opacity);
+  }
+
+  .disabled.unselected .md-switch__track::before {
+    background-clip: content-box;
+  }
+
+  .disabled.selected .md-switch__track {
+    background-clip: border-box;
+  }
+
+  .disabled.selected .md-switch__track::before {
+    background-color: var(--_disabled-selected-track-color);
+  }
+
+  .disabled.unselected .md-switch__track::before {
+    background-color: var(--_disabled-track-color);
+    border-color: var(--_disabled-track-color);
+  }
+
+  /* ═══════════════════════════════════════
+     HANDLE CONTAINER
+     ═══════════════════════════════════════ */
+  .md-switch__handle-container {
+    display: flex;
+    place-content: center;
+    place-items: center;
+    position: relative;
+    transition: margin 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .selected .md-switch__handle-container {
+    margin-inline-start: calc(var(--_track-width) - var(--_track-height));
+  }
+
+  .unselected .md-switch__handle-container {
+    margin-inline-end: calc(var(--_track-width) - var(--_track-height));
+  }
+
+  .disabled .md-switch__handle-container {
+    transition: none;
+  }
+
+  /* ═══════════════════════════════════════
+     HANDLE
+     ═══════════════════════════════════════ */
+  .md-switch__handle {
+    border-radius: var(--_track-shape);
+    height: var(--_handle-height);
+    width: var(--_handle-width);
+    transform-origin: center;
+    transition-property: height, width;
+    transition-duration: 250ms, 250ms;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1), cubic-bezier(0.2, 0, 0, 1);
+    z-index: 0;
+    position: relative;
+  }
+
+  .md-switch__handle::before {
+    content: '';
+    display: flex;
+    inset: 0;
+    position: absolute;
+    border-radius: inherit;
+    box-sizing: border-box;
+    transition: background-color 67ms linear;
+  }
+
+  .disabled .md-switch__handle,
+  .disabled .md-switch__handle::before {
+    transition: none;
+  }
+
+  /* Handle size — selected */
+  .selected .md-switch__handle {
+    height: var(--_selected-handle-height);
+    width: var(--_selected-handle-width);
+  }
+
+  /* Handle size — with icon */
+  .md-switch__handle.with-icon {
+    height: var(--_with-icon-handle-height);
+    width: var(--_with-icon-handle-width);
+  }
+
+  /* Handle size — pressed */
+  .selected:not(.disabled):active .md-switch__handle,
+  .unselected:not(.disabled):active .md-switch__handle {
+    height: var(--_pressed-handle-height);
+    width: var(--_pressed-handle-width);
+    transition-timing-function: linear;
+    transition-duration: 100ms;
+  }
+
+  /* Handle color — selected */
+  .selected .md-switch__handle::before {
+    background-color: var(--_selected-handle-color);
+  }
+
+  .selected:hover .md-switch__handle::before {
+    background-color: var(--_selected-hover-handle-color);
+  }
+
+  .selected:focus-within .md-switch__handle::before {
+    background-color: var(--_selected-focus-handle-color);
+  }
+
+  .selected:active .md-switch__handle::before {
+    background-color: var(--_selected-pressed-handle-color);
+  }
+
+  .selected.disabled .md-switch__handle::before {
+    background-color: var(--_disabled-selected-handle-color);
+    opacity: var(--_disabled-selected-handle-opacity);
+  }
+
+  /* Handle color — unselected */
+  .unselected .md-switch__handle::before {
+    background-color: var(--_handle-color);
+  }
+
+  .unselected:hover .md-switch__handle::before {
+    background-color: var(--_hover-handle-color);
+  }
+
+  .unselected:focus-within .md-switch__handle::before {
+    background-color: var(--_focus-handle-color);
+  }
+
+  .unselected:active .md-switch__handle::before {
+    background-color: var(--_pressed-handle-color);
+  }
+
+  .unselected.disabled .md-switch__handle::before {
+    background-color: var(--_disabled-handle-color);
+    opacity: var(--_disabled-handle-opacity);
+  }
+
+  /* ═══════════════════════════════════════
+     ICONS
+     ═══════════════════════════════════════ */
+  .md-switch__icons {
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+
+  .md-switch__icon {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    fill: currentColor;
+    transition: fill 67ms linear, opacity 33ms linear,
+      transform 167ms cubic-bezier(0.2, 0, 0, 1);
+    opacity: 0;
+  }
+
+  .disabled .md-switch__icon {
+    transition: none;
+  }
+
+  .selected .md-switch__icon--on,
+  .unselected .md-switch__icon--off {
+    opacity: 1;
+  }
+
+  /* Rotate selected icon out of view when unselected and no off icon */
+  .unselected .md-switch__handle:not(.with-icon) .md-switch__icon--on {
+    transform: rotate(-45deg);
+  }
+
+  /* Icon — off */
+  .md-switch__icon--off {
+    width: var(--_icon-size);
+    height: var(--_icon-size);
+    color: var(--_icon-color);
+  }
+
+  .unselected:hover .md-switch__icon--off {
+    color: var(--_icon-color);
+  }
+
+  .unselected:focus-within .md-switch__icon--off {
+    color: var(--_icon-color);
+  }
+
+  .unselected:active .md-switch__icon--off {
+    color: var(--_icon-color);
+  }
+
+  .unselected.disabled .md-switch__icon--off {
+    color: var(--_disabled-icon-color);
+    opacity: var(--_disabled-icon-opacity);
+  }
+
+  /* Icon — on */
+  .md-switch__icon--on {
+    width: var(--_selected-icon-size);
+    height: var(--_selected-icon-size);
+    color: var(--_selected-icon-color);
+  }
+
+  .selected:hover .md-switch__icon--on {
+    color: var(--_selected-icon-color);
+  }
+
+  .selected:focus-within .md-switch__icon--on {
+    color: var(--_selected-icon-color);
+  }
+
+  .selected:active .md-switch__icon--on {
+    color: var(--_selected-icon-color);
+  }
+
+  .selected.disabled .md-switch__icon--on {
+    color: var(--_disabled-selected-icon-color);
+    opacity: var(--_disabled-selected-icon-opacity);
+  }
+
+  /* ═══════════════════════════════════════
+     HIGH CONTRAST MODE
+     ═══════════════════════════════════════ */
+  @media (forced-colors: active) {
+    .selected .md-switch__track::before {
+      background: ButtonText;
+      border-color: ButtonText;
+    }
+
+    .disabled .md-switch__track::before {
+      border-color: GrayText;
+      opacity: 1;
+    }
+
+    .disabled.selected .md-switch__track::before {
+      background: GrayText;
+    }
+
+    .unselected .md-switch__handle::before {
+      background: ButtonText;
+    }
+
+    .disabled .md-switch__handle::before {
+      opacity: 1;
+    }
+
+    .disabled.unselected .md-switch__handle::before {
+      background: GrayText;
+    }
+
+    .md-switch__icon--off {
+      fill: Canvas;
+    }
+
+    .md-switch__icon--on {
+      fill: ButtonText;
+    }
+
+    .disabled.unselected .md-switch__icon--off,
+    .disabled.selected .md-switch__icon--on {
+      opacity: 1;
+    }
+
+    .disabled .md-switch__icon--on {
+      fill: GrayText;
+    }
+  }
+</style>
