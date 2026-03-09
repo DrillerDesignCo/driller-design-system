@@ -1,0 +1,32 @@
+---
+/**
+ * Material Design 3 — ChipSet
+ * A flex-wrap container for Chip components.
+ *
+ * Usage:
+ *   <ChipSet>
+ *     <Chip variant="assist" label="Assist" />
+ *     <Chip variant="filter" label="Genre" />
+ *   </ChipSet>
+ */
+
+interface Props {
+  class?: string;
+  [key: string]: any;
+}
+
+const { class: className, ...attrs } = Astro.props;
+---
+
+<div class:list={['md-chip-set', className]} {...attrs}>
+  <slot />
+</div>
+
+<style>
+  .md-chip-set {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+</style>

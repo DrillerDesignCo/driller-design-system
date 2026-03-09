@@ -1,0 +1,366 @@
+---
+/**
+ * Material Design 3 — Menu
+ * A floating surface for displaying a list of choices.
+ *
+ * Usage:
+ *   <div style="position: relative;">
+ *     <button id="my-btn">Open Menu</button>
+ *     <Menu anchor="my-btn">
+ *       <MenuItem headline="Cut" />
+ *       <MenuItem headline="Copy" />
+ *       <MenuItem headline="Paste" />
+ *     </Menu>
+ *   </div>
+ */
+
+interface Props {
+  open?: boolean;
+  anchor?: string;
+  positioning?: 'absolute' | 'fixed' | 'popover';
+  class?: string;
+  [key: string]: any;
+}
+
+const {
+  open = false,
+  anchor,
+  positioning = 'absolute',
+  class: className,
+  ...attrs
+} = Astro.props;
+
+const menuId = `md-menu-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<div
+  id={menuId}
+  class:list={[
+    'md-menu',
+    {
+      'md-menu--open': open,
+      'md-menu--fixed': positioning === 'fixed',
+      'md-menu--popover': positioning === 'popover',
+    },
+    className,
+  ]}
+  role="menu"
+  aria-hidden={!open}
+  data-anchor={anchor}
+  data-positioning={positioning}
+  {...attrs}
+>
+  <div class="md-menu__elevation" aria-hidden="true"></div>
+  <ul class="md-menu__items" role="presentation">
+    <div class="md-menu__item-padding">
+      <slot />
+    </div>
+  </ul>
+</div>
+
+<script>
+  /**
+   * MD Menu — vanilla JS controller
+   * Handles: anchor-relative positioning, open/close, keyboard nav,
+   *          click-outside-to-close, focus management.
+   */
+  (function () {
+    function initMenu(menuEl: HTMLElement) {
+      const anchorId = menuEl.dataset.anchor;
+      const positioning = menuEl.dataset.positioning ?? 'absolute';
+
+      /** Find the anchor element in the same root */
+      function getAnchorEl(): HTMLElement | null {
+        if (!anchorId) return null;
+        const root = menuEl.getRootNode() as Document | ShadowRoot;
+        return (root as Document).getElementById?.(anchorId) ??
+          (root as ShadowRoot).querySelector?.(`#${anchorId}`) ??
+          null;
+      }
+
+      /** All focusable (non-disabled) menu items */
+      function getItems(): HTMLElement[] {
+        return Array.from(
+          menuEl.querySelectorAll<HTMLElement>(
+            '.md-menu-item:not(.md-menu-item--disabled) .md-menu-item__root'
+          )
+        );
+      }
+
+      /** Position the menu surface relative to the anchor */
+      function positionMenu() {
+        const anchor = getAnchorEl();
+        if (!anchor) return;
+
+        if (positioning === 'fixed' || positioning === 'popover') {
+          const rect = anchor.getBoundingClientRect();
+          menuEl.style.position = 'fixed';
+          menuEl.style.top = `${rect.bottom}px`;
+          menuEl.style.left = `${rect.left}px`;
+          // Flip upwards if not enough space below
+          const spaceBelow = window.innerHeight - rect.bottom;
+          if (spaceBelow < menuEl.offsetHeight && rect.top > menuEl.offsetHeight) {
+            menuEl.style.top = `${rect.top - menuEl.offsetHeight}px`;
+          }
+        } else {
+          // absolute — relative to nearest positioned parent
+          const menuParent = menuEl.offsetParent as HTMLElement | null;
+          const anchorRect = anchor.getBoundingClientRect();
+          const parentRect = menuParent
+            ? menuParent.getBoundingClientRect()
+            : { top: 0, left: 0 };
+
+          menuEl.style.position = 'absolute';
+          menuEl.style.top = `${anchorRect.bottom - parentRect.top}px`;
+          menuEl.style.left = `${anchorRect.left - parentRect.left}px`;
+
+          // Flip upwards if needed
+          const spaceBelow = window.innerHeight - anchorRect.bottom;
+          if (spaceBelow < menuEl.offsetHeight && anchorRect.top > menuEl.offsetHeight) {
+            menuEl.style.top = `${anchorRect.top - parentRect.top - menuEl.offsetHeight}px`;
+          }
+        }
+
+        // Clamp to viewport right edge
+        const menuRect = menuEl.getBoundingClientRect();
+        if (menuRect.right > window.innerWidth) {
+          const excess = menuRect.right - window.innerWidth + 8;
+          menuEl.style.left = `${parseFloat(menuEl.style.left) - excess}px`;
+        }
+      }
+
+      /** Open the menu */
+      function openMenu() {
+        menuEl.classList.add('md-menu--open');
+        menuEl.setAttribute('aria-hidden', 'false');
+        positionMenu();
+
+        // Focus first item
+        const items = getItems();
+        if (items.length) {
+          items[0].focus();
+        }
+
+        document.addEventListener('pointerdown', onOutsideClick, { capture: true });
+        document.addEventListener('keydown', onDocKeydown);
+      }
+
+      /** Close the menu */
+      function closeMenu() {
+        menuEl.classList.remove('md-menu--open');
+        menuEl.setAttribute('aria-hidden', 'true');
+        document.removeEventListener('pointerdown', onOutsideClick, { capture: true });
+        document.removeEventListener('keydown', onDocKeydown);
+
+        // Return focus to anchor
+        const anchor = getAnchorEl();
+        anchor?.focus();
+      }
+
+      /** Click outside handler */
+      function onOutsideClick(event: PointerEvent) {
+        const path = event.composedPath();
+        if (!path.includes(menuEl)) {
+          closeMenu();
+        }
+      }
+
+      /** Global keydown handler (Escape) */
+      function onDocKeydown(event: KeyboardEvent) {
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          closeMenu();
+        }
+      }
+
+      /** Keyboard navigation inside the menu */
+      menuEl.addEventListener('keydown', (event: KeyboardEvent) => {
+        const items = getItems();
+        if (!items.length) return;
+
+        const currentIndex = items.indexOf(document.activeElement as HTMLElement);
+
+        switch (event.key) {
+          case 'ArrowDown': {
+            event.preventDefault();
+            const next = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
+            items[next].focus();
+            break;
+          }
+          case 'ArrowUp': {
+            event.preventDefault();
+            const prev = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
+            items[prev].focus();
+            break;
+          }
+          case 'Home': {
+            event.preventDefault();
+            items[0].focus();
+            break;
+          }
+          case 'End': {
+            event.preventDefault();
+            items[items.length - 1].focus();
+            break;
+          }
+          case 'Enter':
+          case ' ': {
+            // Let the focused item handle its own click
+            const focused = document.activeElement as HTMLElement | null;
+            if (focused && items.includes(focused)) {
+              event.preventDefault();
+              focused.click();
+              closeMenu();
+            }
+            break;
+          }
+          case 'Tab': {
+            closeMenu();
+            break;
+          }
+        }
+      });
+
+      /** MenuItem click → close menu */
+      menuEl.addEventListener('click', (event: MouseEvent) => {
+        const target = (event.target as Element).closest('.md-menu-item__root');
+        if (target && menuEl.contains(target)) {
+          closeMenu();
+        }
+      });
+
+      /** Wire up the anchor element as a toggle trigger */
+      function wireAnchor() {
+        const anchor = getAnchorEl();
+        if (!anchor || (anchor as any).__mdMenuWired) return;
+        (anchor as any).__mdMenuWired = true;
+
+        anchor.addEventListener('click', () => {
+          if (menuEl.classList.contains('md-menu--open')) {
+            closeMenu();
+          } else {
+            openMenu();
+          }
+        });
+
+        // ARIA
+        anchor.setAttribute('aria-haspopup', 'true');
+        anchor.setAttribute('aria-expanded', 'false');
+        menuEl.addEventListener('md-menu-open', () =>
+          anchor.setAttribute('aria-expanded', 'true')
+        );
+        menuEl.addEventListener('md-menu-close', () =>
+          anchor.setAttribute('aria-expanded', 'false')
+        );
+      }
+
+      wireAnchor();
+
+      // If open prop was set server-side, open immediately
+      if (menuEl.classList.contains('md-menu--open')) {
+        positionMenu();
+        document.addEventListener('pointerdown', onOutsideClick, { capture: true });
+        document.addEventListener('keydown', onDocKeydown);
+      }
+
+      // Reposition on resize
+      window.addEventListener('resize', () => {
+        if (menuEl.classList.contains('md-menu--open')) positionMenu();
+      });
+    }
+
+    // Init all menus on page
+    document.querySelectorAll<HTMLElement>('.md-menu').forEach(initMenu);
+  })();
+</script>
+
+<style>
+  /* ═══════════════════════════════════════
+     Menu — Host wrapper
+     ═══════════════════════════════════════ */
+  .md-menu {
+    --_shape: var(--md-menu-container-shape, 4px);
+    --_color: var(--md-menu-container-color, var(--surface));
+    --_min-width: var(--md-menu-min-width, 112px);
+    --_max-width: var(--md-menu-max-width, 280px);
+    --_z-index: var(--md-menu-z-index, 20);
+
+    display: none;
+    position: absolute;
+    min-width: var(--_min-width);
+    max-width: var(--_max-width);
+    border-radius: var(--_shape);
+    z-index: var(--_z-index);
+    inset: auto;
+    overflow: visible;
+    opacity: 0;
+    transform: scaleY(0.8);
+    transform-origin: top center;
+    transition:
+      opacity 120ms cubic-bezier(0.2, 0, 0, 1),
+      transform 120ms cubic-bezier(0.2, 0, 0, 1);
+
+    /* elevation shadow */
+    box-shadow:
+      0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+      0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+      0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  }
+
+  .md-menu--open {
+    display: block;
+    opacity: 1;
+    transform: scaleY(1);
+  }
+
+  .md-menu--fixed {
+    position: fixed;
+  }
+
+  /* ═══════════════════════════════════════
+     Menu — Elevation layer
+     ═══════════════════════════════════════ */
+  .md-menu__elevation {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  /* ═══════════════════════════════════════
+     Menu — Items list
+     ═══════════════════════════════════════ */
+  .md-menu__items {
+    display: block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    background-color: var(--_color);
+    border-radius: inherit;
+    overflow: auto;
+    max-height: inherit;
+    min-width: inherit;
+    max-width: inherit;
+    scrollbar-width: thin;
+  }
+
+  .md-menu__item-padding {
+    padding-block: 8px;
+  }
+
+  /* Dividers inside menu */
+  .md-menu .md-divider,
+  .md-menu [role="separator"] {
+    margin: 8px 0;
+  }
+
+  /* ═══════════════════════════════════════
+     Forced colors (high contrast)
+     ═══════════════════════════════════════ */
+  @media (forced-colors: active) {
+    .md-menu--open {
+      border: 1px solid CanvasText;
+    }
+  }
+</style>

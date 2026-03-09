@@ -1,0 +1,45 @@
+---
+/**
+ * Material Design 3 — List
+ * A container for ListItem components.
+ *
+ * Usage:
+ *   <List>
+ *     <ListItem headline="Item one" />
+ *     <ListItem headline="Item two" type="button" />
+ *   </List>
+ */
+
+interface Props {
+  class?: string;
+  [key: string]: any;
+}
+
+const { class: className, ...attrs } = Astro.props;
+---
+
+<ul
+  role="list"
+  class:list={['md-list', className]}
+  {...attrs}
+>
+  <slot />
+</ul>
+
+<style>
+  /* ═══════════════════════════════════════
+     LIST — Container
+     ═══════════════════════════════════════ */
+  .md-list {
+    background: var(--md-list-container-color, var(--surface));
+    color: unset;
+    display: flex;
+    flex-direction: column;
+    outline: none;
+    padding: 8px 0;
+    position: relative;
+    margin: 0;
+    list-style: none;
+    box-sizing: border-box;
+  }
+</style>
