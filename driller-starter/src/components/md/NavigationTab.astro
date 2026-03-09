@@ -1,0 +1,232 @@
+---
+interface Props {
+  active?: boolean;
+  disabled?: boolean;
+  label?: string;
+  badgeValue?: string;
+  showBadge?: boolean;
+  hideInactiveLabel?: boolean;
+  class?: string;
+}
+
+const {
+  active = false,
+  disabled = false,
+  label,
+  badgeValue,
+  showBadge = false,
+  hideInactiveLabel = false,
+  class: className,
+  ...attrs
+} = Astro.props;
+---
+
+<button
+  class:list={[
+    'md-navigation-tab',
+    {
+      'md-navigation-tab--active': active,
+      'md-navigation-tab--hide-inactive-label': hideInactiveLabel,
+    },
+    className,
+  ]}
+  role="tab"
+  aria-selected={active ? 'true' : 'false'}
+  tabindex={active ? 0 : -1}
+  disabled={disabled || undefined}
+  {...attrs}
+>
+  <span class="md-navigation-tab__icon-content" aria-hidden="true">
+    <span class="md-navigation-tab__active-indicator"></span>
+    <span class="md-navigation-tab__icon">
+      <slot name="inactive-icon" />
+    </span>
+    <span class="md-navigation-tab__icon md-navigation-tab__icon--active">
+      <slot name="active-icon" />
+    </span>
+    {showBadge && (
+      <span class:list={['md-navigation-tab__badge', { 'md-navigation-tab__badge--large': !!badgeValue }]}>
+        {badgeValue && <span class="md-navigation-tab__badge-value">{badgeValue}</span>}
+      </span>
+    )}
+  </span>
+  {label && <span class="md-navigation-tab__label-text">{label}</span>}
+</button>
+
+<style>
+  .md-navigation-tab {
+    /* Button reset */
+    appearance: none;
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+
+    /* Layout */
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    min-width: 48px;
+    height: 100%;
+
+    /* Ripple */
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: currentColor;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      border-radius: inherit;
+      pointer-events: none;
+    }
+
+    &:hover::after {
+      opacity: 0.08;
+    }
+
+    &:active::after {
+      opacity: 0.16;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-primary, #6750a4);
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.38;
+      pointer-events: none;
+    }
+  }
+
+  .md-navigation-tab__icon-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 64px;
+    height: 32px;
+    border-radius: 16px;
+  }
+
+  .md-navigation-tab__active-indicator {
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    background: var(--color-secondary-container, #e8def8);
+    opacity: 0;
+    transform: scaleX(0.5);
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .md-navigation-tab--active .md-navigation-tab__active-indicator {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+  .md-navigation-tab__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    position: relative;
+    z-index: 1;
+    color: var(--text-muted, #49454f);
+    transition: color 0.2s ease;
+
+    ::slotted(svg),
+    ::slotted(span) {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+  }
+
+  .md-navigation-tab__icon--active {
+    display: none;
+  }
+
+  .md-navigation-tab--active .md-navigation-tab__icon:not(.md-navigation-tab__icon--active) {
+    display: none;
+  }
+
+  .md-navigation-tab--active .md-navigation-tab__icon--active {
+    display: flex;
+    color: var(--color-primary, #6750a4);
+  }
+
+  /* When there's no active icon slot, just recolor the regular icon */
+  .md-navigation-tab--active .md-navigation-tab__icon {
+    color: var(--color-primary, #6750a4);
+  }
+
+  .md-navigation-tab__label-text {
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+    color: var(--text-muted, #49454f);
+    transition:
+      color 0.2s ease,
+      font-weight 0.1s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  .md-navigation-tab--active .md-navigation-tab__label-text {
+    color: var(--color-primary, #6750a4);
+    font-weight: 700;
+  }
+
+  /* Hide inactive label when flag is set and tab is not active */
+  .md-navigation-tab--hide-inactive-label:not(.md-navigation-tab--active) .md-navigation-tab__label-text {
+    display: none;
+  }
+
+  /* Badge */
+  .md-navigation-tab__badge {
+    position: absolute;
+    top: 0;
+    inset-inline-start: 50%;
+    background: var(--color-primary, #6750a4);
+    border-radius: 9999px;
+    width: 6px;
+    height: 6px;
+    transform: translateX(6px);
+    z-index: 2;
+  }
+
+  .md-navigation-tab__badge--large {
+    width: auto;
+    height: 16px;
+    min-width: 16px;
+    padding: 0 4px;
+    transform: translateX(4px) translateY(-4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .md-navigation-tab__badge-value {
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-on-primary, #fff);
+    line-height: 1;
+  }
+</style>

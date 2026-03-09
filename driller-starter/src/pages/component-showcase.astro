@@ -26,6 +26,9 @@ import CircularProgress from '../components/md/CircularProgress.astro';
 import LinearProgress from '../components/md/LinearProgress.astro';
 import Badge from '../components/md/Badge.astro';
 import Card from '../components/md/Card.astro';
+import NavigationBar from '../components/md/NavigationBar.astro';
+import NavigationTab from '../components/md/NavigationTab.astro';
+import NavigationDrawer from '../components/md/NavigationDrawer.astro';
 ---
 
 <BaseLayout title="Component Showcase">
@@ -721,6 +724,91 @@ import Card from '../components/md/Card.astro';
           <h3 style="margin: 0 0 0.5rem;">Outlined Card</h3>
           <p style="margin: 0; color: var(--text-muted, #444);">This is an outlined card with a 1px border.</p>
         </Card>
+      </div>
+    </section>
+
+    <Divider />
+
+    <!-- ══════════════════════════════════════
+         NAVIGATION BAR + TAB
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-navigation-bar">
+      <h2 class="showcase-section-title">NavigationBar + NavigationTab</h2>
+      <p class="showcase-sublabel">Click tabs to switch active state. Keyboard: Arrow Left/Right to move focus, Enter/Space to activate.</p>
+
+      <p class="showcase-label">With labels (active on index 0)</p>
+      <NavigationBar activeIndex={0} style="border-radius: 16px; max-width: 480px;">
+        <NavigationTab label="Home">
+          <Icon slot="inactive-icon" name="home" />
+          <Icon slot="active-icon" name="home" filled />
+        </NavigationTab>
+        <NavigationTab label="Search">
+          <Icon slot="inactive-icon" name="search" />
+          <Icon slot="active-icon" name="search" filled />
+        </NavigationTab>
+        <NavigationTab label="Library" showBadge badgeValue="5">
+          <Icon slot="inactive-icon" name="library_music" />
+          <Icon slot="active-icon" name="library_music" filled />
+        </NavigationTab>
+        <NavigationTab label="Profile">
+          <Icon slot="inactive-icon" name="person" />
+          <Icon slot="active-icon" name="person" filled />
+        </NavigationTab>
+      </NavigationBar>
+
+      <p class="showcase-label" style="margin-top: 2rem;">Hide inactive labels</p>
+      <NavigationBar activeIndex={1} hideInactiveLabels style="border-radius: 16px; max-width: 360px;">
+        <NavigationTab label="Home">
+          <Icon slot="inactive-icon" name="home" />
+          <Icon slot="active-icon" name="home" filled />
+        </NavigationTab>
+        <NavigationTab label="Explore">
+          <Icon slot="inactive-icon" name="explore" />
+          <Icon slot="active-icon" name="explore" filled />
+        </NavigationTab>
+        <NavigationTab label="Settings">
+          <Icon slot="inactive-icon" name="settings" />
+          <Icon slot="active-icon" name="settings" filled />
+        </NavigationTab>
+      </NavigationBar>
+    </section>
+
+    <Divider />
+
+    <!-- ══════════════════════════════════════
+         NAVIGATION DRAWER
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-navigation-drawer">
+      <h2 class="showcase-section-title">NavigationDrawer</h2>
+      <p class="showcase-sublabel">The modal drawer opens over the page. Click the scrim or press Escape to close.</p>
+
+      <p class="showcase-label">Standard drawer (inline)</p>
+      <div style="display: flex; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; height: 220px; max-width: 600px;">
+        <NavigationDrawer opened style="position: relative; flex-shrink: 0;">
+          <div style="padding: 0.75rem 1rem; display: flex; flex-direction: column; gap: 0.25rem;">
+            <p style="font-weight: 600; margin: 0 0 0.5rem; font-size: 0.875rem; color: var(--text-muted);">Navigation</p>
+            <Button variant="text" style="justify-content: flex-start;"><Icon slot="icon" name="home" /> Home</Button>
+            <Button variant="text" style="justify-content: flex-start;"><Icon slot="icon" name="search" /> Search</Button>
+            <Button variant="text" style="justify-content: flex-start;"><Icon slot="icon" name="settings" /> Settings</Button>
+          </div>
+        </NavigationDrawer>
+        <div style="flex: 1; padding: 1.5rem; color: var(--text-muted); font-size: 0.875rem;">Page content area →</div>
+      </div>
+
+      <p class="showcase-label" style="margin-top: 2rem;">Modal drawer (click button to open)</p>
+      <div style="position: relative; min-height: 80px; display: flex; align-items: center;">
+        <Button variant="outlined" id="showcase-drawer-btn" data-drawer-toggle="showcase-drawer">
+          <Icon slot="icon" name="menu" />
+          Open Drawer
+        </Button>
+        <NavigationDrawer id="showcase-drawer" modal pivot="start">
+          <div style="padding: 0.75rem 1rem; display: flex; flex-direction: column; gap: 0.25rem;">
+            <p style="font-weight: 600; margin: 0 0 0.5rem; font-size: 0.875rem; color: var(--text-muted);">Modal Navigation</p>
+            <Button variant="text" style="justify-content: flex-start;"><Icon slot="icon" name="home" /> Home</Button>
+            <Button variant="text" style="justify-content: flex-start;"><Icon slot="icon" name="bookmark" /> Saved</Button>
+            <Button variant="text" style="justify-content: flex-start;"><Icon slot="icon" name="logout" /> Sign out</Button>
+          </div>
+        </NavigationDrawer>
       </div>
     </section>
 

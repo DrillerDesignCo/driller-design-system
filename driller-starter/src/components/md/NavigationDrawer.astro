@@ -1,0 +1,160 @@
+---
+interface Props {
+  opened?: boolean;
+  modal?: boolean;
+  pivot?: 'start' | 'end';
+  class?: string;
+}
+
+const {
+  opened = false,
+  modal = false,
+  pivot = 'end',
+  class: className,
+  ...attrs
+} = Astro.props;
+---
+
+{modal && (
+  <div class:list={['md-navigation-drawer__scrim', { 'md-navigation-drawer__scrim--visible': opened }]}></div>
+)}
+<div
+  class:list={['md-navigation-drawer', {
+    'md-navigation-drawer--opened': opened,
+    'md-navigation-drawer--modal': modal,
+    'md-navigation-drawer--pivot-at-start': pivot === 'start',
+  }, className]}
+  role="dialog"
+  aria-expanded={opened ? 'true' : 'false'}
+  aria-hidden={!opened ? 'true' : 'false'}
+  aria-modal={modal ? 'true' : undefined}
+  {...attrs}
+>
+  <div class="md-navigation-drawer__content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  /* ─── Scrim (modal only) ─────────────────────────────────── */
+  .md-navigation-drawer__scrim {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.32);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.25s ease,
+      visibility 0s ease 0.25s;
+    z-index: 99;
+  }
+
+  .md-navigation-drawer__scrim--visible {
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity 0.25s ease,
+      visibility 0s ease 0s;
+  }
+
+  /* ─── Drawer ─────────────────────────────────────────────── */
+  .md-navigation-drawer {
+    display: flex;
+    justify-content: flex-end;
+    inline-size: 0;
+    overflow: hidden;
+    visibility: hidden;
+    transition:
+      inline-size 0.25s ease,
+      visibility 0s ease 0.25s;
+    z-index: 100;
+  }
+
+  .md-navigation-drawer--opened {
+    inline-size: 360px;
+    visibility: visible;
+    transition:
+      inline-size 0.25s ease,
+      visibility 0s ease 0s;
+  }
+
+  /* ─── Modal drawer ───────────────────────────────────────── */
+  .md-navigation-drawer--modal {
+    position: fixed;
+    inset-block: 0;
+    inset-inline-end: 0;
+  }
+
+  /* ─── Pivot at start (left) ──────────────────────────────── */
+  .md-navigation-drawer--pivot-at-start {
+    justify-content: flex-start;
+    inset-inline-end: auto;
+    inset-inline-start: 0;
+  }
+
+  /* ─── Inner content ──────────────────────────────────────── */
+  .md-navigation-drawer__content {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    min-inline-size: 360px;
+    block-size: 100%;
+    background: var(--surface, #fffbfe);
+    border-radius: 0 16px 16px 0;
+    overflow-y: auto;
+    padding: 1.5rem 0;
+  }
+
+  .md-navigation-drawer--pivot-at-start .md-navigation-drawer__content {
+    border-radius: 16px 0 0 16px;
+  }
+</style>
+
+<script>
+  // Toggle drawer open/close via [data-drawer-toggle="drawerId"]
+  document.querySelectorAll('[data-drawer-toggle]').forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const drawerId = (trigger as HTMLElement).getAttribute('data-drawer-toggle');
+      if (!drawerId) return;
+      const drawer = document.getElementById(drawerId);
+      if (!drawer) return;
+      const isOpen = drawer.classList.contains('md-navigation-drawer--opened');
+      drawer.classList.toggle('md-navigation-drawer--opened', !isOpen);
+      drawer.setAttribute('aria-expanded', !isOpen ? 'true' : 'false');
+      drawer.setAttribute('aria-hidden', isOpen ? 'true' : 'false');
+      // Toggle scrim for modal drawers
+      const scrim = drawer.previousElementSibling;
+      if (scrim?.classList.contains('md-navigation-drawer__scrim')) {
+        scrim.classList.toggle('md-navigation-drawer__scrim--visible', !isOpen);
+      }
+    });
+  });
+
+  // Close modal on scrim click
+  document.querySelectorAll('.md-navigation-drawer__scrim').forEach((scrim) => {
+    scrim.addEventListener('click', () => {
+      scrim.classList.remove('md-navigation-drawer__scrim--visible');
+      const drawer = scrim.nextElementSibling as HTMLElement | null;
+      if (drawer) {
+        drawer.classList.remove('md-navigation-drawer--opened');
+        drawer.setAttribute('aria-expanded', 'false');
+        drawer.setAttribute('aria-hidden', 'true');
+      }
+    });
+  });
+
+  // Close modal drawers on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.md-navigation-drawer--modal.md-navigation-drawer--opened').forEach((d) => {
+        d.classList.remove('md-navigation-drawer--opened');
+        d.setAttribute('aria-expanded', 'false');
+        d.setAttribute('aria-hidden', 'true');
+        const scrim = d.previousElementSibling;
+        if (scrim?.classList.contains('md-navigation-drawer__scrim')) {
+          scrim.classList.remove('md-navigation-drawer__scrim--visible');
+        }
+      });
+    }
+  });
+</script>
