@@ -29,6 +29,8 @@ import Card from '../components/md/Card.astro';
 import NavigationBar from '../components/md/NavigationBar.astro';
 import NavigationTab from '../components/md/NavigationTab.astro';
 import NavigationDrawer from '../components/md/NavigationDrawer.astro';
+import SegmentedButton from '../components/md/SegmentedButton.astro';
+import SegmentedButtonSet from '../components/md/SegmentedButtonSet.astro';
 ---
 
 <BaseLayout title="Component Showcase">
@@ -809,6 +811,72 @@ import NavigationDrawer from '../components/md/NavigationDrawer.astro';
             <Button variant="text" style="justify-content: flex-start;"><Icon slot="icon" name="logout" /> Sign out</Button>
           </div>
         </NavigationDrawer>
+      </div>
+    </section>
+
+    <Divider />
+
+    <!-- ══════════════════════════════════════
+         SEGMENTED BUTTON
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-segmented-button">
+      <h2 class="showcase-section-title">Segmented Button</h2>
+
+      <p class="showcase-label">Single select (requires 1 selected)</p>
+      <div class="showcase-row">
+        <SegmentedButtonSet>
+          <SegmentedButton label="Day" selected />
+          <SegmentedButton label="Week" />
+          <SegmentedButton label="Month" />
+        </SegmentedButtonSet>
+      </div>
+
+      <p class="showcase-label" style="margin-top: 2rem;">Multi select</p>
+      <div class="showcase-row">
+        <SegmentedButtonSet multiselect>
+          <SegmentedButton label="Bold" selected>
+            <Icon slot="icon" name="format_bold" />
+          </SegmentedButton>
+          <SegmentedButton label="Italic">
+            <Icon slot="icon" name="format_italic" />
+          </SegmentedButton>
+          <SegmentedButton label="Underline" selected>
+            <Icon slot="icon" name="format_underlined" />
+          </SegmentedButton>
+        </SegmentedButtonSet>
+      </div>
+
+      <p class="showcase-label" style="margin-top: 2rem;">Icons only</p>
+      <div class="showcase-row">
+        <SegmentedButtonSet>
+          <SegmentedButton selected>
+            <Icon slot="icon" name="grid_view" />
+          </SegmentedButton>
+          <SegmentedButton>
+            <Icon slot="icon" name="view_list" />
+          </SegmentedButton>
+        </SegmentedButtonSet>
+      </div>
+
+      <p class="showcase-label" style="margin-top: 2rem;">No checkmarks</p>
+      <div class="showcase-row">
+        <SegmentedButtonSet>
+          <SegmentedButton label="List" noCheckmark selected>
+            <Icon slot="icon" name="view_list" />
+          </SegmentedButton>
+          <SegmentedButton label="Cards" noCheckmark>
+            <Icon slot="icon" name="grid_view" />
+          </SegmentedButton>
+        </SegmentedButtonSet>
+      </div>
+
+      <p class="showcase-label" style="margin-top: 2rem;">Disabled</p>
+      <div class="showcase-row">
+        <SegmentedButtonSet>
+          <SegmentedButton label="Enabled" />
+          <SegmentedButton label="Selected Disabled" selected disabled />
+          <SegmentedButton label="Disabled" disabled />
+        </SegmentedButtonSet>
       </div>
     </section>
 
