@@ -1,0 +1,798 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+import Icon from '../../components/md/Icon.astro';
+import Divider from '../../components/md/Divider.astro';
+import Button from '../../components/md/Button.astro';
+import IconButton from '../../components/md/IconButton.astro';
+import FAB from '../../components/md/FAB.astro';
+import Checkbox from '../../components/md/Checkbox.astro';
+import Radio from '../../components/md/Radio.astro';
+import Switch from '../../components/md/Switch.astro';
+import Slider from '../../components/md/Slider.astro';
+import TextField from '../../components/md/TextField.astro';
+import Select from '../../components/md/Select.astro';
+import SelectOption from '../../components/md/SelectOption.astro';
+import Chip from '../../components/md/Chip.astro';
+import ChipSet from '../../components/md/ChipSet.astro';
+import List from '../../components/md/List.astro';
+import ListItem from '../../components/md/ListItem.astro';
+import Menu from '../../components/md/Menu.astro';
+import MenuItem from '../../components/md/MenuItem.astro';
+import Tabs from '../../components/md/Tabs.astro';
+import Tab from '../../components/md/Tab.astro';
+import Dialog from '../../components/md/Dialog.astro';
+import CircularProgress from '../../components/md/CircularProgress.astro';
+import LinearProgress from '../../components/md/LinearProgress.astro';
+---
+
+<BaseLayout title="Component Showcase">
+  <div class="showcase-page">
+    <header class="showcase-header">
+      <h1>Material Design Component Showcase</h1>
+      <p class="showcase-subtitle">All MD3 components — every variant and state</p>
+    </header>
+
+    <!-- ══════════════════════════════════════
+         ICON
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-icon">
+      <h2 class="showcase-section-title">Icon</h2>
+      <div class="showcase-row">
+        <Icon name="home" />
+        <Icon name="search" />
+        <Icon name="favorite" />
+        <Icon name="favorite" filled />
+        <Icon name="star" />
+        <Icon name="star" filled />
+        <Icon name="settings" size={32} />
+        <Icon name="delete" size={36} />
+        <Icon name="arrow_forward" />
+        <Icon name="check_circle" filled />
+      </div>
+    </section>
+
+    <Divider />
+
+    <!-- ══════════════════════════════════════
+         DIVIDER
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-divider">
+      <h2 class="showcase-section-title">Divider</h2>
+      <div class="showcase-col">
+        <p class="showcase-label">Horizontal (default)</p>
+        <Divider />
+        <p class="showcase-label">Inset start</p>
+        <Divider insetStart />
+        <p class="showcase-label">Inset end</p>
+        <Divider insetEnd />
+        <p class="showcase-label">Full inset</p>
+        <Divider inset />
+        <p class="showcase-label">Vertical (inside flex row)</p>
+        <div class="showcase-row" style="align-items: stretch; height: 48px;">
+          <span>Left</span>
+          <Divider vertical />
+          <span>Middle</span>
+          <Divider vertical />
+          <span>Right</span>
+        </div>
+      </div>
+    </section>
+
+    <Divider />
+
+    <!-- ══════════════════════════════════════
+         BUTTON
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-button">
+      <h2 class="showcase-section-title">Button</h2>
+
+      <p class="showcase-label">All 5 variants</p>
+      <div class="showcase-row">
+        <Button variant="elevated">Elevated</Button>
+        <Button variant="filled">Filled</Button>
+        <Button variant="filled-tonal">Tonal</Button>
+        <Button variant="outlined">Outlined</Button>
+        <Button variant="text">Text</Button>
+      </div>
+
+      <p class="showcase-label">With leading icon</p>
+      <div class="showcase-row">
+        <Button variant="filled">
+          <Icon slot="icon" name="add" />
+          Create
+        </Button>
+        <Button variant="outlined">
+          <Icon slot="icon" name="upload" />
+          Upload
+        </Button>
+        <Button variant="elevated">
+          <Icon slot="icon" name="edit" />
+          Edit
+        </Button>
+      </div>
+
+      <p class="showcase-label">With trailing icon</p>
+      <div class="showcase-row">
+        <Button variant="filled" trailingIcon>
+          Next
+          <Icon slot="icon" name="arrow_forward" />
+        </Button>
+        <Button variant="text" trailingIcon>
+          Learn more
+          <Icon slot="icon" name="open_in_new" />
+        </Button>
+      </div>
+
+      <p class="showcase-label">Disabled</p>
+      <div class="showcase-row">
+        <Button variant="elevated" disabled>Elevated</Button>
+        <Button variant="filled" disabled>Filled</Button>
+        <Button variant="filled-tonal" disabled>Tonal</Button>
+        <Button variant="outlined" disabled>Outlined</Button>
+        <Button variant="text" disabled>Text</Button>
+      </div>
+
+      <p class="showcase-label">As link</p>
+      <div class="showcase-row">
+        <Button variant="filled" href="#">Link Button</Button>
+        <Button variant="outlined" href="#" target="_blank">External Link</Button>
+      </div>
+    </section>
+
+    <Divider />
+
+    <!-- ══════════════════════════════════════
+         ICON BUTTON
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-icon-button">
+      <h2 class="showcase-section-title">Icon Button</h2>
+
+      <p class="showcase-label">All 4 variants</p>
+      <div class="showcase-row">
+        <IconButton variant="standard" aria-label="Standard icon button">
+          <Icon name="favorite" />
+        </IconButton>
+        <IconButton variant="filled" aria-label="Filled icon button">
+          <Icon name="favorite" />
+        </IconButton>
+        <IconButton variant="filled-tonal" aria-label="Filled tonal icon button">
+          <Icon name="favorite" />
+        </IconButton>
+        <IconButton variant="outlined" aria-label="Outlined icon button">
+          <Icon name="favorite" />
+        </IconButton>
+      </div>
+
+      <p class="showcase-label">Toggle (click to toggle selected)</p>
+      <div class="showcase-row">
+        <IconButton variant="standard" toggle aria-label="Toggle standard">
+          <Icon name="favorite" />
+          <Icon slot="selected" name="favorite" filled />
+        </IconButton>
+        <IconButton variant="filled" toggle aria-label="Toggle filled">
+          <Icon name="bookmark" />
+          <Icon slot="selected" name="bookmark" filled />
+        </IconButton>
+        <IconButton variant="filled-tonal" toggle selected aria-label="Toggle tonal selected">
+          <Icon name="star" />
+          <Icon slot="selected" name="star" filled />
+        </IconButton>
+        <IconButton variant="outlined" toggle aria-label="Toggle outlined">
+          <Icon name="thumb_up" />
+          <Icon slot="selected" name="thumb_up" filled />
+        </IconButton>
+      </div>
+
+      <p class="showcase-label">Disabled</p>
+      <div class="showcase-row">
+        <IconButton variant="standard" disabled aria-label="Disabled standard">
+          <Icon name="settings" />
+        </IconButton>
+        <IconButton variant="filled" disabled aria-label="Disabled filled">
+          <Icon name="settings" />
+        </IconButton>
+        <IconButton variant="filled-tonal" disabled aria-label="Disabled tonal">
+          <Icon name="settings" />
+        </IconButton>
+        <IconButton variant="outlined" disabled aria-label="Disabled outlined">
+          <Icon name="settings" />
+        </IconButton>
+      </div>
+    </section>
+
+    <Divider />
+
+    <!-- ══════════════════════════════════════
+         FAB
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-fab">
+      <h2 class="showcase-section-title">FAB (Floating Action Button)</h2>
+
+      <p class="showcase-label">Sizes</p>
+      <div class="showcase-row showcase-row--align-center">
+        <FAB size="small" aria-label="Small FAB">
+          <Icon name="add" />
+        </FAB>
+        <FAB size="medium" aria-label="Medium FAB">
+          <Icon name="add" />
+        </FAB>
+        <FAB size="large" aria-label="Large FAB">
+          <Icon name="add" />
+        </FAB>
+      </div>
+
+      <p class="showcase-label">Color variants</p>
+      <div class="showcase-row">
+        <FAB variant="surface" aria-label="Surface FAB">
+          <Icon name="edit" />
+        </FAB>
+        <FAB variant="primary" aria-label="Primary FAB">
+          <Icon name="edit" />
+        </FAB>
+        <FAB variant="secondary" aria-label="Secondary FAB">
+          <Icon name="edit" />
+        </FAB>
+        <FAB variant="tertiary" aria-label="Tertiary FAB">
+          <Icon name="edit" />
+        </FAB>
+      </div>
+
+      <p class="showcase-label">Extended (with label)</p>
+      <div class="showcase-row">
+        <FAB label="New item" aria-label="Extended primary FAB">
+          <Icon name="add" />
+        </FAB>
+        <FAB variant="surface" label="Compose" aria-label="Extended surface FAB">
+          <Icon name="edit" />
+        </FAB>
+        <FAB variant="secondary" label="Share" aria-label="Extended secondary FAB">
+          <Icon name="share" />
+        </FAB>
+      </div>
+
+      <p class="showcase-label">Lowered elevation</p>
+      <div class="showcase-row">
+        <FAB lowered aria-label="Lowered FAB">
+          <Icon name="add" />
+        </FAB>
+        <FAB label="Lowered Extended" lowered aria-label="Lowered extended FAB">
+          <Icon name="add" />
+        </FAB>
+      </div>
+    </section>
+
+    <Divider />
+
+    <!-- ══════════════════════════════════════
+         CHECKBOX
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-checkbox">
+      <h2 class="showcase-section-title">Checkbox</h2>
+      <div class="showcase-row">
+        <div class="showcase-labeled-item">
+          <Checkbox />
+          <span>Unchecked</span>
+        </div>
+        <div class="showcase-labeled-item">
+          <Checkbox checked />
+          <span>Checked</span>
+        </div>
+        <div class="showcase-labeled-item">
+          <Checkbox indeterminate />
+          <span>Indeterminate</span>
+        </div>
+        <div class="showcase-labeled-item">
+          <Checkbox disabled />
+          <span>Disabled</span>
+        </div>
+        <div class="showcase-labeled-item">
+          <Checkbox checked disabled />
+          <span>Checked + Disabled</span>
+        </div>
+        <div class="showcase-labeled-item">
+          <Checkbox indeterminate disabled />
+          <span>Indet. + Disabled</span>
+        </div>
+      </div>
+    </section>
+
+    <Divider />
+
+    <!-- ══════════════════════════════════════
+         RADIO
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-radio">
+      <h2 class="showcase-section-title">Radio</h2>
+
+      <p class="showcase-label">Grouped (select one)</p>
+      <div class="showcase-row">
+        <div class="showcase-labeled-item">
+          <Radio name="showcase-color" value="red" />
+          <span>Red</span>
+        </div>
+        <div class="showcase-labeled-item">
+          <Radio name="showcase-color" value="green" checked />
+          <span>Green</span>
+        </div>
+        <div class="showcase-labeled-item">
+          <Radio name="showcase-color" value="blue" />
+          <span>Blue</span>
+        </div>
+      </div>
+
+      <p class="showcase-label">Disabled states</p>
+      <div class="showcase-row">
+        <div class="showcase-labeled-item">
+          <Radio name="showcase-disabled" value="a" disabled />
+          <span>Disabled unchecked</span>
+        </div>
+        <div class="showcase-labeled-item">
+          <Radio name="showcase-disabled" value="b" checked disabled />
+          <span>Disabled checked</span>
+        </div>
+      </div>
+    </section>
+
+    <Divider />
+
+    <!-- ══════════════════════════════════════
+         SWITCH
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-switch">
+      <h2 class="showcase-section-title">Switch</h2>
+      <div class="showcase-row">
+        <div class="showcase-labeled-item">
+          <Switch />
+          <span>Off</span>
+        </div>
+        <div class="showcase-labeled-item">
+          <Switch selected />
+          <span>On</span>
+        </div>
+        <div class="showcase-labeled-item">
+          <Switch icons />
+          <span>With icons (off)</span>
+        </div>
+        <div class="showcase-labeled-item">
+          <Switch selected icons />
+          <span>With icons (on)</span>
+        </div>
+        <div class="showcase-labeled-item">
+          <Switch disabled />
+          <span>Disabled off</span>
+        </div>
+        <div class="showcase-labeled-item">
+          <Switch selected disabled />
+          <span>Disabled on</span>
+        </div>
+      </div>
+    </section>
+
+    <Divider />
+
+    <!-- ══════════════════════════════════════
+         SLIDER
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-slider">
+      <h2 class="showcase-section-title">Slider</h2>
+      <div class="showcase-col">
+        <p class="showcase-label">Default (value: 40)</p>
+        <Slider value={40} />
+
+        <p class="showcase-label">Labeled (value: 65)</p>
+        <Slider value={65} labeled />
+
+        <p class="showcase-label">With ticks (step: 10)</p>
+        <Slider value={50} step={10} ticks />
+
+        <p class="showcase-label">Range mode</p>
+        <Slider range valueStart={20} valueEnd={75} labeled />
+
+        <p class="showcase-label">Disabled</p>
+        <Slider value={50} disabled />
+      </div>
+    </section>
+
+    <Divider />
+
+    <!-- ══════════════════════════════════════
+         TEXT FIELD
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-textfield">
+      <h2 class="showcase-section-title">TextField</h2>
+      <div class="showcase-grid">
+        <TextField label="Filled (default)" />
+        <TextField variant="outlined" label="Outlined" />
+        <TextField label="With value" value="Hello World" />
+        <TextField variant="outlined" label="With supporting text" supportingText="Helper text below the field" />
+        <TextField label="Error state" error errorText="This field is required" value="bad@" />
+        <TextField variant="outlined" label="Outlined error" error errorText="Invalid input" />
+        <TextField label="Disabled filled" disabled value="Cannot edit" />
+        <TextField variant="outlined" label="Disabled outlined" disabled />
+        <TextField label="With character limit" maxLength={50} />
+        <TextField label="Textarea" rows={3} />
+        <TextField variant="outlined" label="Email" type="email" placeholder="you@email.com" />
+        <TextField variant="outlined" label="Password" type="password" />
+      </div>
+    </section>
+
+    <Divider />
+
+    <!-- ══════════════════════════════════════
+         SELECT + SELECTOPTION
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-select">
+      <h2 class="showcase-section-title">Select + SelectOption</h2>
+      <div class="showcase-grid">
+        <Select label="Filled Select" name="fruit-filled">
+          <SelectOption value="apple" headline="Apple" />
+          <SelectOption value="banana" headline="Banana" selected />
+          <SelectOption value="cherry" headline="Cherry" />
+          <SelectOption value="durian" headline="Durian" />
+        </Select>
+
+        <Select variant="outlined" label="Outlined Select" name="fruit-outlined">
+          <SelectOption value="red" headline="Red" />
+          <SelectOption value="green" headline="Green" selected />
+          <SelectOption value="blue" headline="Blue" />
+        </Select>
+
+        <Select label="With disabled option" name="country">
+          <SelectOption value="us" headline="United States" />
+          <SelectOption value="ca" headline="Canada" />
+          <SelectOption value="mx" headline="Mexico" disabled />
+          <SelectOption value="gb" headline="United Kingdom" />
+        </Select>
+
+        <Select label="Disabled select" disabled name="disabled-sel">
+          <SelectOption value="a" headline="Option A" selected />
+          <SelectOption value="b" headline="Option B" />
+        </Select>
+      </div>
+    </section>
+
+    <Divider />
+
+    <!-- ══════════════════════════════════════
+         CHIP + CHIPSET
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-chip">
+      <h2 class="showcase-section-title">Chip + ChipSet</h2>
+
+      <p class="showcase-label">Assist chips</p>
+      <ChipSet>
+        <Chip variant="assist" label="Assist chip" />
+        <Chip variant="assist" label="With icon">
+          <Icon slot="icon" name="calendar_today" />
+        </Chip>
+        <Chip variant="assist" label="Elevated" elevated />
+        <Chip variant="assist" label="Disabled" disabled />
+      </ChipSet>
+
+      <p class="showcase-label">Filter chips (click to toggle)</p>
+      <ChipSet>
+        <Chip variant="filter" label="Filter" />
+        <Chip variant="filter" label="Selected" selected />
+        <Chip variant="filter" label="Elevated filter" elevated />
+        <Chip variant="filter" label="Disabled filter" disabled />
+      </ChipSet>
+
+      <p class="showcase-label">Input chips (click × to remove)</p>
+      <ChipSet>
+        <Chip variant="input" label="React" />
+        <Chip variant="input" label="TypeScript" />
+        <Chip variant="input" label="Astro" />
+        <Chip variant="input" label="Disabled input" disabled />
+      </ChipSet>
+
+      <p class="showcase-label">Suggestion chips</p>
+      <ChipSet>
+        <Chip variant="suggestion" label="Suggestion" />
+        <Chip variant="suggestion" label="Link chip" href="#" />
+        <Chip variant="suggestion" label="Elevated" elevated />
+        <Chip variant="suggestion" label="Disabled" disabled />
+      </ChipSet>
+    </section>
+
+    <Divider />
+
+    <!-- ══════════════════════════════════════
+         LIST + LISTITEM
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-list">
+      <h2 class="showcase-section-title">List + ListItem</h2>
+      <div class="showcase-list-wrapper">
+        <List>
+          <ListItem headline="Simple text item" />
+          <ListItem headline="With supporting text" supportingText="Secondary information here" />
+          <ListItem headline="With trailing text" trailingSupportingText="4:00 PM" />
+          <ListItem headline="Button item (interactive)" type="button" />
+          <ListItem headline="Link item" href="#" />
+          <ListItem headline="With leading icon" supportingText="Icon in start slot">
+            <Icon slot="start" name="star" />
+          </ListItem>
+          <ListItem headline="With trailing icon">
+            <Icon slot="end" name="chevron_right" />
+          </ListItem>
+          <ListItem headline="Disabled item" disabled />
+        </List>
+      </div>
+    </section>
+
+    <Divider />
+
+    <!-- ══════════════════════════════════════
+         MENU + MENUITEM
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-menu">
+      <h2 class="showcase-section-title">Menu + MenuItem</h2>
+      <p class="showcase-sublabel">Click the button to open the menu. Click outside or press Escape to close.</p>
+      <div class="showcase-menu-anchor">
+        <Button variant="filled" id="showcase-menu-btn">Open Menu</Button>
+        <Menu anchor="showcase-menu-btn">
+          <MenuItem headline="Cut">
+            <Icon slot="start" name="content_cut" />
+            <span slot="end">⌘X</span>
+          </MenuItem>
+          <MenuItem headline="Copy">
+            <Icon slot="start" name="content_copy" />
+            <span slot="end">⌘C</span>
+          </MenuItem>
+          <MenuItem headline="Paste">
+            <Icon slot="start" name="content_paste" />
+            <span slot="end">⌘V</span>
+          </MenuItem>
+          <MenuItem headline="Disabled action" disabled />
+          <MenuItem headline="Delete" href="#" />
+        </Menu>
+      </div>
+    </section>
+
+    <Divider />
+
+    <!-- ══════════════════════════════════════
+         TABS + TAB
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-tabs">
+      <h2 class="showcase-section-title">Tabs + Tab</h2>
+
+      <p class="showcase-label">Primary tabs</p>
+      <Tabs>
+        <Tab variant="primary" label="Photos" active>
+          <Icon slot="icon" name="photo" />
+        </Tab>
+        <Tab variant="primary" label="Videos">
+          <Icon slot="icon" name="videocam" />
+        </Tab>
+        <Tab variant="primary" label="Music">
+          <Icon slot="icon" name="music_note" />
+        </Tab>
+        <Tab variant="primary" label="Files">
+          <Icon slot="icon" name="folder" />
+        </Tab>
+      </Tabs>
+
+      <p class="showcase-label" style="margin-top: 2rem;">Secondary tabs</p>
+      <Tabs>
+        <Tab variant="secondary" label="Overview" active />
+        <Tab variant="secondary" label="Activity" />
+        <Tab variant="secondary" label="Settings" />
+      </Tabs>
+
+      <p class="showcase-label" style="margin-top: 2rem;">Primary inline icon</p>
+      <Tabs>
+        <Tab variant="primary" label="Home" inlineIcon active>
+          <Icon slot="icon" name="home" />
+        </Tab>
+        <Tab variant="primary" label="Search" inlineIcon>
+          <Icon slot="icon" name="search" />
+        </Tab>
+        <Tab variant="primary" label="Profile" inlineIcon>
+          <Icon slot="icon" name="person" />
+        </Tab>
+      </Tabs>
+    </section>
+
+    <Divider />
+
+    <!-- ══════════════════════════════════════
+         DIALOG
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-dialog">
+      <h2 class="showcase-section-title">Dialog</h2>
+      <p class="showcase-sublabel">Click the button to open the dialog. Click Cancel, Confirm, or the scrim to close.</p>
+      <div class="showcase-row">
+        <Button variant="outlined" data-dialog-open="showcase-dialog" id="showcase-dialog-trigger">
+          Open Dialog
+        </Button>
+      </div>
+
+      <Dialog id="showcase-dialog" headline="Permanently delete?">
+        <p>Deleting this item will remove all associated data. This action cannot be undone.</p>
+        <div slot="actions">
+          <Button variant="text" data-dialog-close>Cancel</Button>
+          <Button variant="filled">Delete</Button>
+        </div>
+      </Dialog>
+    </section>
+
+    <Divider />
+
+    <!-- ══════════════════════════════════════
+         CIRCULAR PROGRESS
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-circular-progress">
+      <h2 class="showcase-section-title">Circular Progress</h2>
+      <div class="showcase-row showcase-row--align-center">
+        <div class="showcase-labeled-item showcase-labeled-item--col">
+          <CircularProgress value={0.25} />
+          <span>25%</span>
+        </div>
+        <div class="showcase-labeled-item showcase-labeled-item--col">
+          <CircularProgress value={0.5} />
+          <span>50%</span>
+        </div>
+        <div class="showcase-labeled-item showcase-labeled-item--col">
+          <CircularProgress value={0.75} />
+          <span>75%</span>
+        </div>
+        <div class="showcase-labeled-item showcase-labeled-item--col">
+          <CircularProgress value={1} />
+          <span>100%</span>
+        </div>
+        <div class="showcase-labeled-item showcase-labeled-item--col">
+          <CircularProgress indeterminate />
+          <span>Indeterminate</span>
+        </div>
+        <div class="showcase-labeled-item showcase-labeled-item--col">
+          <CircularProgress indeterminate fourColor />
+          <span>Four Color</span>
+        </div>
+      </div>
+    </section>
+
+    <Divider />
+
+    <!-- ══════════════════════════════════════
+         LINEAR PROGRESS
+    ══════════════════════════════════════ -->
+    <section class="showcase-section" id="section-linear-progress">
+      <h2 class="showcase-section-title">Linear Progress</h2>
+      <div class="showcase-col">
+        <p class="showcase-label">Determinate (75%)</p>
+        <LinearProgress value={0.75} />
+
+        <p class="showcase-label">Determinate (30%) with buffer (60%)</p>
+        <LinearProgress value={0.3} buffer={0.6} />
+
+        <p class="showcase-label">Indeterminate</p>
+        <LinearProgress indeterminate />
+
+        <p class="showcase-label">Indeterminate four-color</p>
+        <LinearProgress indeterminate fourColor />
+      </div>
+    </section>
+
+  </div>
+</BaseLayout>
+
+<style>
+  /* ── Page layout ─────────────────────────────── */
+  .showcase-page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+    font-family: var(--font-body, sans-serif);
+    color: var(--text);
+  }
+
+  /* ── Header ──────────────────────────────────── */
+  .showcase-header {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid var(--line);
+  }
+
+  .showcase-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem;
+    color: var(--text);
+  }
+
+  .showcase-subtitle {
+    color: var(--text-muted);
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  /* ── Sections ────────────────────────────────── */
+  .showcase-section {
+    padding: 3rem 0;
+    scroll-margin-top: 1rem;
+  }
+
+  .showcase-section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 1.5rem;
+    color: var(--text);
+    border-left: 3px solid var(--color-primary);
+    padding-left: 0.75rem;
+  }
+
+  /* ── Labels ──────────────────────────────────── */
+  .showcase-label {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 1.25rem 0 0.5rem;
+  }
+
+  .showcase-sublabel {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin: 0 0 1rem;
+  }
+
+  /* ── Row layout ──────────────────────────────── */
+  .showcase-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .showcase-row--align-center {
+    align-items: center;
+  }
+
+  /* ── Column layout ───────────────────────────── */
+  .showcase-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  /* ── Grid layout ─────────────────────────────── */
+  .showcase-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  /* ── Labeled item helper ─────────────────────── */
+  .showcase-labeled-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  .showcase-labeled-item--col {
+    flex-direction: column;
+    gap: 0.375rem;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* ── List wrapper ────────────────────────────── */
+  .showcase-list-wrapper {
+    max-width: 480px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  /* ── Menu anchor ─────────────────────────────── */
+  .showcase-menu-anchor {
+    position: relative;
+    display: inline-block;
+  }
+</style>
