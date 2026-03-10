@@ -463,10 +463,10 @@ const endFraction = (renderValueEnd - min) / totalRange;
      HANDLE CONTAINER — Positioning
      ═══════════════════════════════════════ */
   .md-slider__handle-container-padded {
-    position: relative;
-    block-size: 100%;
-    inline-size: 100%;
+    position: absolute;
+    inset: 0;
     padding-inline: calc(var(--_state-layer-size) / 2);
+    pointer-events: none;
   }
 
   .md-slider__handle-container-block {
@@ -488,7 +488,8 @@ const endFraction = (renderValueEnd - min) / totalRange;
      ═══════════════════════════════════════ */
   .md-slider__handle {
     position: absolute;
-    top: 0;
+    inset-block-start: 50%;
+    transform: translateY(-50%);
     block-size: var(--_state-layer-size);
     inline-size: var(--_state-layer-size);
     border-radius: var(--_handle-shape);
