@@ -1,25 +1,169 @@
 /*
- * Driller Starter — Three-Layer Token System (Light Mode)
+ * Waste Falcon — Three-Layer Token System (Light Mode)
  * ────────────────────────────────────────────────────────
  * Layer 1: Primitives  → brand-specific values (swap per client)
  * Layer 2: Semantic     → purpose-driven aliases (same structure, every site)
  * Layer 3: Component    → consumed by UI components
  */
 
+
+/* ══════════════════════════════════════════════
+   SELF-HOSTED FONTS
+   ══════════════════════════════════════════════ */
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+
 /* ══════════════════════════════════════════════
    LAYER 1 — PRIMITIVES
    ══════════════════════════════════════════════ */
 
 :root {
-  --color-primary: #D4764E;
-  --color-dark: #1B3A5C;
-  --color-light: #FAFAF8;
-  --color-accent-text: #A85A35;
+  /* Brand primitives */
+  --color-primary: #0074b8;
+  --color-on-primary: #ffffff;
+  --color-primary-hover: #005f9c;
+  --color-dark: #032b4d;
+  --color-light: #ffffff;
+  --color-accent-text: #0068a3;
   --color-white: #ffffff;
+  --color-error: #ba1a1a;
 
-  --font-display: 'DM Serif Display', serif;
+  /* M3 surface containers (derived from brand) */
+  --color-secondary-container: rgba(0, 116, 184, 0.12);
+  --surface-container-low: #f5f8fc;
+  --surface-container-highest: #e2e8f0;
+  --surface-dim: #d9e2ec;
+
+  /* Typography families */
+  --font-display: 'Poppins', sans-serif;
   --font-body: 'Poppins', sans-serif;
-  --font-serif: 'Source Serif 4', serif;
+  --font-serif: 'Poppins', sans-serif;
+
+  /* Typography weights (3 weights only) */
+  --weight-regular: 400;
+  --weight-semibold: 600;   /* M3 "medium" → our semibold */
+  --weight-bold: 700;
+
+  /* ── M3 Type Scale ─────────────────────────── */
+  /* ref: https://m3.material.io/styles/typography/type-scale-tokens */
+
+  /* Display — hero headlines, marketing statements */
+  --md-sys-typescale-display-large-font: var(--font-display);
+  --md-sys-typescale-display-large-weight: var(--weight-bold);
+  --md-sys-typescale-display-large-size: clamp(2.5rem, 5vw + 1rem, 3.5625rem);  /* 57px */
+  --md-sys-typescale-display-large-line-height: 1.12;   /* 64px */
+  --md-sys-typescale-display-large-tracking: -0.016em;   /* -0.25px */
+
+  --md-sys-typescale-display-medium-font: var(--font-display);
+  --md-sys-typescale-display-medium-weight: var(--weight-bold);
+  --md-sys-typescale-display-medium-size: clamp(2rem, 4vw + 0.5rem, 2.8125rem);  /* 45px */
+  --md-sys-typescale-display-medium-line-height: 1.16;   /* 52px */
+  --md-sys-typescale-display-medium-tracking: 0;
+
+  --md-sys-typescale-display-small-font: var(--font-display);
+  --md-sys-typescale-display-small-weight: var(--weight-bold);
+  --md-sys-typescale-display-small-size: clamp(1.5rem, 3vw + 0.25rem, 2.25rem);  /* 36px */
+  --md-sys-typescale-display-small-line-height: 1.22;   /* 44px */
+  --md-sys-typescale-display-small-tracking: 0;
+
+  /* Headline — section headings */
+  --md-sys-typescale-headline-large-font: var(--font-body);
+  --md-sys-typescale-headline-large-weight: var(--weight-bold);
+  --md-sys-typescale-headline-large-size: 2rem;          /* 32px */
+  --md-sys-typescale-headline-large-line-height: 1.25;   /* 40px */
+  --md-sys-typescale-headline-large-tracking: 0;
+
+  --md-sys-typescale-headline-medium-font: var(--font-body);
+  --md-sys-typescale-headline-medium-weight: var(--weight-bold);
+  --md-sys-typescale-headline-medium-size: 1.75rem;      /* 28px */
+  --md-sys-typescale-headline-medium-line-height: 1.29;  /* 36px */
+  --md-sys-typescale-headline-medium-tracking: 0;
+
+  --md-sys-typescale-headline-small-font: var(--font-body);
+  --md-sys-typescale-headline-small-weight: var(--weight-bold);
+  --md-sys-typescale-headline-small-size: 1.5rem;        /* 24px */
+  --md-sys-typescale-headline-small-line-height: 1.33;   /* 32px */
+  --md-sys-typescale-headline-small-tracking: 0;
+
+  /* Title — card titles, nav items, subheadings */
+  --md-sys-typescale-title-large-font: var(--font-body);
+  --md-sys-typescale-title-large-weight: var(--weight-semibold);
+  --md-sys-typescale-title-large-size: 1.375rem;         /* 22px */
+  --md-sys-typescale-title-large-line-height: 1.27;      /* 28px */
+  --md-sys-typescale-title-large-tracking: 0;
+
+  --md-sys-typescale-title-medium-font: var(--font-body);
+  --md-sys-typescale-title-medium-weight: var(--weight-semibold);
+  --md-sys-typescale-title-medium-size: 1rem;            /* 16px */
+  --md-sys-typescale-title-medium-line-height: 1.5;      /* 24px */
+  --md-sys-typescale-title-medium-tracking: 0.009em;     /* 0.15px */
+
+  --md-sys-typescale-title-small-font: var(--font-body);
+  --md-sys-typescale-title-small-weight: var(--weight-semibold);
+  --md-sys-typescale-title-small-size: 0.875rem;         /* 14px */
+  --md-sys-typescale-title-small-line-height: 1.43;      /* 20px */
+  --md-sys-typescale-title-small-tracking: 0.007em;      /* 0.1px */
+
+  /* Body — paragraphs, content */
+  --md-sys-typescale-body-large-font: var(--font-body);
+  --md-sys-typescale-body-large-weight: var(--weight-regular);
+  --md-sys-typescale-body-large-size: 1rem;              /* 16px */
+  --md-sys-typescale-body-large-line-height: 1.5;        /* 24px */
+  --md-sys-typescale-body-large-tracking: 0.031em;       /* 0.5px */
+
+  --md-sys-typescale-body-medium-font: var(--font-body);
+  --md-sys-typescale-body-medium-weight: var(--weight-regular);
+  --md-sys-typescale-body-medium-size: 0.875rem;         /* 14px */
+  --md-sys-typescale-body-medium-line-height: 1.43;      /* 20px */
+  --md-sys-typescale-body-medium-tracking: 0.018em;      /* 0.25px */
+
+  --md-sys-typescale-body-small-font: var(--font-body);
+  --md-sys-typescale-body-small-weight: var(--weight-regular);
+  --md-sys-typescale-body-small-size: 0.75rem;           /* 12px */
+  --md-sys-typescale-body-small-line-height: 1.33;       /* 16px */
+  --md-sys-typescale-body-small-tracking: 0.033em;       /* 0.4px */
+
+  /* Label — buttons, chips, tabs, micro-labels */
+  --md-sys-typescale-label-large-font: var(--font-body);
+  --md-sys-typescale-label-large-weight: var(--weight-semibold);
+  --md-sys-typescale-label-large-size: 0.875rem;         /* 14px */
+  --md-sys-typescale-label-large-line-height: 1.43;      /* 20px */
+  --md-sys-typescale-label-large-tracking: 0.007em;      /* 0.1px */
+
+  --md-sys-typescale-label-medium-font: var(--font-body);
+  --md-sys-typescale-label-medium-weight: var(--weight-semibold);
+  --md-sys-typescale-label-medium-size: 0.75rem;         /* 12px */
+  --md-sys-typescale-label-medium-line-height: 1.33;     /* 16px */
+  --md-sys-typescale-label-medium-tracking: 0.042em;     /* 0.5px */
+
+  --md-sys-typescale-label-small-font: var(--font-body);
+  --md-sys-typescale-label-small-weight: var(--weight-semibold);
+  --md-sys-typescale-label-small-size: 0.6875rem;        /* 11px */
+  --md-sys-typescale-label-small-line-height: 1.45;      /* 16px */
+  --md-sys-typescale-label-small-tracking: 0.045em;      /* 0.5px */
 }
 
 
@@ -30,28 +174,28 @@
 :root {
   /* Backgrounds */
   --bg: var(--color-white);
-  --surface: var(--color-light);
+  --surface: #f0f6fb;
   --surface-raised: #ffffff;
 
   /* Text */
   --text: var(--color-dark);
-  --text-muted: #4A5568;
-  --text-faint: #8A94A6;
+  --text-muted: #3a5068;
+  --text-faint: #5d7282;
 
   /* Accent */
   --accent: var(--color-accent-text);
   --accent-bg: var(--color-primary);
-  --accent-soft: rgba(212, 118, 78, 0.10);
-  --focus-ring: rgba(212, 118, 78, 0.50);
+  --accent-soft: rgba(0, 116, 184, 0.10);
+  --focus-ring: rgba(0, 116, 184, 0.50);
 
   /* Lines */
-  --line: rgba(27, 58, 92, 0.10);
-  --line-strong: rgba(27, 58, 92, 0.20);
+  --line: rgba(3, 43, 77, 0.10);
+  --line-strong: rgba(3, 43, 77, 0.20);
 
   /* Nav */
   --nav-bg: var(--color-white);
   --nav-text: var(--color-dark);
-  --nav-text-muted: #6B6460;
+  --nav-text-muted: #4a6178;
   --nav-border: var(--line);
 }
 
@@ -62,11 +206,11 @@
 
 .dark-section {
   --bg: var(--color-dark);
-  --surface: #15304E;
+  --surface: #052e52;
   --text: var(--color-light);
   --text-muted: rgba(255, 255, 255, 0.75);
-  --text-faint: rgba(255, 255, 255, 0.50);
-  --accent: var(--color-primary);
+  --text-faint: rgba(255, 255, 255, 0.60);
+  --accent: #5db4e0;
   --line: rgba(255, 255, 255, 0.15);
   --line-strong: rgba(255, 255, 255, 0.30);
   background: var(--bg);
@@ -79,12 +223,12 @@
    ══════════════════════════════════════════════ */
 
 :root {
-  /* Button — Primary (solid gold) */
+  /* Button — Primary (solid blue) */
   --btn-primary-bg: var(--color-primary);
-  --btn-primary-text: var(--color-dark);
+  --btn-primary-text: var(--color-white);
   --btn-primary-border: var(--color-primary);
-  --btn-primary-hover-bg: #BE6540;
-  --btn-primary-hover-text: #FFFFFF;
+  --btn-primary-hover-bg: #005f9c;
+  --btn-primary-hover-text: #ffffff;
 
   /* Button — Secondary (outlined dark) */
   --btn-secondary-bg: transparent;
@@ -102,7 +246,7 @@
 /* Dark section button overrides */
 .dark-section {
   --btn-primary-bg: var(--color-primary);
-  --btn-primary-text: var(--color-dark);
+  --btn-primary-text: var(--color-white);
   --btn-primary-border: var(--color-primary);
   --btn-secondary-bg: transparent;
   --btn-secondary-text: var(--color-light);

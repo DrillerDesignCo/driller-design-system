@@ -266,10 +266,10 @@ const isDisabledOrSoft = disabled || softDisabled;
      ═══════════════════════════════════════ */
   .md-button--filled {
     --_container-color: var(--md-filled-button-container-color, var(--color-primary));
-    --_icon-color: var(--md-filled-button-label-text-color, #ffffff);
-    --_hover-state-layer-color: #ffffff;
-    --_pressed-state-layer-color: #ffffff;
-    color: var(--md-filled-button-label-text-color, #ffffff);
+    --_icon-color: var(--md-filled-button-label-text-color, var(--color-on-primary));
+    --_hover-state-layer-color: var(--color-on-primary);
+    --_pressed-state-layer-color: var(--color-on-primary);
+    color: var(--md-filled-button-label-text-color, var(--color-on-primary));
   }
 
   .md-button--filled .md-button__elevation {

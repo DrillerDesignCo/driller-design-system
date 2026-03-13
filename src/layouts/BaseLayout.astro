@@ -19,10 +19,9 @@ const pageTitle = title === brand.name ? title : `${title} | ${brand.name}`;
     <meta name="description" content={description} />
     <title>{pageTitle}</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href={brand.fontsUrl} rel="stylesheet" />
+    <!-- Self-hosted Poppins (loaded via @font-face in tokens.css) -->
+    <link rel="preload" href="/fonts/Poppins-Regular.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="preload" href="/fonts/Poppins-Bold.ttf" as="font" type="font/ttf" crossorigin />
 
     <!-- Material Symbols -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
@@ -108,7 +107,7 @@ const pageTitle = title === brand.name ? title : `${title} | ${brand.name}`;
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(255, 255, 255, 0.92);
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--line);
@@ -128,8 +127,9 @@ const pageTitle = title === brand.name ? title : `${title} | ${brand.name}`;
   }
 
   .nav-logo-text {
-    font-family: var(--font-display);
-    font-size: 1.125rem;
+    font-family: var(--md-sys-typescale-title-large-font);
+    font-weight: var(--md-sys-typescale-title-large-weight);
+    font-size: var(--md-sys-typescale-title-large-size);
   }
 
   .nav-links {
@@ -140,8 +140,8 @@ const pageTitle = title === brand.name ? title : `${title} | ${brand.name}`;
 
   .nav-links a {
     color: var(--text-muted);
-    font-size: 0.875rem;
-    font-weight: 400;
+    font-size: var(--md-sys-typescale-body-medium-size);
+    font-weight: var(--md-sys-typescale-body-medium-weight);
     transition: color 0.2s ease;
   }
 
@@ -151,7 +151,7 @@ const pageTitle = title === brand.name ? title : `${title} | ${brand.name}`;
 
   .nav-cta {
     padding: 0.625rem 1.5rem;
-    font-size: 0.75rem;
+    font-size: var(--md-sys-typescale-label-medium-size);
   }
 
   /* Footer — dark contrast section */
@@ -175,13 +175,14 @@ const pageTitle = title === brand.name ? title : `${title} | ${brand.name}`;
   }
 
   .footer-name {
-    font-family: var(--font-display);
-    font-size: 1.125rem;
+    font-family: var(--md-sys-typescale-title-large-font);
+    font-weight: var(--md-sys-typescale-title-large-weight);
+    font-size: var(--md-sys-typescale-title-large-size);
     color: var(--text);
   }
 
   .footer-location {
-    font-size: 0.875rem;
+    font-size: var(--md-sys-typescale-body-medium-size);
     color: var(--text-muted);
   }
 
@@ -193,7 +194,7 @@ const pageTitle = title === brand.name ? title : `${title} | ${brand.name}`;
 
   .footer-links a, .footer-legal a {
     color: var(--text-muted);
-    font-size: 0.875rem;
+    font-size: var(--md-sys-typescale-body-medium-size);
     transition: color 0.2s ease;
   }
 
@@ -203,7 +204,7 @@ const pageTitle = title === brand.name ? title : `${title} | ${brand.name}`;
 
   .footer-copy {
     grid-column: 1 / -1;
-    font-size: 0.75rem;
+    font-size: var(--md-sys-typescale-body-small-size);
     color: var(--text-faint);
   }
 

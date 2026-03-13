@@ -5,10 +5,32 @@
  */
 
 :root {
+  /* ── M3 Sys Color Tokens (mapped to brand primitives) ── */
+  --md-sys-color-primary: var(--color-primary);
+  --md-sys-color-on-primary: var(--color-on-primary);
+  --md-sys-color-primary-container: var(--color-secondary-container);
+  --md-sys-color-on-primary-container: var(--color-dark);
+  --md-sys-color-secondary: var(--color-dark);
+  --md-sys-color-on-secondary: var(--color-on-primary);
+  --md-sys-color-secondary-container: var(--color-secondary-container);
+  --md-sys-color-on-secondary-container: var(--color-dark);
+  --md-sys-color-surface: var(--surface);
+  --md-sys-color-on-surface: var(--text);
+  --md-sys-color-on-surface-variant: var(--text-muted);
+  --md-sys-color-surface-container: var(--surface);
+  --md-sys-color-surface-container-low: var(--surface-container-low);
+  --md-sys-color-surface-container-highest: var(--surface-container-highest);
+  --md-sys-color-outline: var(--line-strong);
+  --md-sys-color-outline-variant: var(--line);
+  --md-sys-color-error: var(--color-error);
+  --md-sys-color-on-error: var(--color-on-primary);
+  --md-sys-color-inverse-surface: var(--color-dark);
+  --md-sys-color-inverse-on-surface: var(--color-light);
+
   /* ── Ripple ── */
-  --md-ripple-hover-color: var(--color-primary);
+  --md-ripple-hover-color: var(--md-sys-color-primary);
   --md-ripple-hover-opacity: 0.08;
-  --md-ripple-pressed-color: var(--color-primary);
+  --md-ripple-pressed-color: var(--md-sys-color-primary);
   --md-ripple-pressed-opacity: 0.12;
 
   /* ── Elevation ── */
@@ -34,7 +56,7 @@
 
   /* ── Button — shared ── */
   --md-button-container-height: 40px;
-  --md-button-container-shape: 9999px;
+  --md-button-container-shape: var(--md-sys-shape-corner-full);
   --md-button-label-text-font: var(--font-body);
   --md-button-label-text-size: 0.875rem;
   --md-button-label-text-weight: 500;
@@ -49,24 +71,29 @@
 
   /* Button — Elevated */
   --md-elevated-button-container-color: var(--surface-raised);
-  --md-elevated-button-label-text-color: var(--color-primary);
+  --md-elevated-button-label-text-color: var(--md-sys-color-primary);
   --md-elevated-button-elevation: 1;
 
   /* Button — Filled */
-  --md-filled-button-container-color: var(--color-primary);
-  --md-filled-button-label-text-color: #ffffff;
+  --md-filled-button-container-color: var(--md-sys-color-primary);
+  --md-filled-button-label-text-color: var(--md-sys-color-on-primary);
 
   /* Button — Filled Tonal */
   --md-filled-tonal-button-container-color: var(--accent-soft);
   --md-filled-tonal-button-label-text-color: var(--text);
 
   /* Button — Outlined */
-  --md-outlined-button-label-text-color: var(--color-primary);
-  --md-outlined-button-outline-color: var(--line-strong);
+  --md-outlined-button-label-text-color: var(--md-sys-color-primary);
+  --md-outlined-button-outline-color: var(--md-sys-color-outline);
   --md-outlined-button-outline-width: 1px;
 
   /* Button — Text */
-  --md-text-button-label-text-color: var(--color-primary);
+  --md-text-button-label-text-color: var(--md-sys-color-primary);
+
+  /* ── FAB ── */
+  --md-fab-primary-container-color: var(--md-sys-color-primary);
+  --md-fab-primary-label-text-color: var(--md-sys-color-on-primary);
+  --md-fab-primary-icon-color: var(--md-sys-color-on-primary);
 
   /* ── Sys Motion ── */
   --md-sys-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
@@ -84,6 +111,16 @@
 
 /* Dark section overrides */
 .dark-section {
+  /* M3 sys overrides for dark context */
+  --md-sys-color-primary: var(--color-primary);
+  --md-sys-color-on-primary: var(--color-on-primary);
+  --md-sys-color-surface: var(--surface);
+  --md-sys-color-on-surface: var(--color-light);
+  --md-sys-color-on-surface-variant: var(--text-muted);
+  --md-sys-color-outline: var(--line-strong);
+  --md-sys-color-outline-variant: var(--line);
+
+  /* Component overrides */
   --md-ripple-hover-color: var(--color-light);
   --md-ripple-pressed-color: var(--color-light);
   --md-elevated-button-container-color: var(--surface);

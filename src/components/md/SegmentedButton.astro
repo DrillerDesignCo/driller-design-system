@@ -104,7 +104,7 @@ const hasLabel = label !== '';
     }
 
     &:focus-visible {
-      outline: 2px solid var(--color-primary, #6750a4);
+      outline: 2px solid var(--color-primary);
       outline-offset: -2px;
       z-index: 2;
     }
@@ -112,17 +112,17 @@ const hasLabel = label !== '';
 
   /* ── Selected state ── */
   .md-segmented-button--selected {
-    background: var(--surface-container-highest, var(--surface-dim, #e6e0e9));
+    background: var(--surface-container-highest, var(--surface-dim));
   }
 
   .md-segmented-button--selected .md-segmented-button__label-text,
   .md-segmented-button--selected .md-segmented-button__icon {
-    color: var(--color-primary, #6750a4);
+    color: var(--color-accent-text);
   }
 
   .md-segmented-button--unselected .md-segmented-button__label-text,
   .md-segmented-button--unselected .md-segmented-button__icon {
-    color: var(--text, #1d1b20);
+    color: var(--text);
   }
 
   /* ── Disabled ── */
@@ -143,7 +143,7 @@ const hasLabel = label !== '';
   /* ── Outline ── */
   .md-segmented-button__outline {
     border-radius: inherit;
-    border: 1px solid var(--line-strong, var(--line, #79747e));
+    border: 1px solid var(--line-strong, var(--line));
     position: absolute;
     inset: 0 -0.5px;
     pointer-events: none;
@@ -170,7 +170,7 @@ const hasLabel = label !== '';
   }
 
   .md-segmented-button__checkmark-path {
-    stroke: var(--color-primary, #6750a4);
+    stroke: var(--color-accent-text);
     stroke-width: 2;
     stroke-dasharray: 29.7833385;
     stroke-dashoffset: 29.7833385;

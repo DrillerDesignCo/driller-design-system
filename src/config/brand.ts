@@ -3,19 +3,19 @@
 
 export const brand = {
   // ── Identity ──
-  name: "Starter",
-  tagline: "Ship Faster. Look Better.",
-  location: "By Driller Design Co.",
+  name: "Waste Falcon",
+  tagline: "Fast. Reliable. Clean.",
+  location: "Brazos County, TX",
   description:
-    "A premium Astro starter template with a three-font typography system, layered design tokens, and reusable components. Built for agencies that ship.",
-  url: "https://drillerdesign.co/starter",
+    "Waste Falcon provides dependable junk removal and dumpster rental services in College Station, Brenham, Navasota, and the greater Brazos County area. Call today for a free quote.",
+  url: "https://wastefalcon.com",
 
   // ── Colors ──
   colors: {
-    primary: "#D4764E",     // Warm Coral — accent, CTAs, emphasis
-    dark: "#1B3A5C",        // Navy — dark surfaces, headings
-    light: "#FAFAF8",       // Warm White — light surfaces
-    accentText: "#A85A35",  // Deep coral for text on light backgrounds
+    primary: "#0081ca",     // Bright Blue — accent, CTAs, emphasis
+    dark: "#032b4d",        // Dark Navy — dark surfaces, headings
+    light: "#ffffff",       // White — light surfaces
+    accentText: "#0068a3",  // Deep blue for text on light backgrounds
     error: "#9B2C2C",
     success: "#2D6A4F",
     info: "#2B6CB0",
@@ -24,33 +24,40 @@ export const brand = {
 
   // ── Typography ──
   fonts: {
-    display: "'DM Serif Display', serif",
+    display: "'Poppins', sans-serif",
     body: "'Poppins', sans-serif",
-    serif: "'Source Serif 4', serif",
+    serif: "'Poppins', sans-serif",
   },
 
-  // ── Google Fonts ──
-  fontsUrl:
-    "https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Poppins:wght@300;400;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,600&display=swap",
+  // ── Self-Hosted Fonts (no Google Fonts URL needed) ──
+  fontsUrl: "",
+
+  // ── Contact ──
+  contact: {
+    phone: "(877) 779-2783",
+    email: "book@wastefalcon.com",
+  },
 
   // ── Navigation ──
   nav: [
-    { label: "Features", href: "#features" },
-    { label: "Typography", href: "#typography" },
+    { label: "Services", href: "#services" },
     { label: "Pricing", href: "#pricing" },
+    { label: "Reviews", href: "#reviews" },
+    { label: "Contact", href: "#contact" },
   ],
 
   // ── CTAs ──
   cta: {
-    primary: { label: "Get the Template", href: "#pricing" },
-    secondary: { label: "See What's Included", href: "#features" },
+    primary: { label: "Get a Quote", href: "#contact" },
+    secondary: { label: "Our Services", href: "#services" },
   },
 
   // ── Social ──
   social: {
-    linkedin: "",
+    facebook: "https://www.facebook.com/wastefalcon",
+    google: "https://maps.app.goo.gl/oZViwh1P9nSu6VgA8",
     instagram: "",
-    google: "",
+    linkedin: "https://www.linkedin.com/company/waste-falcon",
   },
 
   // ── Legal ──

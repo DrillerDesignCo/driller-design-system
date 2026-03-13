@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import CTABlock from '../components/CTABlock.astro';
 import FAQAccordion from '../components/FAQAccordion.astro';
+import Icon from '../components/md/Icon.astro';
 import { brand } from '../config/brand';
 ---
 
@@ -46,32 +47,32 @@ import { brand } from '../config/brand';
       <h2 style="margin-bottom: 3rem;">Everything You Need. Nothing You Don't.</h2>
       <div class="features-grid">
         <div class="card feature-card">
-          <div class="feature-icon">🎨</div>
+          <div class="feature-icon"><Icon name="palette" /></div>
           <h3>One Config File</h3>
           <p class="body-lg">Change <code>brand.ts</code> and the entire site rebrands — colors, fonts, nav, CTAs, footer. No hunting through files.</p>
         </div>
         <div class="card feature-card">
-          <div class="feature-icon">🔤</div>
+          <div class="feature-icon"><Icon name="text_fields" /></div>
           <h3>Three-Font System</h3>
           <p class="body-lg">DM Serif Display for hero headlines. Poppins for UI. Source Serif 4 for reading. Editorial hierarchy built in.</p>
         </div>
         <div class="card feature-card">
-          <div class="feature-icon">🎯</div>
+          <div class="feature-icon"><Icon name="token" /></div>
           <h3>Layered Design Tokens</h3>
           <p class="body-lg">Three-layer CSS variable system: primitives → semantic → component. Swap 10 values and the entire system cascades.</p>
         </div>
         <div class="card feature-card">
-          <div class="feature-icon">⚡</div>
+          <div class="feature-icon"><Icon name="bolt" /></div>
           <h3>Zero JS by Default</h3>
           <p class="body-lg">Astro ships zero JavaScript unless you opt in. Perfect Lighthouse scores out of the box.</p>
         </div>
         <div class="card feature-card">
-          <div class="feature-icon">📐</div>
+          <div class="feature-icon"><Icon name="widgets" /></div>
           <h3>Component Library</h3>
           <p class="body-lg">Hero, CTA blocks, FAQ accordion, cards — pre-built and production-ready. Compose pages in minutes.</p>
         </div>
         <div class="card feature-card">
-          <div class="feature-icon">🌗</div>
+          <div class="feature-icon"><Icon name="dark_mode" /></div>
           <h3>Light & Dark Modes</h3>
           <p class="body-lg">Add <code>.dark-section</code> to any element and the token context flips. Mix and match freely.</p>
         </div>
@@ -93,7 +94,7 @@ import { brand } from '../config/brand';
         <hr class="divider" />
         <div class="type-row">
           <span class="micro-label type-label">POPPINS</span>
-          <p class="type-sample" style="font-size: 1.25rem; font-weight: 600;">The subheading that structures the story.</p>
+          <p class="type-sample" style="font-size: var(--md-sys-typescale-title-large-size); font-weight: var(--md-sys-typescale-title-large-weight);">The subheading that structures the story.</p>
         </div>
         <hr class="divider" />
         <div class="type-row">
@@ -186,19 +187,19 @@ import { brand } from '../config/brand';
             </div>
           </div>
           <ul class="pricing-features">
-            <li>✓ Full source code</li>
-            <li>✓ All components (Hero, CTA, FAQ, Cards)</li>
-            <li>✓ Three-font typography system</li>
-            <li>✓ Layered design token architecture</li>
-            <li>✓ Light + dark section modes</li>
-            <li>✓ Responsive layouts</li>
-            <li>✓ Unlimited client projects</li>
+            <li><Icon name="check" size={18} /> Full source code</li>
+            <li><Icon name="check" size={18} /> All components (Hero, CTA, FAQ, Cards)</li>
+            <li><Icon name="check" size={18} /> Three-font typography system</li>
+            <li><Icon name="check" size={18} /> Layered design token architecture</li>
+            <li><Icon name="check" size={18} /> Light + dark section modes</li>
+            <li><Icon name="check" size={18} /> Responsive layouts</li>
+            <li><Icon name="check" size={18} /> Unlimited client projects</li>
           </ul>
           <a href="#" class="btn btn-secondary" style="width: 100%;">Get Starter</a>
         </div>
 
         <div class="pricing-card pricing-featured card">
-          <div class="pricing-badge micro-label">MOST POPULAR</div>
+          <div class="pricing-badge micro-label" style="color: var(--color-on-primary);">MOST POPULAR</div>
           <div class="pricing-tier">
             <span class="micro-label">AGENCY</span>
             <div class="pricing-price">
@@ -207,13 +208,13 @@ import { brand } from '../config/brand';
             </div>
           </div>
           <ul class="pricing-features">
-            <li>✓ Everything in Starter</li>
-            <li>✓ Blog & article layout system</li>
-            <li>✓ Content Collections setup</li>
-            <li>✓ SEO meta & JSON-LD schemas</li>
-            <li>✓ Contact form with validation</li>
-            <li>✓ Services & case study templates</li>
-            <li>✓ Priority support for 6 months</li>
+            <li><Icon name="check" size={18} /> Everything in Starter</li>
+            <li><Icon name="check" size={18} /> Blog & article layout system</li>
+            <li><Icon name="check" size={18} /> Content Collections setup</li>
+            <li><Icon name="check" size={18} /> SEO meta & JSON-LD schemas</li>
+            <li><Icon name="check" size={18} /> Contact form with validation</li>
+            <li><Icon name="check" size={18} /> Services & case study templates</li>
+            <li><Icon name="check" size={18} /> Priority support for 6 months</li>
           </ul>
           <a href="#" class="btn btn-primary" style="width: 100%;">Get Agency</a>
         </div>
@@ -227,13 +228,13 @@ import { brand } from '../config/brand';
             </div>
           </div>
           <ul class="pricing-features">
-            <li>✓ Everything in Agency</li>
-            <li>✓ CMS integration (Sanity / Contentful)</li>
-            <li>✓ Multi-language support</li>
-            <li>✓ Analytics dashboard template</li>
-            <li>✓ Client portal page template</li>
-            <li>✓ White-label rights</li>
-            <li>✓ Lifetime priority support</li>
+            <li><Icon name="check" size={18} /> Everything in Agency</li>
+            <li><Icon name="check" size={18} /> CMS integration (Sanity / Contentful)</li>
+            <li><Icon name="check" size={18} /> Multi-language support</li>
+            <li><Icon name="check" size={18} /> Analytics dashboard template</li>
+            <li><Icon name="check" size={18} /> Client portal page template</li>
+            <li><Icon name="check" size={18} /> White-label rights</li>
+            <li><Icon name="check" size={18} /> Lifetime priority support</li>
           </ul>
           <a href="#" class="btn btn-secondary" style="width: 100%;">Get Studio</a>
         </div>
@@ -306,14 +307,14 @@ import { brand } from '../config/brand';
   }
 
   .proof-number {
-    font-family: var(--font-display);
-    font-size: 2rem;
+    font-family: var(--md-sys-typescale-display-small-font);
+    font-size: var(--md-sys-typescale-headline-large-size);
     color: var(--text);
-    line-height: 1.2;
+    line-height: var(--md-sys-typescale-headline-large-line-height);
   }
 
   .proof-label {
-    font-size: 0.8125rem !important;
+    font-size: var(--md-sys-typescale-label-large-size) !important;
   }
 
   /* Features */
@@ -344,7 +345,7 @@ import { brand } from '../config/brand';
     background: var(--accent-soft);
     padding: 0.125rem 0.375rem;
     border-radius: 4px;
-    font-size: 0.875rem;
+    font-size: var(--md-sys-typescale-body-medium-size);
     color: var(--accent);
   }
 
@@ -412,8 +413,8 @@ import { brand } from '../config/brand';
   }
 
   .step-number {
-    font-family: var(--font-display);
-    font-size: 2.5rem;
+    font-family: var(--md-sys-typescale-display-medium-font);
+    font-size: var(--md-sys-typescale-display-medium-size);
     color: var(--accent-bg);
     line-height: 1;
   }
@@ -422,7 +423,7 @@ import { brand } from '../config/brand';
     background: var(--accent-soft);
     padding: 0.125rem 0.375rem;
     border-radius: 4px;
-    font-size: 0.875rem;
+    font-size: var(--md-sys-typescale-body-medium-size);
     color: var(--accent);
   }
 
@@ -445,7 +446,7 @@ import { brand } from '../config/brand';
   .pricing-featured {
     border-color: var(--accent-bg);
     border-width: 2px;
-    box-shadow: 0 8px 32px rgba(212, 118, 78, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 116, 184, 0.15);
   }
 
   .pricing-badge {
@@ -454,10 +455,10 @@ import { brand } from '../config/brand';
     left: 50%;
     transform: translateX(-50%);
     background: var(--accent-bg);
-    color: var(--color-dark);
+    color: var(--color-on-primary);
     padding: 0.25rem 1rem;
     border-radius: 100px;
-    font-size: 0.625rem;
+    font-size: var(--md-sys-typescale-label-small-size);
     white-space: nowrap;
   }
 
@@ -474,14 +475,14 @@ import { brand } from '../config/brand';
   }
 
   .price-amount {
-    font-family: var(--font-display);
-    font-size: 3rem;
+    font-family: var(--md-sys-typescale-display-small-font);
+    font-size: var(--md-sys-typescale-display-small-size);
     color: var(--text);
     line-height: 1;
   }
 
   .price-note {
-    font-size: 0.875rem !important;
+    font-size: var(--md-sys-typescale-body-medium-size) !important;
   }
 
   .pricing-features {
@@ -489,7 +490,7 @@ import { brand } from '../config/brand';
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    font-size: 0.9375rem;
+    font-size: var(--md-sys-typescale-body-medium-size);
     color: var(--text-muted);
   }
 
