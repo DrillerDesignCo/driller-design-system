@@ -1,11 +1,12 @@
-<!-- Generated: 2026-03-27 | Files scanned: 65 | Token estimate: ~950 -->
+<!-- Generated: 2026-03-27 | Files scanned: 68 | Token estimate: ~950 -->
 
 # Frontend
 
 ## Page Tree
 
 ```
-/                              → src/pages/index.astro (landing page)
+/                              → src/pages/index.astro (landing page w/ GSAP animations)
+/about                         → src/pages/about.astro (about page w/ owner bio, credentials)
 /apply                         → src/pages/apply.astro (consultation form)
 /services                      → src/pages/services/index.astro (service grid)
 /services/[service]            → src/pages/services/[service].astro (dynamic — 6 hubs)
@@ -23,16 +24,20 @@
 ## Component Hierarchy
 
 ```
-BaseLayout.astro (221 lines)
-  ├─ <header> sticky nav (logo, links, CTA)
+BaseLayout.astro (299 lines)
+  ├─ <header> sticky nav w/ dropdown menus, logo, CTA, mobile toggle
+  │    ├─ Desktop: brand.nav items with optional children[] dropdowns
+  │    └─ Mobile: collapsible drawer with nested child links
   ├─ <main> <slot />
-  └─ <footer> brand, nav, legal, copyright
+  └─ <footer> floating card (gradient bg, watermark, 4-col grid, legal)
 
 Page Components (src/components/)
-  ├─ Hero.astro (1.6 KB) — eyebrow + headline + description + dual CTAs
-  ├─ CTABlock.astro (1 KB) — full-width dark CTA section
-  ├─ FAQAccordion.astro (1.7 KB) — <details> accordion with items[]
-  └─ Breadcrumbs.astro (1.9 KB) — breadcrumb nav with JSON-LD schema [NEW]
+  ├─ Hero.astro (1.9 KB) — eyebrow + headline + description + dual CTAs
+  ├─ CTABlock.astro (1.2 KB) — full-width dark CTA section
+  ├─ FAQAccordion.astro (1.9 KB) — <details> accordion with items[]
+  ├─ Breadcrumbs.astro (1.9 KB) — breadcrumb nav with JSON-LD schema
+  ├─ PageSummary.astro (1.5 KB) — stats bar (value/label pairs)
+  └─ PhoneCTA.astro (1.5 KB) — phone call-to-action banner
 
 Material Design 3 Components (src/components/md/) — 31 total
   ├─ Inputs:    Button, Checkbox, Chip/ChipSet, FAB, IconButton, Radio,
@@ -48,11 +53,11 @@ Material Design 3 Components (src/components/md/) — 31 total
 
 ```
 src/content.config.ts
-  ├─ services — glob loader, Zod schema: title, slug, type, icon, keywords,
+  ├─ services — glob loader, Zod schema: title, description, slug, type, icon, keywords,
   │             heroHeadline, heroDescription, ogImage, order, parentHub
-  ├─ cities   — glob loader, Zod schema: title, city, state, county, tier,
+  ├─ cities   — glob loader, Zod schema: title, description, city, state, county, tier,
   │             serviceSlug, serviceName, keywords, nearbyTier3, ogImage
-  └─ blog     — glob loader, Zod schema: title, publishDate, updatedDate,
+  └─ blog     — glob loader, Zod schema: title, description, publishDate, updatedDate,
                 author, keywords, ogImage, draft
 ```
 
@@ -60,7 +65,7 @@ src/content.config.ts
 
 ```
 Layer 1 — Primitives (tokens.css :root)
-  --color-primary: #0074b8          --font-display: Poppins
+  --color-primary: #0081ca          --font-display: Poppins
   --color-dark: #032b4d             --font-body: Poppins
   --color-light: #ffffff            --font-serif: Poppins
   + full M3 typescale (display/headline/title/body/label × S/M/L)
@@ -79,6 +84,7 @@ MD3 Tokens (md-tokens.css)
 
 ## Styling Approach
 
+- **Tailwind CSS v4** — utility classes via `@tailwindcss/vite` plugin in `astro.config.mjs`
 - **Global CSS** — reset, typography classes (.display-xl, .body-lg, .micro-label), layout (.container, .section), buttons (.btn), cards (.card)
 - **Scoped CSS** — each .astro page/component has `<style>` block (Astro auto-scopes)
-- **No build-time CSS framework** — vanilla CSS with custom properties
+- **GSAP** — scroll-triggered animations on homepage (hero, service cards, features, process, CTA)

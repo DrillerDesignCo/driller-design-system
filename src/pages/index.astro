@@ -291,7 +291,7 @@ const localBusinessSchema = JSON.stringify({
     </div>
     
     <!-- Areas We Serve -->
-    <div class="flex-1 bg-surface flex xl:justify-start">
+    <div class="flex-1 bg-surface flex xl:justify-start relative overflow-hidden">
       <div class="w-full max-w-[40rem] px-6 md:px-12 py-24 ml-auto xl:ml-0 xl:mr-auto flex flex-col justify-center">
         <span class="text-xs uppercase tracking-[0.2em] font-black text-on-surface-variant mb-4 block">Service Radius</span>
         <h2 class="text-4xl md:text-5xl font-bold text-dark mb-8">Areas We Serve</h2>
@@ -343,9 +343,10 @@ const localBusinessSchema = JSON.stringify({
           <p class="text-lg text-white/80 mb-10 max-w-md relative z-10">Stop putting off that project. Whether you need a 10-yard container for a bathroom remodel or a 30-yard roll-off for a full tear-out, Waste Falcon has the right dumpster at the right price.</p>
           
           <div class="flex flex-col items-start gap-4 relative z-10 w-full max-w-sm mt-2">
-            <a href="tel:18777792783" class="text-white font-bold text-2xl inline-flex items-center gap-2 group hover:text-white/80 transition-colors">
-              <span>Questions?</span>
-              <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform text-2xl">arrow_forward</span>
+            <h3 class="text-white font-bold text-2xl">Questions?</h3>
+            <a href="tel:18777792783" class="text-white font-bold text-lg inline-flex items-center gap-2 group hover:text-white/80 transition-colors">
+              <span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">phone</span>
+              <h4 class="text-lg font-bold">Give us a call!</h4>
             </a>
             <span class="text-[15px] font-medium text-white/90 leading-relaxed px-1">Serving College Station, Bryan, and the entire Brazos Valley</span>
           </div>

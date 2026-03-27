@@ -1,4 +1,4 @@
-<!-- Generated: 2026-03-27 | Files scanned: 65 | Token estimate: ~300 -->
+<!-- Generated: 2026-03-27 | Files scanned: 68 | Token estimate: ~350 -->
 
 # Dependencies
 
@@ -8,6 +8,9 @@
 |---------|---------|---------|
 | `astro` | ^6.0.8 | Core framework — static site generator |
 | `@astrojs/check` | ^0.9.8 | Astro type-checking CLI |
+| `@tailwindcss/vite` | ^4.2.2 | Tailwind CSS v4 Vite plugin |
+| `tailwindcss` | ^4.2.2 | Tailwind CSS v4 utility framework |
+| `gsap` | ^3.14.2 | GSAP animation library (homepage scroll animations) |
 | `typescript` | ^5.9.3 | TypeScript compiler |
 
 **Total production deps: 0** (all are devDependencies)
@@ -18,7 +21,7 @@
 |---------|--------|---------|
 | Content Collections | `astro:content` | Service/city/blog content management |
 | Glob Loader | `astro/loaders` | File-based content loading |
-| Zod | `astro:content` (re-exported) | Schema validation for collections |
+| Zod | `astro/zod` | Schema validation for collections |
 
 ## CDN Resources
 

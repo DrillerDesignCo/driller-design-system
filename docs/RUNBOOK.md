@@ -57,6 +57,7 @@ This is a **static site** — there are no server-side health endpoints. Monitor
 - **Uptime**: HTTP 200 on `https://wastefalcon.com`
 - **Performance**: Lighthouse score ≥ 90 (Performance, Accessibility, SEO)
 - **SSL**: Certificate validity and renewal
+- **IndexNow**: Verify URL submissions via IndexNow API are accepted
 
 ---
 
@@ -74,10 +75,17 @@ Fix the TypeScript error in the reported file, then rebuild.
 
 - Ensure styles are inside the component's `<style>` block (not an external file)
 - Check that CSS custom properties are defined in `src/styles/md/md-tokens.css` or `src/styles/tokens.css`
+- Verify Tailwind CSS v4 classes are being processed (check `@tailwindcss/vite` in `astro.config.mjs`)
+
+### GSAP animations not working
+
+- GSAP is only loaded on the homepage (`src/pages/index.astro`)
+- Animations require the `data-gsap` attribute on target elements
+- ScrollTrigger is registered via `gsap.registerPlugin(ScrollTrigger)` in a page-level `<script>`
 
 ### Node version mismatch
 
-Astro requires Node.js ≥ 22.12.0 (even-numbered LTS). Check with:
+Astro 6 requires Node.js ≥ 22.12.0 (even-numbered LTS). Check with:
 
 ```bash
 node --version
@@ -110,12 +118,13 @@ Most static hosts (Netlify, Vercel, Cloudflare) support **instant rollback** to 
 
 ## 6. Form Submissions
 
-Forms are handled by **[StaticForms](https://staticforms.xyz)** — a third-party static form backend.
+The homepage form (`/index.astro`) has a form action pointing to `/contact/` but **no server-side handler is configured yet**. The `/apply` page also has no form backend.
 
-- Forms POST directly from the browser to StaticForms
-- Submissions are forwarded to the configured email address
-- No server-side code is required
-- Manage your access key and submission settings at [staticforms.xyz](https://staticforms.xyz)
+When a form backend is added:
+- **StaticForms** or similar static form service is recommended
+- Forms will POST directly from the browser
+- Submissions should be forwarded to `book@wastefalcon.com`
+- No server-side code is required for static form backends
 
 ---
 

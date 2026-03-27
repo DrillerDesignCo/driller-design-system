@@ -27,16 +27,21 @@ npm run dev          # → http://localhost:4321
 ```
 Waste Falcon/
 ├─ public/               # Static assets (copied verbatim to dist/)
+│  └─ fonts/             # Self-hosted Poppins (4 weights)
 ├─ src/
-│  ├─ components/md/     # 31 Material Design 3 Astro components
-│  ├─ config/brand.ts    # Client-specific brand config (one file per client)
+│  ├─ components/        # Page components (Hero, CTABlock, FAQAccordion, etc.)
+│  │  └─ md/             # 31 Material Design 3 Astro components
+│  ├─ config/brand.ts    # Client-specific brand config (nav, footer, owner, etc.)
+│  ├─ config/schema.ts   # JSON-LD structured data factory functions
+│  ├─ content/           # Content Collections (services/, cities/)
+│  ├─ content.config.ts  # Collection schemas (Zod via astro/zod)
 │  ├─ layouts/           # BaseLayout.astro
-│  ├─ pages/             # Route-based pages (index, services, apply, showcase)
+│  ├─ pages/             # Route-based pages (index, about, apply, services, showcase)
 │  └─ styles/
 │     ├─ global.css      # Global styles
 │     ├─ tokens.css      # Design tokens
 │     └─ md/             # MD3 token & utility styles
-├─ astro.config.mjs      # Astro configuration
+├─ astro.config.mjs      # Astro config + Tailwind CSS v4 Vite plugin
 ├─ tsconfig.json         # TypeScript (strict mode, extends astro/tsconfigs/strict)
 └─ package.json
 ```
@@ -65,10 +70,13 @@ All client-specific values live in **`src/config/brand.ts`**. This is the only f
 - Color palette (primary, dark, light, accent, semantic colors)
 - Typography (font families)
 - Contact info (phone, email)
-- Navigation items
+- Navigation items (with optional dropdown children)
+- Footer columns (services, company, service areas)
 - CTA labels & links
 - Social media URLs
 - Legal page links
+- Owner info (name, title, experience — for E-E-A-T)
+- Sister brand (BCS Junk Removal)
 
 ---
 
@@ -77,6 +85,10 @@ All client-specific values live in **`src/config/brand.ts`**. This is the only f
 The project includes **31 Material Design 3 components** in `src/components/md/`:
 
 Badge, Button, Card, Checkbox, Chip, ChipSet, CircularProgress, Dialog, Divider, FAB, Icon, IconButton, LinearProgress, List, ListItem, Menu, MenuItem, NavigationBar, NavigationDrawer, NavigationTab, Radio, SegmentedButton, SegmentedButtonSet, Select, SelectOption, Slider, SubMenu, Switch, Tab, Tabs, TextField
+
+Additionally, **6 page-level components** in `src/components/`:
+
+Hero, CTABlock, FAQAccordion, Breadcrumbs, PageSummary, PhoneCTA
 
 ### Component Guidelines
 
@@ -101,8 +113,9 @@ Visual verification: open `http://localhost:4321/component-showcase` to inspect 
 
 - **TypeScript**: strict mode (`astro/tsconfigs/strict`)
 - **Astro components**: Props interface at top of frontmatter
-- **CSS**: vanilla CSS with custom properties — no Tailwind
+- **CSS**: Tailwind v4 utility classes + vanilla CSS with custom properties
 - **Naming**: kebab-case for CSS classes prefixed with `md-` for design system components
+- **Animations**: GSAP with `data-gsap` attributes for scroll-triggered effects
 
 ---
 

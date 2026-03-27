@@ -1,27 +1,45 @@
-Codemap Diff Report — 2026-03-27T10:51 CDT
+Codemap Diff Report — 2026-03-27T18:00 CDT
 ═══════════════════════════════════════════
 
 Previous scan: 65 files
-Current scan:  65 files (+0 new)
+Current scan:  68 files (+3 new)
 
 ── Files Added ──────────────────────────
-  (none)
+  src/pages/about.astro (12.6 KB — about page with owner bio, credentials, schema)
+  src/components/PageSummary.astro (1.5 KB — stats bar component)
+  src/components/PhoneCTA.astro (1.5 KB — phone CTA banner component)
+
+── Files Modified (significant) ────────
+  src/config/brand.ts — added nav.children[], footer{}, owner{}, sister{}
+  src/layouts/BaseLayout.astro — 221→299 lines, dropdown nav, dark mode favicon, redesigned footer
+  src/pages/index.astro — 476 lines, GSAP animations, redesigned hero/services/CTA sections
+  package.json — added @tailwindcss/vite, tailwindcss, gsap
+  astro.config.mjs — added @tailwindcss/vite plugin
 
 ── Files Removed ────────────────────────
   (none)
 
 ── Architecture Changes ─────────────────
-  (none)
+  Astro upgraded from v5 → v6
+  Tailwind CSS v4 added via @tailwindcss/vite plugin
+  GSAP + ScrollTrigger added for homepage animations
+  Navigation restructured: flat nav[] → nav[] with optional children[] dropdowns
+  Footer restructured: simple links → 3-column footer{services, company, serviceAreas}
+  Brand config: added owner{}, sister{} fields for E-E-A-T
+  Zod imports: from 'astro:content' → 'astro/zod' (Astro 6 change)
+  Favicon: added dark mode support via prefers-color-scheme media query
 
 ── New Dependencies ─────────────────────
-  (none)
+  @tailwindcss/vite ^4.2.2 (Tailwind CSS Vite plugin)
+  tailwindcss ^4.2.2 (Tailwind CSS v4)
+  gsap ^3.14.2 (animation library)
 
 ── Codemap Diff % ───────────────────────
-  architecture.md   0% changed
-  frontend.md       0% changed
-  backend.md        0% changed
-  data.md           0% changed
-  dependencies.md   0% changed
+  architecture.md   ~40% changed (Astro 6, Tailwind, GSAP, brand restructure)
+  frontend.md       ~35% changed (about page, 6 page components, Tailwind, GSAP)
+  backend.md        ~25% changed (Tailwind build step, form notes, GSAP note)
+  data.md           ~30% changed (brand.ts fields, FAQ count, about page data)
+  dependencies.md   ~30% changed (3 new packages, Zod import source)
 
 ── Staleness Warnings ───────────────────
   (none — all docs updated today)
