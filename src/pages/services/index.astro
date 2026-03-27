@@ -1,130 +1,141 @@
 ---
+// src/pages/services/index.astro — Services Hub
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Hero from '../../components/Hero.astro';
 import CTABlock from '../../components/CTABlock.astro';
+import { getCollection } from 'astro:content';
 import { brand } from '../../config/brand';
+import { jsonLdScript, organizationSchema, webSiteSchema } from '../../config/schema';
 
-// Example services — replace with Content Collections for dynamic content
-const services = [
-  {
-    title: "Single-Page Website",
-    description: "High-converting single-page asset for lead capture.",
-    investment: "$1,500",
-    href: "/services/single-page-website/",
-  },
-  {
-    title: "Enterprise Web Architecture",
-    description: "Scalable multi-page infrastructure with payment gateways and product catalogs.",
-    investment: "Starting at $5,000",
-    href: "/services/enterprise-web-architecture/",
-  },
-  {
-    title: "Brand Architecture",
-    description: "Deep brand strategy, complete visual identity system, comprehensive Brand Book.",
-    investment: "Starting at $2,500",
-    href: "/services/brand-architecture/",
-  },
-  {
-    title: "Managed SEO",
-    description: "Local market domination through GBP optimization, citations, and localized content.",
-    investment: "$1,500/mo",
-    href: "/services/managed-seo/",
-  },
-  {
-    title: "Paid Acquisition",
-    description: "Campaign setup and management for Google Ads and paid search channels.",
-    investment: "Starting at $1,500",
-    href: "/services/paid-acquisition/",
-  },
-  {
-    title: "Fractional Creative",
-    description: "On-call design retainer for signage, print campaigns, branded merchandise, and more.",
-    investment: "$2,500/mo",
-    href: "/services/fractional-creative/",
-  },
-];
+const allServices = await getCollection('services');
+const primary = allServices
+  .filter((s) => s.data.type === 'primary')
+  .sort((a, b) => a.data.order - b.data.order);
+const secondary = allServices
+  .filter((s) => s.data.type === 'secondary')
+  .sort((a, b) => a.data.order - b.data.order);
 ---
 
-<BaseLayout title="Services" description="View our services and investment tiers.">
+<BaseLayout
+  title="Services"
+  description="Dumpster rental, demolition, and commercial waste services in the Brazos Valley. Construction dumpsters, roll-off rentals, and ongoing commercial contracts."
+>
+  <script type="application/ld+json" set:html={jsonLdScript([organizationSchema(), webSiteSchema()])} />
+
+  <div class="container">
+    <Breadcrumbs items={[{ label: 'Services', href: '/services/' }]} />
+  </div>
 
   <Hero
-    headline="Blueprinted Strategy. Tailored Execution."
-    description="We take market reality, architect the blueprint, and execute end-to-end."
-    secondaryCta={undefined}
+    eyebrow="WHAT WE DO"
+    headline="Dumpster Rental & Demolition Services"
+    description="From one-time residential cleanouts to ongoing commercial contracts, Waste Falcon delivers the right dumpster for every project across the Brazos Valley."
   />
 
   <section class="section">
     <div class="container">
+      <h2>Our Services</h2>
       <div class="services-grid">
-        {services.map((service) => (
-          <a href={service.href} class="service-card">
-            <div class="service-card-content">
-              <h3>{service.title}</h3>
-              <p class="body-lg">{service.description}</p>
-            </div>
-            <div class="service-card-footer">
-              <span class="micro-label" style="color: var(--accent);">
-                Investment: {service.investment}
-              </span>
-              <span class="micro-label" style="color: var(--text-muted);">
-                View Details →
-              </span>
-            </div>
+        {primary.map((service) => (
+          <a href={`/services/${service.data.slug}/`} class="service-card service-card--primary">
+            <span class="material-symbols-outlined service-card__icon">{service.data.icon}</span>
+            <h3 class="service-card__title">{service.data.title}</h3>
+            <p class="service-card__desc">{service.data.description}</p>
+            <span class="service-card__link">
+              Learn more
+              <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
+            </span>
           </a>
         ))}
       </div>
+
+      {secondary.length > 0 && (
+        <>
+          <h2 style="margin-top: 4rem;">Specialized Services</h2>
+          <div class="services-grid services-grid--secondary">
+            {secondary.map((service) => (
+              <a href={`/services/${service.data.slug}/`} class="service-card">
+                <span class="material-symbols-outlined service-card__icon">{service.data.icon}</span>
+                <h3 class="service-card__title">{service.data.title}</h3>
+                <p class="service-card__desc">{service.data.description}</p>
+                <span class="service-card__link">
+                  Learn more
+                  <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
+                </span>
+              </a>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   </section>
 
   <CTABlock
-    headline="If It Doesn't Move the Needle, It Doesn't Ship."
-    description="Let's architect a tailored blueprint for your market."
+    headline="Need a Dumpster?"
+    description="Call now for same-day delivery in College Station and Bryan."
+    cta={{ label: `Call ${brand.contact.phone}`, href: `tel:${brand.contact.phone.replace(/\D/g, '')}` }}
   />
-
 </BaseLayout>
 
 <style>
   .services-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1px;
-    background: var(--line);
-    border: 1px solid var(--line);
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
   }
 
   .service-card {
-    background: var(--bg);
-    padding: 2.5rem;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 2rem;
-    transition: background 0.25s ease;
-    min-height: 220px;
-  }
-
-  .service-card:hover {
-    background: var(--accent-soft);
-  }
-
-  .service-card-content {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
   }
 
-  .service-card h3 {
+  .service-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+
+  .service-card--primary {
+    background: var(--surface-container, var(--surface));
+  }
+
+  .service-card__icon {
+    font-size: 32px;
+    color: var(--accent);
+  }
+
+  .service-card__title {
+    font-size: var(--md-sys-typescale-title-medium-size, 16px);
+    font-weight: 600;
     color: var(--text);
-    font-size: var(--md-sys-typescale-title-large-size);
+    margin: 0;
   }
 
-  .service-card-footer {
+  .service-card__desc {
+    font-size: var(--md-sys-typescale-body-medium-size, 14px);
+    color: var(--text-muted);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .service-card__link {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
     gap: 0.5rem;
+    color: var(--accent);
+    font-size: var(--md-sys-typescale-label-large-size, 14px);
+    font-weight: 600;
+    margin-top: auto;
   }
 
   @media (max-width: 768px) {

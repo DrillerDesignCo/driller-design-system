@@ -1,0 +1,342 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import PageSummary from '../components/PageSummary.astro';
+import PhoneCTA from '../components/PhoneCTA.astro';
+import CTABlock from '../components/CTABlock.astro';
+import Icon from '../components/md/Icon.astro';
+import Card from '../components/md/Card.astro';
+import { brand } from '../config/brand';
+
+// Person + LocalBusiness schema for E-E-A-T
+const aboutSchema = JSON.stringify([
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": brand.name,
+    "description": brand.description,
+    "url": brand.url,
+    "telephone": brand.contact.phone,
+    "email": brand.contact.email,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "7111 Raymond Stotzer Pkwy",
+      "addressLocality": "College Station",
+      "addressRegion": "TX",
+      "postalCode": "77845",
+      "addressCountry": "US",
+    },
+    "founder": {
+      "@type": "Person",
+      "name": brand.owner.name,
+      "jobTitle": brand.owner.title,
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5.0",
+      "reviewCount": "92",
+      "bestRating": "5",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": brand.owner.name,
+    "jobTitle": brand.owner.title,
+    "worksFor": {
+      "@type": "Organization",
+      "name": brand.name,
+      "url": brand.url,
+    },
+  },
+]);
+---
+
+<BaseLayout
+  title="About Waste Falcon | Locally Owned Dumpster Rental & Junk Removal"
+  description="Meet Caleb Barnett, owner of Waste Falcon. Locally owned dumpster rental and demolition services in College Station, Bryan, and the Brazos Valley."
+>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json" set:html={aboutSchema} slot="head" />
+
+  <!-- Hero -->
+  <Hero
+    eyebrow="About Us"
+    headline="About Waste Falcon"
+    description="Waste Falcon is a locally owned dumpster rental and demolition company based in College Station, Texas. We serve homeowners, contractors, property managers, and businesses across the Brazos Valley — from small garage cleanouts to large-scale construction projects."
+    primaryCta={{ label: "Get a Free Quote", href: "/contact/" }}
+    secondaryCta={{ label: "Call (877) 779-2783", href: `tel:${brand.contact.phone.replace(/\D/g, '')}` }}
+  />
+
+  <!-- Credentials Bar -->
+  <PageSummary items={[
+    { value: "5★", label: "Google rating" },
+    { value: "92", label: "verified reviews" },
+    { value: "5+", label: "years in the Brazos Valley" },
+    { value: "A-", label: "BBB rating" },
+  ]} />
+
+  <!-- Intro Copy -->
+  <section class="section" id="intro">
+    <div class="container reading-width">
+      <p class="body-lg" style="font-size: var(--md-sys-typescale-body-large-size); line-height: 1.8; color: var(--text-muted);">
+        We keep things simple: you tell us what you need, we deliver the right dumpster to your site, and we haul it away when you're done. No run-around. No surprise fees. Just reliable waste removal from a team you can reach by phone.
+      </p>
+    </div>
+  </section>
+
+  <!-- Meet Caleb -->
+  <section class="section" id="meet-caleb" style="background: var(--surface);">
+    <div class="container">
+      <div class="owner-section">
+        <div class="owner-photo">
+          <!-- Placeholder for Caleb's headshot -->
+          <div class="owner-photo-placeholder">
+            <Icon name="person" />
+          </div>
+        </div>
+        <div class="owner-content">
+          <span class="micro-label" style="color: var(--accent); display: block; margin-bottom: 0.75rem;">OWNER & OPERATOR</span>
+          <h2>Meet Caleb Barnett</h2>
+          <p class="body-lg" style="margin-top: 1rem;">
+            Caleb Barnett runs two waste and junk removal companies in the Bryan-College Station area. He founded BCS Junk Removal over five years ago and has since taken ownership of Waste Falcon to expand into dumpster rental and demolition services.
+          </p>
+          <p class="body-lg" style="margin-top: 1rem;">
+            Running both companies gives Caleb a perspective most dumpster rental operators don't have. He's been on the job site. He's hauled the junk by hand. He knows what it takes to keep a project moving — and what slows it down. That hands-on experience shapes how Waste Falcon operates: fast delivery, clear pricing, and real people answering the phone.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Story -->
+  <section class="section" id="our-story">
+    <div class="container reading-width">
+      <span class="micro-label" style="color: var(--accent); display: block; margin-bottom: 0.75rem;">OUR STORY</span>
+      <h2 style="margin-bottom: 1.5rem;">Built for the Brazos Valley</h2>
+      <p class="body-lg" style="margin-bottom: 1rem;">
+        Waste Falcon was built to serve the Brazos Valley's growing need for dependable roll-off dumpster service. When Caleb took over the company, he brought the same approach that made BCS Junk Removal a trusted name in the area — show up on time, charge a fair price, and treat every customer like a neighbor.
+      </p>
+      <p class="body-lg">
+        Today, Waste Falcon offers dumpster rentals in four sizes (10, 15, 20, and 30 yard), demolition services, and debris hauling for residential and commercial jobs. Whether it's a bathroom renovation in College Station, a roofing tear-off in Bryan, or a full commercial cleanout in Brenham, we handle the waste so you can focus on the work.
+      </p>
+    </div>
+  </section>
+
+  <!-- What Makes Us Different -->
+  <section class="section dark-section" id="what-makes-us-different">
+    <div class="container">
+      <span class="micro-label" style="color: var(--color-primary); display: block; margin-bottom: 0.75rem;">WHAT MAKES US DIFFERENT</span>
+      <h2 style="margin-bottom: 3rem;">Why People Choose Waste Falcon</h2>
+
+      <div class="diff-grid">
+        <Card variant="filled" class="diff-item">
+          <div class="diff-icon"><Icon name="location_on" /></div>
+          <h3>We're Local</h3>
+          <p class="body-lg">Waste Falcon is based in Brazos County and operates throughout the surrounding area. You're not calling a national franchise. You're working with a local team that knows these roads and this community.</p>
+        </Card>
+
+        <Card variant="filled" class="diff-item">
+          <div class="diff-icon"><Icon name="receipt_long" /></div>
+          <h3>We're Straightforward</h3>
+          <p class="body-lg">Every quote includes delivery, pickup, disposal, and your rental period. The price we give you is the price you pay.</p>
+        </Card>
+
+        <Card variant="filled" class="diff-item">
+          <div class="diff-icon"><Icon name="handyman" /></div>
+          <h3>We Do More Than Drop a Box</h3>
+          <p class="body-lg">Need a structure torn down? We bring the crew and the containers. Need junk hauled out by hand? Our sister company, BCS Junk Removal, sends a team. One call handles it all.</p>
+        </Card>
+
+        <Card variant="filled" class="diff-item">
+          <div class="diff-icon"><Icon name="call" /></div>
+          <h3>We Answer the Phone</h3>
+          <p class="body-lg">When you call Waste Falcon, a real person picks up. Not a recording. Not a chatbot. A person who can schedule your delivery and answer your questions on the spot.</p>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sister Company -->
+  <section class="section" id="bcs-junk-removal" style="background: var(--surface);">
+    <div class="container reading-width">
+      <span class="micro-label" style="color: var(--accent); display: block; margin-bottom: 0.75rem;">SISTER COMPANY</span>
+      <h2 style="margin-bottom: 1.5rem;">BCS Junk Removal</h2>
+      <p class="body-lg" style="margin-bottom: 1rem;">
+        Caleb built BCS Junk Removal from the ground up over five years ago. BCS handles full-service junk removal — a crew shows up, loads your unwanted items, and hauls everything away for you.
+      </p>
+      <p class="body-lg">
+        If you'd rather have someone else do the heavy lifting instead of filling a dumpster yourself, BCS Junk Removal is the answer. Same owner. Same commitment to fair pricing and fast service.
+      </p>
+    </div>
+  </section>
+
+  <!-- Certifications & Credentials -->
+  <section class="section" id="certifications">
+    <div class="container">
+      <span class="micro-label" style="color: var(--color-primary); display: block; margin-bottom: 0.75rem;">CERTIFICATIONS & CREDENTIALS</span>
+      <h2 style="margin-bottom: 2.5rem;">Trusted in the Brazos Valley</h2>
+
+      <div class="cred-grid">
+        <Card variant="elevated" class="cred-card">
+          <div class="cred-icon"><Icon name="star" /></div>
+          <span class="cred-value">5-Star Google Rating</span>
+          <span class="cred-detail body-lg">92 verified reviews</span>
+        </Card>
+
+        <Card variant="elevated" class="cred-card">
+          <div class="cred-icon"><Icon name="verified" /></div>
+          <span class="cred-value">Licensed & Insured</span>
+          <span class="cred-detail body-lg">State of Texas</span>
+        </Card>
+
+        <Card variant="elevated" class="cred-card">
+          <div class="cred-icon"><Icon name="workspace_premium" /></div>
+          <span class="cred-value">BBB A- Rating</span>
+          <span class="cred-detail body-lg">File opened October 2024</span>
+        </Card>
+
+        <Card variant="elevated" class="cred-card">
+          <div class="cred-icon"><Icon name="groups" /></div>
+          <span class="cred-value">Chamber of Commerce</span>
+          <span class="cred-detail body-lg">Bryan-College Station member</span>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <CTABlock
+    headline="Ready to Work With Us?"
+    description="Whether you need a dumpster for a weekend project or ongoing service for a commercial property, Waste Falcon is ready to help. Serving College Station, Bryan, and communities across the Brazos Valley."
+    cta={{ label: "Get a Free Quote", href: "/contact/" }}
+    variant="dark"
+  />
+
+</BaseLayout>
+
+<style>
+  /* Owner Section */
+  .owner-section {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .owner-photo-placeholder {
+    width: 280px;
+    height: 340px;
+    background: var(--surface-raised);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+  }
+
+  .owner-photo-placeholder :global(.material-symbols-outlined) {
+    font-size: 64px;
+  }
+
+  /* Differentiators Grid */
+  .diff-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+
+  .diff-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 2rem;
+  }
+
+  .diff-icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface-container-high);
+    border-radius: 16px;
+    color: var(--color-primary);
+    font-size: 28px;
+  }
+
+  .diff-item h3 {
+    font-size: var(--md-sys-typescale-title-large-size);
+    font-weight: var(--md-sys-typescale-title-large-weight);
+    margin-top: 0.5rem;
+  }
+  
+  .diff-item p {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* Credentials Grid */
+  .cred-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .cred-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+    padding: 2rem 1.5rem;
+  }
+
+  .cred-icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-primary-container);
+    border-radius: 50%;
+    color: var(--color-on-primary-container);
+    margin-bottom: 0.5rem;
+    font-size: 28px;
+  }
+
+  .cred-value {
+    font-family: var(--md-sys-typescale-title-medium-font);
+    font-weight: var(--md-sys-typescale-title-medium-weight);
+    font-size: var(--md-sys-typescale-title-medium-size);
+    color: var(--text);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .owner-section {
+      grid-template-columns: 1fr;
+    }
+
+    .owner-photo-placeholder {
+      width: 100%;
+      height: 240px;
+    }
+
+    .diff-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .cred-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .cred-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

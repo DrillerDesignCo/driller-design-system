@@ -1,0 +1,279 @@
+---
+// src/pages/services/[service]/[city].astro — City landing page
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import CTABlock from '../../../components/CTABlock.astro';
+import FAQAccordion from '../../../components/FAQAccordion.astro';
+import { getCollection, render } from 'astro:content';
+import { brand } from '../../../config/brand';
+import {
+  jsonLdScript,
+  serviceSchema,
+  organizationSchema,
+  faqSchema,
+} from '../../../config/schema';
+
+export async function getStaticPaths() {
+  const cities = await getCollection('cities');
+  return cities.map((entry) => ({
+    params: {
+      service: entry.data.serviceSlug,
+      city: entry.data.city.toLowerCase().replace(/\s+/g, '-'),
+    },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+// Sibling city pages (same service, different cities)
+const allCities = await getCollection('cities');
+const siblingCities = allCities
+  .filter(
+    (c) =>
+      c.data.serviceSlug === entry.data.serviceSlug &&
+      c.data.city !== entry.data.city
+  )
+  .sort((a, b) => a.data.tier.localeCompare(b.data.tier) || a.data.city.localeCompare(b.data.city));
+
+// Same-city, different-service pages (cross-linking siblings)
+const sameCityServices = allCities
+  .filter(
+    (c) =>
+      c.data.city === entry.data.city &&
+      c.data.serviceSlug !== entry.data.serviceSlug
+  )
+  .sort((a, b) => a.data.serviceName.localeCompare(b.data.serviceName));
+
+const citySlug = entry.data.city.toLowerCase().replace(/\s+/g, '-');
+const pageUrl = `${brand.url}/services/${entry.data.serviceSlug}/${citySlug}/`;
+const pageTitle = `${entry.data.serviceName} in ${entry.data.city}, ${entry.data.state}`;
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={entry.data.description}
+>
+  <script
+    type="application/ld+json"
+    set:html={jsonLdScript([
+      serviceSchema({
+        name: entry.data.serviceName,
+        description: entry.data.description,
+        url: pageUrl,
+        areaServed: `${entry.data.city}, ${entry.data.state}`,
+      }),
+      organizationSchema(),
+    ])}
+  />
+
+  <div class="container">
+    <Breadcrumbs
+      items={[
+        { label: 'Services', href: '/services/' },
+        { label: entry.data.serviceName, href: `/services/${entry.data.serviceSlug}/` },
+        { label: entry.data.city, href: `/services/${entry.data.serviceSlug}/${citySlug}/` },
+      ]}
+    />
+  </div>
+
+  <section class="hero">
+    <div class="container hero-inner">
+      <span class="micro-label hero-eyebrow" style="color: var(--accent);">
+        {entry.data.city}, {entry.data.state}
+      </span>
+      <h1 class="display-xl hero-headline">{pageTitle}</h1>
+      <p class="body-lg hero-description">{entry.data.description}</p>
+      <div class="hero-actions">
+        <a href="/contact/" class="btn btn-primary">Get a Free Quote</a>
+        <a href={`tel:${brand.contact.phone.replace(/\D/g, '')}`} class="btn btn-secondary">
+          Call {brand.contact.phone}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="city-content">
+        <Content />
+      </div>
+    </div>
+  </section>
+
+  {entry.data.nearbyTier3.length > 0 && (
+    <section class="section" style="background: var(--surface-container, var(--bg));">
+      <div class="container">
+        <h2>Also Serving Nearby Communities</h2>
+        <p class="body-lg" style="color: var(--text-muted);">
+          In addition to {entry.data.city}, we provide {entry.data.serviceName.toLowerCase()} to these nearby areas:
+        </p>
+        <div class="nearby-tags">
+          {entry.data.nearbyTier3.map((town: string) => (
+            <span class="nearby-tag">
+              <span class="material-symbols-outlined" style="font-size: 16px;">location_on</span>
+              {town}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {sameCityServices.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <h2>Other Services in {entry.data.city}</h2>
+        <div class="cross-links">
+          {sameCityServices.map((c) => (
+            <a
+              href={`/services/${c.data.serviceSlug}/${c.data.city.toLowerCase().replace(/\s+/g, '-')}/`}
+              class="cross-link-card"
+            >
+              <span class="cross-link-card__name">{c.data.serviceName}</span>
+              <span class="material-symbols-outlined" style="font-size: 18px; color: var(--accent);">arrow_forward</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {siblingCities.length > 0 && (
+    <section class="section" style="background: var(--surface-container, var(--bg));">
+      <div class="container">
+        <h2>{entry.data.serviceName} in Other Cities</h2>
+        <div class="sibling-cities">
+          {siblingCities.map((c) => (
+            <a
+              href={`/services/${c.data.serviceSlug}/${c.data.city.toLowerCase().replace(/\s+/g, '-')}/`}
+              class="sibling-city-link"
+            >
+              {c.data.city}, {c.data.state}
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <CTABlock
+    headline={`Need ${entry.data.serviceName} in ${entry.data.city}?`}
+    description="Call now or request a free quote. Fast delivery, fair pricing."
+    cta={{ label: `Call ${brand.contact.phone}`, href: `tel:${brand.contact.phone.replace(/\D/g, '')}` }}
+  />
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: 7rem 0 5rem;
+    display: flex;
+    align-items: center;
+    min-height: 45vh;
+  }
+
+  .hero-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    max-width: 720px;
+  }
+
+  .hero-headline { color: var(--text); }
+  .hero-description { max-width: 560px; }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 0.75rem;
+  }
+
+  .city-content {
+    max-width: var(--reading-max, 720px);
+  }
+
+  .city-content :global(h2) { margin-top: 3rem; margin-bottom: 1rem; }
+  .city-content :global(h3) { margin-top: 2rem; margin-bottom: 0.75rem; }
+  .city-content :global(ul), .city-content :global(ol) { padding-left: 1.5rem; margin-bottom: 1.5rem; }
+  .city-content :global(li) { margin-bottom: 0.5rem; color: var(--text-muted); line-height: 1.7; }
+  .city-content :global(li strong) { color: var(--text); }
+
+  .city-content :global(table) { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .city-content :global(th), .city-content :global(td) { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--line); font-size: var(--md-sys-typescale-body-medium-size, 14px); }
+  .city-content :global(th) { font-weight: 600; color: var(--text); }
+  .city-content :global(td) { color: var(--text-muted); }
+
+  .nearby-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .nearby-tag {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    font-size: var(--md-sys-typescale-label-large-size, 14px);
+    color: var(--text-muted);
+  }
+
+  .cross-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .cross-link-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 500;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .cross-link-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  }
+
+  .sibling-cities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .sibling-city-link {
+    padding: 0.5rem 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    text-decoration: none;
+    color: var(--text);
+    font-size: var(--md-sys-typescale-label-large-size, 14px);
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .sibling-city-link:hover {
+    border-color: var(--accent);
+    background: var(--surface-container, var(--bg));
+  }
+
+  @media (max-width: 768px) {
+    .hero { padding: 4rem 0 3rem; min-height: auto; }
+    .hero-actions { flex-direction: column; }
+    .hero-actions .btn { width: 100%; text-align: center; }
+    .cross-links { grid-template-columns: 1fr; }
+  }
+</style>

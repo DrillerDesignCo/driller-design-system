@@ -18,32 +18,39 @@
  *     <p>Card content here</p>
  *   </Card>
  *
- *   <Card variant="outlined">
- *     <p>Outlined card</p>
+ *   <Card variant="outlined" href="/services">
+ *     <p>Outlined card acting as a link</p>
  *   </Card>
  */
 
 interface Props {
   variant?: 'elevated' | 'filled' | 'outlined';
+  href?: string;
+  target?: string;
   class?: string;
   [key: string]: any;
 }
 
 const {
   variant = 'filled',
+  href,
+  target,
   class: className,
   ...attrs
 } = Astro.props;
+
+const Tag = href ? 'a' : 'div';
 ---
 
-<div
-  class:list={['md-card', `md-card--${variant}`, className]}
+<Tag
+  class:list={['md-card', `md-card--${variant}`, { 'md-card--clickable': !!href }, className]}
+  {...href ? { href, target } : {}}
   {...attrs}
 >
   <div class="md-card__background"></div>
   <slot />
   <div class="md-card__outline"></div>
-</div>
+</Tag>
 
 <style>
   /* ═══════════════════════════════════════════════════════════

@@ -1,0 +1,68 @@
+---
+import { brand } from '../config/brand';
+
+interface Props {
+  label?: string;
+  variant?: 'inline' | 'block';
+  class?: string;
+}
+
+const {
+  label = brand.contact.phone,
+  variant = 'inline',
+  class: className,
+  ...attrs
+} = Astro.props;
+
+const phoneHref = `tel:${brand.contact.phone.replace(/\D/g, '')}`;
+---
+
+<a
+  href={phoneHref}
+  class:list={['phone-cta', `phone-cta--${variant}`, className]}
+  {...attrs}
+>
+  <span class="material-symbols-outlined phone-cta__icon" aria-hidden="true">call</span>
+  <span class="phone-cta__text">{label}</span>
+</a>
+
+<style>
+  .phone-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--md-sys-typescale-label-large-font);
+    font-weight: var(--md-sys-typescale-label-large-weight);
+    font-size: var(--md-sys-typescale-label-large-size);
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .phone-cta:hover {
+    color: var(--text);
+  }
+
+  .phone-cta__icon {
+    font-size: 20px;
+  }
+
+  .phone-cta--block {
+    display: flex;
+    justify-content: center;
+    padding: 0.875rem 2rem;
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+    border-radius: 6px;
+    min-height: 48px;
+    font-size: var(--md-sys-typescale-label-large-size);
+    transition: all 0.2s ease;
+  }
+
+  .phone-cta--block:hover {
+    background: var(--btn-primary-hover-bg);
+    color: var(--btn-primary-hover-text);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 116, 184, 0.25);
+  }
+</style>

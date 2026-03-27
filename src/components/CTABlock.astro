@@ -1,5 +1,6 @@
 ---
 import { brand } from '../config/brand';
+import Button from './md/Button.astro';
 
 interface Props {
   headline?: string;
@@ -18,10 +19,10 @@ const {
 
 <section class={`cta-block section ${variant === 'dark' ? 'dark-section' : ''}`}>
   <div class="container cta-inner">
-    <span class="micro-label" style="color: var(--accent);">LET'S WORK TOGETHER</span>
+    <span class="micro-label" style="color: var(--color-primary);">LET'S WORK TOGETHER</span>
     <h2 class="display-lg cta-headline">{headline}</h2>
     {description && <p class="body-lg cta-description">{description}</p>}
-    <a href={cta.href} class="btn btn-primary">{cta.label}</a>
+    <Button variant="filled" href={cta.href}>{cta.label}</Button>
   </div>
 </section>
 
@@ -41,5 +42,16 @@ const {
 
   .cta-description {
     max-width: 500px;
+  }
+
+  @media (max-width: 768px) {
+    .cta-inner {
+      padding: 0 1rem;
+    }
+    
+    .cta-inner > :global(.md-button) {
+      width: 100%;
+      max-width: 320px;
+    }
   }
 </style>

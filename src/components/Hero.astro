@@ -1,5 +1,6 @@
 ---
 import { brand } from '../config/brand';
+import Button from './md/Button.astro';
 
 interface Props {
   eyebrow?: string;
@@ -24,11 +25,11 @@ const {
     <h1 class="display-xl hero-headline">{headline}</h1>
     {description && <p class="body-lg hero-description">{description}</p>}
     <div class="hero-actions">
-      <a href={primaryCta.href} class="btn btn-primary">{primaryCta.label}</a>
+      <Button variant="filled" href={primaryCta.href}>{primaryCta.label}</Button>
       {secondaryCta && (
-        <a href={secondaryCta.href} class="btn btn-secondary">
+        <Button variant="filled-tonal" href={secondaryCta.href}>
           {secondaryCta.label}
-        </a>
+        </Button>
       )}
     </div>
   </div>
@@ -50,7 +51,7 @@ const {
   }
 
   .hero-eyebrow {
-    color: var(--accent);
+    color: var(--color-primary);
   }
 
   .hero-headline {
@@ -59,28 +60,36 @@ const {
 
   .hero-description {
     max-width: 560px;
+    color: var(--text-muted);
   }
 
   .hero-actions {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
-    margin-top: 0.75rem;
+    margin-top: 1rem;
   }
 
   @media (max-width: 768px) {
     .hero {
-      padding: 4rem 0 3rem;
+      padding: 5rem 0 4rem;
       min-height: auto;
+    }
+
+    .hero-inner {
+      text-align: center;
+      align-items: center;
     }
 
     .hero-actions {
       flex-direction: column;
+      width: 100%;
+      max-width: 400px;
     }
 
-    .hero-actions .btn {
+    /* Target the Button component inside hero-actions to stretch full width on mobile */
+    .hero-actions > :global(.md-button) {
       width: 100%;
-      text-align: center;
     }
   }
 </style>

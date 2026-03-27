@@ -1,0 +1,92 @@
+---
+// src/components/Breadcrumbs.astro — SEO breadcrumb navigation
+import { brand } from '../config/brand';
+import { breadcrumbSchema, jsonLdScript } from '../config/schema';
+
+interface BreadcrumbItem {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+
+// Build full chain: Home → ...items
+const crumbs: BreadcrumbItem[] = [
+  { label: 'Home', href: '/' },
+  ...items,
+];
+
+const schemaItems = crumbs.map((c) => ({
+  name: c.label,
+  url: `${brand.url}${c.href}`,
+}));
+---
+
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <ol class="breadcrumbs-list">
+    {crumbs.map((crumb, i) => (
+      <li class="breadcrumbs-item">
+        {i < crumbs.length - 1 ? (
+          <>
+            <a href={crumb.href} class="breadcrumbs-link">{crumb.label}</a>
+            <span class="breadcrumbs-separator" aria-hidden="true">
+              <span class="material-symbols-outlined" style="font-size: 18px;">chevron_right</span>
+            </span>
+          </>
+        ) : (
+          <span class="breadcrumbs-current" aria-current="page">{crumb.label}</span>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<script type="application/ld+json" set:html={jsonLdScript(breadcrumbSchema(schemaItems))} />
+
+<style>
+  .breadcrumbs {
+    padding: 1rem 0 0;
+    font-size: var(--md-sys-typescale-body-small-size, 12px);
+  }
+
+  .breadcrumbs-list {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 0;
+  }
+
+  .breadcrumbs-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .breadcrumbs-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .breadcrumbs-link:hover {
+    color: var(--accent);
+  }
+
+  .breadcrumbs-separator {
+    color: var(--text-faint);
+    display: flex;
+    align-items: center;
+  }
+
+  .breadcrumbs-current {
+    color: var(--text);
+    font-weight: 500;
+  }
+</style>

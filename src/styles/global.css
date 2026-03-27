@@ -1,234 +1,107 @@
 /*
- * Waste Falcon — Global Styles (Light Mode)
+ * Waste Falcon — Global Styles (Tailwind v4 Architectural Framework)
  */
 
-@import './tokens.css';
-@import './md/md-tokens.css';
-@import './md/ripple.css';
-@import './md/elevation.css';
-@import './md/focus-ring.css';
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-
-/* ══════════════════════════════════════════════
-   BASE RESET
-   ══════════════════════════════════════════════ */
-
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
-html {
-  scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@theme {
+  /* Typography - Map to the existing Poppins font */
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  /* 
+   * COLOR PALETTE 
+   * Mapped from original Waste Falcon tokens but applying 
+   * the "Precision Ecology" nomenclature and hierarchy.
+   */
+  
+  /* Primary Actions / Authority */
+  --color-primary: #0074b8;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #005f9c; /* Used for Hero CTA gradients */
+
+  /* Secondary / Dark Anchors */
+  --color-dark: #032b4d;
+
+  /* Surface Hierarchy (The stack rule) */
+  --color-surface-container-lowest: #ffffff; /* Pure white focal card */
+  --color-surface-container-low: #f5f8fc; /* Secondary Sections */
+  --color-surface: #f0f6fb; /* Base Foundation */
+  --color-surface-container: #dbf1fe; /* Actionable containers */
+  --color-surface-container-highest: #cfe6f2; /* Elevated functional cards */
+  --color-surface-dim: #c7dde9;
+  
+  /* Glassmorphism Surface */
+  --color-surface-variant: #e6f6ff;
+
+  /* Text & Inks (No pure black allowed) */
+  --color-on-surface: #032b4d; 
+  --color-on-surface-variant: #3a5068; 
+
+  /* Tertiary / Success (from Eco-Aesthetic rules) */
+  --color-tertiary: #1a2500;
+  --color-tertiary-fixed: #ccf078;
+
+  /* Lines */
+  --color-outline-variant: #c1c8c4; /* Ghost border color */
+  --color-line: rgba(3, 43, 77, 0.10);
+  --color-line-strong: rgba(3, 43, 77, 0.20);
+
+  /* Depths / Shadows */
+  /* Ambient shadow: 32px blur, 0px offset-y, 6% opacity of on_surface #032b4d */
+  --shadow-ambient: 0 0 32px rgba(3, 43, 77, 0.06);
+
+  /* Component Radii */
+  --radius-xl: 1.5rem;   /* Buttons */
+  --radius-lg: 1rem;     /* Service Cards */
+  --radius-md: 0.75rem;  /* Inputs */
+  --radius-full: 9999px; /* Chips */
 }
 
-body {
-  font-family: var(--font-body);
-  font-weight: var(--md-sys-typescale-body-large-weight);
-  font-size: var(--md-sys-typescale-body-large-size);
-  line-height: var(--md-sys-typescale-body-large-line-height);
-  letter-spacing: var(--md-sys-typescale-body-large-tracking);
-  color: var(--text);
-  background-color: var(--bg);
-}
+/* 
+ * BASE HTML RESETS 
+ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  body {
+    /* Set the foundational bottom layer of the "stack" */
+    @apply bg-surface text-on-surface font-sans;
+  }
 
-img, video, svg {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
-
-a {
-  color: var(--accent);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-a:hover {
-  color: var(--text);
-}
-
-::selection {
-  background: var(--accent-bg);
-  color: #ffffff;
-}
-
-:focus-visible {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: 2px;
-}
-
-
-/* ══════════════════════════════════════════════
-   TYPOGRAPHY
-   ══════════════════════════════════════════════ */
-
-.display-xl {
-  font-family: var(--md-sys-typescale-display-large-font);
-  font-weight: var(--md-sys-typescale-display-large-weight);
-  font-size: var(--md-sys-typescale-display-large-size);
-  line-height: var(--md-sys-typescale-display-large-line-height);
-  letter-spacing: var(--md-sys-typescale-display-large-tracking);
-}
-
-.display-lg {
-  font-family: var(--md-sys-typescale-display-medium-font);
-  font-weight: var(--md-sys-typescale-display-medium-weight);
-  font-size: var(--md-sys-typescale-display-medium-size);
-  line-height: var(--md-sys-typescale-display-medium-line-height);
-  letter-spacing: var(--md-sys-typescale-display-medium-tracking);
-}
-
-.display-sm {
-  font-family: var(--md-sys-typescale-display-small-font);
-  font-weight: var(--md-sys-typescale-display-small-weight);
-  font-size: var(--md-sys-typescale-display-small-size);
-  line-height: var(--md-sys-typescale-display-small-line-height);
-  letter-spacing: var(--md-sys-typescale-display-small-tracking);
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--md-sys-typescale-headline-large-font);
-  font-weight: var(--md-sys-typescale-headline-large-weight);
-  color: var(--text);
-}
-
-h1 { font-size: var(--md-sys-typescale-headline-large-size); line-height: var(--md-sys-typescale-headline-large-line-height); }
-h2 { font-size: var(--md-sys-typescale-headline-medium-size); line-height: var(--md-sys-typescale-headline-medium-line-height); }
-h3 { font-size: var(--md-sys-typescale-headline-small-size); line-height: var(--md-sys-typescale-headline-small-line-height); }
-h4 { font-size: var(--md-sys-typescale-title-large-size); line-height: var(--md-sys-typescale-title-large-line-height); font-weight: var(--md-sys-typescale-title-large-weight); }
-
-.body-lg {
-  font-family: var(--md-sys-typescale-body-large-font);
-  font-size: var(--md-sys-typescale-body-large-size);
-  line-height: var(--md-sys-typescale-body-large-line-height);
-  letter-spacing: var(--md-sys-typescale-body-large-tracking);
-  color: var(--text-muted);
-}
-
-.reading-text {
-  font-family: var(--font-serif);
-  font-weight: var(--weight-regular);
-  font-size: var(--md-sys-typescale-body-large-size);
-  line-height: 1.8;
-  color: var(--text-muted);
-}
-
-.reading-text strong { font-weight: var(--weight-semibold); }
-.reading-text em { font-style: italic; }
-
-.micro-label {
-  font-family: var(--md-sys-typescale-label-small-font);
-  font-weight: var(--md-sys-typescale-label-small-weight);
-  font-size: var(--md-sys-typescale-label-small-size);
-  line-height: var(--md-sys-typescale-label-small-line-height);
-  letter-spacing: var(--md-sys-typescale-label-small-tracking);
-  text-transform: uppercase;
-}
-
-
-/* ══════════════════════════════════════════════
-   LAYOUT
-   ══════════════════════════════════════════════ */
-
-.container {
-  width: 100%;
-  max-width: var(--container-max);
-  margin: 0 auto;
-  padding: 0 var(--container-padding);
-}
-
-.reading-width {
-  max-width: var(--reading-max);
-  margin: 0 auto;
-}
-
-.section {
-  padding: 5rem 0;
-}
-
-
-/* ══════════════════════════════════════════════
-   BUTTONS
-   ══════════════════════════════════════════════ */
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.875rem 2rem;
-  font-family: var(--md-sys-typescale-label-large-font);
-  font-weight: var(--md-sys-typescale-label-large-weight);
-  font-size: var(--md-sys-typescale-label-large-size);
-  line-height: var(--md-sys-typescale-label-large-line-height);
-  letter-spacing: var(--md-sys-typescale-label-large-tracking);
-  text-decoration: none;
-  border-radius: 6px;
-  border: 1.5px solid transparent;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-height: 48px;
-}
-
-.btn-primary {
-  background: var(--btn-primary-bg);
-  color: var(--btn-primary-text);
-  border-color: var(--btn-primary-border);
-}
-
-.btn-primary:hover {
-  background: var(--btn-primary-hover-bg);
-  color: var(--btn-primary-hover-text);
-  border-color: var(--btn-primary-hover-bg);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 116, 184, 0.25);
-}
-
-.btn-secondary {
-  background: var(--btn-secondary-bg);
-  color: var(--btn-secondary-text);
-  border-color: var(--btn-secondary-border);
-}
-
-.btn-secondary:hover {
-  background: var(--btn-secondary-hover-bg);
-  color: var(--btn-secondary-hover-text);
-  border-color: var(--btn-secondary-hover-bg);
-  transform: translateY(-1px);
-}
-
-
-/* ══════════════════════════════════════════════
-   CARDS
-   ══════════════════════════════════════════════ */
-
-.card {
-  background: var(--surface-raised);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 2rem;
-  transition: all 0.2s ease;
-}
-
-.card:hover {
-  border-color: var(--line-strong);
-  box-shadow: 0 8px 24px rgba(3, 43, 77, 0.06);
-  transform: translateY(-2px);
-}
-
-
-/* ══════════════════════════════════════════════
-   DIVIDERS
-   ══════════════════════════════════════════════ */
-
-.divider {
-  border: 0;
-  border-top: 1px solid var(--line);
+  /* Typography Scale from the Framework */
+  h1, .display-lg {
+    @apply text-[3.5rem] leading-tight tracking-[-0.02em] font-bold text-primary;
+  }
+  h2, .headline-md {
+    @apply text-[1.75rem] leading-tight font-bold text-on-surface;
+  }
+  p, .body-lg {
+    @apply text-[1rem] leading-relaxed text-on-surface-variant;
+  }
+  .label-md {
+    @apply text-[0.75rem] uppercase tracking-[0.05em] font-semibold;
+  }
+  
+  ::selection {
+    @apply bg-primary text-white;
+  }
 }

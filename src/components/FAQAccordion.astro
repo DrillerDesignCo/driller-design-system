@@ -7,24 +7,46 @@ interface FAQItem {
 interface Props {
   items: FAQItem[];
   headline?: string;
+  /** Set to true to inject FAQPage JSON-LD schema */
+  jsonLd?: boolean;
 }
 
-const { items, headline = "Frequently Asked Questions" } = Astro.props;
+const { items, headline = "Frequently Asked Questions", jsonLd = true } = Astro.props;
+
+// Build FAQPage structured data
+const faqSchema = jsonLd ? JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": items.map((item) => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.answer,
+    },
+  })),
+}) : null;
 ---
 
-<section class="faq section">
-  <div class="container">
-    <h2>{headline}</h2>
-    <div class="faq-list">
+{jsonLd && faqSchema && (
+  <script type="application/ld+json" set:html={faqSchema} />
+)}
+
+<section class="py-24 bg-surface" id="faq">
+  <div class="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row gap-16">
+    <div class="md:w-1/3">
+      <h2 class="text-4xl md:text-5xl font-bold text-dark leading-tight sticky top-32">{headline}</h2>
+    </div>
+    <div class="md:w-2/3 flex flex-col gap-6">
       {items.map((item) => (
-        <details class="faq-item">
-          <summary class="faq-question">
+        <details class="group bg-surface-container-highest rounded-2xl overflow-hidden hover:bg-surface-container-low transition-colors shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] [&_summary::-webkit-details-marker]:hidden">
+          <summary class="flex justify-between items-center p-8 cursor-pointer list-none text-lg font-bold text-dark transition-colors">
             <span>{item.question}</span>
-            <svg class="faq-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg class="text-primary transition-transform duration-300 group-open:rotate-180 flex-shrink-0" width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </summary>
-          <div class="faq-answer body-lg">
+          <div class="px-8 pb-8 text-on-surface-variant leading-relaxed">
             <p>{item.answer}</p>
           </div>
         </details>
@@ -32,55 +54,3 @@ const { items, headline = "Frequently Asked Questions" } = Astro.props;
     </div>
   </div>
 </section>
-
-<style>
-  .faq h2 {
-    margin-bottom: 2.5rem;
-  }
-
-  .faq-list {
-    max-width: var(--reading-max);
-  }
-
-  .faq-item {
-    border-bottom: 1px solid var(--line);
-  }
-
-  .faq-question {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.25rem 0;
-    cursor: pointer;
-    list-style: none;
-    font-size: var(--md-sys-typescale-body-large-size);
-    color: var(--text);
-    transition: color 0.2s ease;
-  }
-
-  .faq-question::-webkit-details-marker {
-    display: none;
-  }
-
-  .faq-question:hover {
-    color: var(--accent);
-  }
-
-  .faq-icon {
-    color: var(--text-muted);
-    transition: transform 0.25s ease;
-    flex-shrink: 0;
-  }
-
-  details[open] .faq-icon {
-    transform: rotate(180deg);
-  }
-
-  .faq-answer {
-    padding: 0 0 1.25rem;
-  }
-
-  .faq-answer p {
-    color: var(--text-muted);
-  }
-</style>

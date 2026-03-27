@@ -1,0 +1,324 @@
+---
+// src/pages/services/[service].astro — Individual service hub page
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CTABlock from '../../components/CTABlock.astro';
+import { getCollection, render } from 'astro:content';
+import { brand } from '../../config/brand';
+import {
+  jsonLdScript,
+  serviceSchema,
+  organizationSchema,
+  faqSchema,
+} from '../../config/schema';
+
+export async function getStaticPaths() {
+  const services = await getCollection('services');
+  return services.map((entry) => ({
+    params: { service: entry.data.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+// Get city pages for this service
+const allCities = await getCollection('cities');
+const serviceCities = allCities
+  .filter((c) => c.data.serviceSlug === entry.data.slug)
+  .sort((a, b) => {
+    // Tier 1 first, then Tier 2
+    if (a.data.tier !== b.data.tier) return a.data.tier.localeCompare(b.data.tier);
+    return a.data.city.localeCompare(b.data.city);
+  });
+
+// Get sibling services for cross-linking
+const allServices = await getCollection('services');
+const siblings = allServices
+  .filter((s) => s.data.slug !== entry.data.slug && s.data.type === 'primary')
+  .sort((a, b) => a.data.order - b.data.order);
+
+const serviceUrl = `${brand.url}/services/${entry.data.slug}/`;
+---
+
+<BaseLayout
+  title={entry.data.title}
+  description={entry.data.description}
+>
+  <script
+    type="application/ld+json"
+    set:html={jsonLdScript([
+      serviceSchema({
+        name: entry.data.title,
+        description: entry.data.description,
+        url: serviceUrl,
+      }),
+      organizationSchema(),
+    ])}
+  />
+
+  <div class="container">
+    <Breadcrumbs
+      items={[
+        { label: 'Services', href: '/services/' },
+        { label: entry.data.title, href: `/services/${entry.data.slug}/` },
+      ]}
+    />
+  </div>
+
+  <section class="hero">
+    <div class="container hero-inner">
+      <span class="micro-label hero-eyebrow" style="color: var(--accent);">
+        {brand.location}
+      </span>
+      <h1 class="display-xl hero-headline">{entry.data.heroHeadline}</h1>
+      <p class="body-lg hero-description">{entry.data.heroDescription}</p>
+      <div class="hero-actions">
+        <a href="/contact/" class="btn btn-primary">Get a Free Quote</a>
+        <a href={`tel:${brand.contact.phone.replace(/\D/g, '')}`} class="btn btn-secondary">
+          Call {brand.contact.phone}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="service-content">
+        <Content />
+      </div>
+    </div>
+  </section>
+
+  {serviceCities.length > 0 && (
+    <section class="section" style="background: var(--surface-container, var(--bg));">
+      <div class="container">
+        <h2>Service Areas</h2>
+        <p class="body-lg" style="color: var(--text-muted); margin-bottom: 2rem;">
+          We provide {entry.data.title.toLowerCase()} across the Brazos Valley.
+        </p>
+        <div class="city-grid">
+          {serviceCities.map((city) => (
+            <a
+              href={`/services/${entry.data.slug}/${city.data.city.toLowerCase().replace(/\s+/g, '-')}/`}
+              class="city-card"
+            >
+              <span class="material-symbols-outlined city-card__icon">location_on</span>
+              <div>
+                <h3 class="city-card__name">{city.data.city}, {city.data.state}</h3>
+                <p class="city-card__county">{city.data.county} County</p>
+              </div>
+              <span class="material-symbols-outlined city-card__arrow">arrow_forward</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {siblings.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <h2>Other Services</h2>
+        <div class="sibling-grid">
+          {siblings.map((s) => (
+            <a href={`/services/${s.data.slug}/`} class="sibling-card">
+              <span class="material-symbols-outlined" style="color: var(--accent);">{s.data.icon}</span>
+              <span>{s.data.title}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <CTABlock
+    headline="Ready to Get Started?"
+    description="Call now or request a free quote online. Same-day delivery available."
+    cta={{ label: `Call ${brand.contact.phone}`, href: `tel:${brand.contact.phone.replace(/\D/g, '')}` }}
+  />
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: 7rem 0 5rem;
+    display: flex;
+    align-items: center;
+    min-height: 50vh;
+  }
+
+  .hero-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    max-width: 720px;
+  }
+
+  .hero-headline { color: var(--text); }
+
+  .hero-description { max-width: 560px; }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 0.75rem;
+  }
+
+  .service-content {
+    max-width: var(--reading-max, 720px);
+  }
+
+  .service-content :global(h2) {
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .service-content :global(h3) {
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .service-content :global(ul),
+  .service-content :global(ol) {
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .service-content :global(li) {
+    margin-bottom: 0.5rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  .service-content :global(li strong) {
+    color: var(--text);
+  }
+
+  .service-content :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+  }
+
+  .service-content :global(th),
+  .service-content :global(td) {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    font-size: var(--md-sys-typescale-body-medium-size, 14px);
+  }
+
+  .service-content :global(th) {
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .service-content :global(td) {
+    color: var(--text-muted);
+  }
+
+  .service-content :global(blockquote) {
+    border-left: 3px solid var(--accent);
+    padding: 1rem 1.5rem;
+    margin: 2rem 0;
+    background: var(--surface-container, var(--bg));
+    border-radius: 0 12px 12px 0;
+  }
+
+  .service-content :global(blockquote p) {
+    margin: 0;
+  }
+
+  .city-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .city-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--surface);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .city-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  }
+
+  .city-card__icon {
+    color: var(--accent);
+    font-size: 24px;
+  }
+
+  .city-card__name {
+    font-size: var(--md-sys-typescale-title-small-size, 14px);
+    font-weight: 600;
+    color: var(--text);
+    margin: 0;
+  }
+
+  .city-card__county {
+    font-size: var(--md-sys-typescale-body-small-size, 12px);
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  .city-card__arrow {
+    margin-left: auto;
+    color: var(--text-faint);
+    font-size: 20px;
+  }
+
+  .sibling-grid {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+
+  .sibling-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    text-decoration: none;
+    color: var(--text);
+    font-size: var(--md-sys-typescale-label-large-size, 14px);
+    font-weight: 500;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .sibling-card:hover {
+    border-color: var(--accent);
+    background: var(--surface-container, var(--bg));
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      padding: 4rem 0 3rem;
+      min-height: auto;
+    }
+    .hero-actions {
+      flex-direction: column;
+    }
+    .hero-actions .btn {
+      width: 100%;
+      text-align: center;
+    }
+    .city-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
